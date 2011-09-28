@@ -75,9 +75,17 @@ Some examples would be
 *Example two:*
 {{{
     require node "Expedited Shipping" when Order.isExpedited
+    require node "Regular Shipping" when not Order.isExpedited
+    require node "Billing"
+}}}
+
+*Example three:*
+{{{
+    require node "Expedited Shipping" when Order.isExpedited
+    require node "Regular Shipping" when not Order.isExpedited
     require node "Billing"
     or 
-    require node "Regular Shipping" when not Order.isExpedited
+    require node "Customer Pickup"
     require node "Billing"
 }}}
 
