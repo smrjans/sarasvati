@@ -1,0 +1,12 @@
+#summary The different ways joins can be done
+
+= Introduction =
+Whenever an arc token arrives at a node, a decision must be made as to what to do. There are three options to select from.
+
+  # The conditions for executing the node have not been met. The arc token will remain in an incomplete state. The arc token will await some point in the future, when another arc token may arrive that causes the node execution criteria to be met.
+  # The conditions for executing the node may be met. All the arc tokens that contributed to this will be become the parents of the new node token.
+  # The conditions for executing the node were met in the past, and the node has already executed. The arc token will be retroactively added in as a parent of the node token that was already created.
+
+= Criteria for completing a join =
+
+Sarasvati includes several built in join types. 
