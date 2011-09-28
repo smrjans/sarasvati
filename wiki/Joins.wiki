@@ -3,10 +3,19 @@
 = Introduction =
 Whenever an arc token arrives at a node, a decision must be made as to what to do. There are three options to select from.
 
-  # The conditions for executing the node have not been met. The arc token will remain in an incomplete state. The arc token will await some point in the future, when another arc token may arrive that causes the node execution criteria to be met.
-  # The conditions for executing the node may be met. All the arc tokens that contributed to this will be become the parents of the new node token.
-  # The conditions for executing the node were met in the past, and the node has already executed. The arc token will be retroactively added in as a parent of the node token that was already created.
+  # The conditions for executing the node have not been met. The arc token will remain in an incomplete state. The arc token will await some point in the future, when another arc token may arrive that causes the node execution criteria to be met. 
+  # The conditions for executing the node may be met. All the arc tokens that contributed to this will be become the parents of the new node token. When the conditions for executing the node are met, this will be known as completing the join.
+  # The conditions for executing the node were met in the past, and the node has already executed. The arc token will be retroactively added in as a parent of the node token that was already created. The action is called a merge.
 
 = Criteria for completing a join =
 
-Sarasvati includes several built in join types. 
+Sarasvati includes several built in join strategies. Join strategies are defined by implementing the [http://sarasvati.googlecode.com/svn/java/tags/v1.0.4/doc/javadoc/com/googlecode/sarasvati/JoinStrategy.html JoinStrategy interface]. A Node will generally indicate which join strategy use by having its JoinType set. The JoinType enum corresponds to a specific JoinStrategy. 
+
+A JoinStrategy instance, when asked to perform a join, will return a JoinResult. The JoinResult indicates which of the three courses to take (complete the join, merge the token into a previous join or do nothing). It will also, in the case of a completion, return the set of arc tokens contributing to the join. In the case of a merge, it will return the NodeToken to which to add the ArcToken as a parent.
+
+
+
+= Custom Join Strategies =
+A custom join strategy may be provided in one of two ways. Either the CLASS join type is specified. In this case the join param on the node is assumed to be the name of class implementing JoinStrategy. This class must have a public, no-arg constructor. 
+
+The other way a custom join strategy may be used is by using a custom subclass of Node which overrides the getJoinStrategy method. 
