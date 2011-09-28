@@ -47,6 +47,42 @@ A JoinStrategy instance, when asked to perform a join, will return a JoinResult.
     * Assumes that the join param is a program in the JoinLang domain specific language.
     * Uses the JoinLangJoinStrategy.
 
+= JoinLang = 
+JoinLang is a domain specific language for specifying join criteria. JoinLang programs take the form of require statements in blocks.
+
+In loose EBNF, it would be defined as
+  
+{{{
+  Program = RequireBlock ('or' RequireBlock)*
+
+  RequireBlock = RequireStatement (RequireStatement)*
+
+  RequireStatement = require node <name> (when <expr>)?
+                   | require tokenset <name> (when <expr>)?
+                   | require all arcs (labelled <name> (when <expr)?)?
+                   | require at least <number> arcs (labelled <name> (when <expr>)?)?
+}}}
+
+The 'when' expressions are all Rubric expressions.
+
+Some examples would be
+
+*Example one:*
+{{{ 
+  require at least 3 arcs labelled "Approved" 
+}}}
+  
+*Example two:*
+{{{
+    require node "Expedited Shipping" when Order.isExpedited
+    require node "Billing"
+    or 
+    require node "Regular Shipping" when not Order.isExpedited
+    require node "Billing"
+}}}
+
+Many of the other join strategies can be expressed in terms of JoinLang.
+
 = Custom Join Strategies =
 A custom join strategy may be provided in one of two ways. Either the CLASS join type is specified. In this case the join param on the node is assumed to be the name of class implementing JoinStrategy. This class must have a public, no-arg constructor. 
 
