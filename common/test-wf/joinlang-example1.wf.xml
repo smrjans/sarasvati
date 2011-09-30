@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<process-definition xmlns="http://sarasvati.googlecode.com/ProcessDefinition" name="joinlang-example1">
+    <node isStart="true" type="task" joinType="or" name="Write Document">
+        <arc to="Reviewer One"/>
+        <arc to="Reviewer Two"/>
+        <arc to="Node_4"/>
+        <custom>
+            <taskName>Write Document</taskName>
+            <taskDesc>Write Document</taskDesc>
+        </custom>
+    </node>
+    <node type="task" joinType="or" name="Reviewer One">
+        <arc to="Send to printer"/>
+        <custom>
+            <taskName>Review (1)</taskName>
+            <taskDesc>Review this</taskDesc>
+        </custom>
+    </node>
+    <node type="task" joinType="or" name="Reviewer Two">
+        <arc to="Send to printer"/>
+        <custom>
+            <taskName>Review (2)</taskName>
+            <taskDesc>Review this</taskDesc>
+        </custom>
+    </node>
+    <node type="task" joinType="or" name="Node_4">
+        <arc to="Send to printer"/>
+        <custom>
+            <taskName>Review (3)</taskName>
+            <taskDesc>Review this</taskDesc>
+        </custom>
+    </node>
+    <node type="task" joinType="joinlang" name="Send to printer">
+        <join>require at least 2 arcs</join>
+        <custom>
+            <taskName>Send to printer</taskName>
+            <taskDesc>Send to printer</taskDesc>
+        </custom>
+    </node>
+</process-definition>
