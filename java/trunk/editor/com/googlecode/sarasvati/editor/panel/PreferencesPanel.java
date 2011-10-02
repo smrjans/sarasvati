@@ -30,6 +30,7 @@ import javax.swing.tree.TreeSelectionModel;
  *
  * @author paul
  */
+@SuppressWarnings("synthetic-access")
 public class PreferencesPanel extends javax.swing.JPanel {
 
   private static final long serialVersionUID = 1L;

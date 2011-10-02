@@ -48,6 +48,7 @@ import com.googlecode.sarasvati.visual.icon.NodeIconType;
  *
  * @author Paul Lorenz
  */
+@SuppressWarnings("synthetic-access")
 public class NodeTypePreferencesPanel extends BasePrefsPage {
 
     private static final long serialVersionUID = 1L;

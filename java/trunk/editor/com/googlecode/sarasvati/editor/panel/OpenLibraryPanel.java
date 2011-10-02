@@ -38,6 +38,7 @@ import com.googlecode.sarasvati.util.SvUtil;
  *
  * @author paul
  */
+@SuppressWarnings("synthetic-access")
 public class OpenLibraryPanel extends javax.swing.JPanel {
 
     private static final long serialVersionUID = 1L;

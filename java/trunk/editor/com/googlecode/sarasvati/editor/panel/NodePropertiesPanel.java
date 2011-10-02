@@ -50,6 +50,7 @@ import com.googlecode.sarasvati.visual.icon.NodeIconType;
 /**
  * @author Paul Lorenz
  */
+@SuppressWarnings("synthetic-access")
 public class NodePropertiesPanel extends javax.swing.JPanel {
 
     private static final long serialVersionUID = 1L;
