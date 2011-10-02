@@ -21,18 +21,40 @@ package com.googlecode.sarasvati.unittest.framework;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.util.SvUtil;
 
 public class ProcessPrinter
 {
+  public static String toString(final NodeToken token)
+  {
+    return "[" + SvUtil.getShortClassName(token) +
+           " id=" + token.getId() +
+           " guardAction=" + token.getGuardAction() +
+           " execType=" + token.getExecutionType() +
+           " complete=" + token.isComplete() +
+           " nodeName=" + token.getNode().getName() +
+           "]";
+  }
+
+  public static String toString(final ArcToken token)
+  {
+    return "[" + SvUtil.getShortClassName(token.getClass()) +
+           " execType=" + token.getExecutionType() +
+           " pending=" + token.isPending() +
+           " complete=" + token.isComplete() +
+           " child=" + (token.isComplete() ? token.getChildToken().getId() : "--") +
+           "]";
+  }
+
   public static void print (final GraphProcess p)
   {
-    System.out.println( "Process: " + p.getGraph().getName() );
-    for (NodeToken t : p.getNodeTokens() )
+    System.out.println("Process: " + p.getGraph().getName());
+    for (NodeToken t : p.getNodeTokens())
     {
-      System.out.println( t );
-      for ( ArcToken a : t.getChildTokens() )
+      System.out.println(toString(t));
+      for (ArcToken a : t.getChildTokens())
       {
-        System.out.println( "\t" + a );
+        System.out.println("\t" + toString(a));
       }
     }
     System.out.println();

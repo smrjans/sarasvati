@@ -515,6 +515,6 @@ public class HibNodeToken implements NodeToken
   @Override
   public String toString ()
   {
-    return "[HibNodeToken id=" + id + " action=" + guardAction + "]";
+    return "[HibNodeToken id=" + id + " guardAction=" + guardAction + " execType=" + executionType + " complete=" + isComplete() + "]";
   }
 }

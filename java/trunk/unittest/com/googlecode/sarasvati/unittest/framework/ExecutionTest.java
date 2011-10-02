@@ -24,6 +24,7 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Before;
 
 import com.googlecode.sarasvati.Arc;
@@ -33,7 +34,6 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.TokenSetMember;
 import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
@@ -105,6 +105,12 @@ public class ExecutionTest
     engine.addExecutionListener( DuplicateEventDetector.class, ExecutionEventType.values());
   }
 
+  @After
+  public void cleanup()
+  {
+    TestEnv.commitSession();
+  }
+
   protected Graph ensureLoaded (final String name) throws Exception
   {
     final File basePath = new File( "common/unit-test/" );
@@ -119,44 +125,38 @@ public class ExecutionTest
     return engine.getRepository().getLatestGraph( name );
   }
 
-  public NodeToken getActiveToken (final GraphProcess p, final String nodeName)
+  public NodeToken getActiveToken(final GraphProcess p, final String nodeName)
+  {
+    return getActiveToken(p, new TokenOnNodePredicate(nodeName));
+  }
+
+  public NodeToken getActiveToken(final GraphProcess p, final TestPredicate<NodeToken> test)
   {
     for ( NodeToken token : p.getActiveNodeTokens() )
     {
-      if ( nodeName.equals( token.getNode().getName() ) )
+      if ( test.matches(token) )
       {
         return token;
       }
     }
 
-    Assert.assertTrue( "No node token found on node: " + nodeName, false );
-    return null;
-  }
-
-  public NodeToken getActiveToken (final GraphProcess p,
-                                   final String nodeName,
-                                   final String tokenSetName,
-                                   final int tokenSetIdx)
-  {
-    for ( NodeToken token : p.getActiveNodeTokens() )
-    {
-      if ( nodeName.equals( token.getNode().getName() ) )
-      {
-        TokenSetMember tsMember = token.getTokenSetMember( tokenSetName );
-        if ( tsMember != null && tsMember.getMemberIndex() == tokenSetIdx )
-        {
-          return token;
-        }
-      }
-    }
-
-    Assert.assertTrue( "No node token found on node: " + nodeName, false );
+    Assert.assertTrue( "No node token found for predicate: " + test, false );
     return null;
   }
 
   public GraphProcess completeToken (final GraphProcess p, final String nodeName)
   {
-    completeToken(getActiveToken( p, nodeName ));
+    final NodeToken token = getActiveToken(p, new TokenOnNodePredicate(nodeName));
+    System.out.println("Completing token: " + token + " on node " + token.getNode());
+    completeToken(token);
+    return p;
+  }
+
+  public GraphProcess completeToken (final GraphProcess p, final TestPredicate<NodeToken> test)
+  {
+    final NodeToken token = getActiveToken(p, test);
+    System.out.println("Completing token: " + token + " on node " + token.getNode());
+    completeToken(token);
     return p;
   }
 
@@ -172,7 +172,8 @@ public class ExecutionTest
 
   public GraphProcess completeToken (final GraphProcess p, final String nodeName, final String arcName)
   {
-    engine.complete( getActiveToken( p, nodeName ), arcName );
+    final NodeToken token = getActiveToken(p, new TokenOnNodePredicate(nodeName));
+    engine.complete(token, arcName);
     return p;
   }
 
@@ -186,7 +187,9 @@ public class ExecutionTest
                              final String tokenSetName,
                              final int tokenSetIdx)
   {
-    engine.complete( getActiveToken( p, nodeName, tokenSetName, tokenSetIdx ), Arc.DEFAULT_ARC );
+    final NodeToken token = getActiveToken(p, new MemberSetPredicate(nodeName, tokenSetName, tokenSetIdx));
+    System.out.println("Completing token: " + token);
+    engine.complete(token, Arc.DEFAULT_ARC);
   }
 
   public void completeToken (final GraphProcess p,
@@ -195,7 +198,8 @@ public class ExecutionTest
                              final String tokenSetName,
                              final int tokenSetIdx)
   {
-    engine.complete( getActiveToken( p, nodeName, tokenSetName, tokenSetIdx ), arcName );
+    final NodeToken token = getActiveToken(p, new MemberSetPredicate(nodeName, tokenSetName, tokenSetIdx));
+    engine.complete(token, arcName);
   }
 
   public GraphProcess startProcess(final String graphName) throws Exception

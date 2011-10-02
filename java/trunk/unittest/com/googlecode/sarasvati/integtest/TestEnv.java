@@ -14,11 +14,14 @@ public class TestEnv
 
   static
   {
-    final String testProfile = System.getProperty( "sarasvati.test.profile" );
+    final String testEngine = System.getProperty("sarasvati.test.targetEngine");
+    final String testDatabase = System.getProperty("sarasvati.test.targetDB");
 
     try
     {
-      if ( "postgresql".equals( testProfile ) )
+      final boolean hibEngine = "hibernate".equals(testEngine);
+
+      if (hibEngine && "postgresql".equals(testDatabase))
       {
         init( "paul", "integtests",
               "org.postgresql.Driver",
@@ -31,7 +34,7 @@ public class TestEnv
       throw new ExceptionInInitializerError( e );
     }
 
-    System.out.println("Running tests with profile: " + testProfile);
+    System.out.println("Running tests with profile: " + testDatabase);
   }
 
   public static void init (final String username,
@@ -62,9 +65,11 @@ public class TestEnv
     sessionFactory = config.buildSessionFactory();
   }
 
-  public static Session openSession ()
+  public static void openSession ()
   {
-    return sessionFactory.openSession();
+    session = sessionFactory.openSession();
+    session.beginTransaction();
+    engine = new HibEngine(session);
   }
 
   private static Engine engine = null;
@@ -80,9 +85,7 @@ public class TestEnv
       }
       else
       {
-        session = openSession();
-        session.beginTransaction();
-        engine = new HibEngine(session);
+        openSession();
       }
     }
     return engine;
@@ -100,8 +103,7 @@ public class TestEnv
       session.flush();
       session.getTransaction().commit();
       session.close();
-      session = openSession();
-      engine = new HibEngine( session );
+      openSession();
     }
 
     return engine;

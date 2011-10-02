@@ -300,4 +300,11 @@ public class SvUtil
       throw new RuntimeException( uee );
     }
   }
+
+  public static String getShortClassName(final Object o)
+  {
+    final String className = o.getClass().getName();
+    final int lastDot = className.lastIndexOf('.');
+    return lastDot >= 0 ? className.substring(lastDot + 1) : className;
+  }
 }

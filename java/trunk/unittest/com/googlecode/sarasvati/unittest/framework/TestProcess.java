@@ -384,10 +384,11 @@ public class TestProcess
               TestNodeToken testChild = testArcToken.getChildToken();
               testArcToken.setToken( arcToken );
 
-              // If this test node token already processed by some incoming arc, don't re-queue
+              // If this test node token has already been processed by some incoming arc, don't re-queue
               if ( testChild.getToken() == null )
               {
                 testChild.setToken( child );
+                System.out.println("Tying " + testChild + " to " + ProcessPrinter.toString(child));
                 queue.add( testChild );
               }
 
@@ -455,7 +456,7 @@ public class TestProcess
 
   public void dumpToStandardOut ()
   {
-    System.out.println( "\nTesProcess: " );
+    System.out.println( "\nTestProcess: " );
     Set<TestNodeToken> p = new HashSet<TestNodeToken>();
 
     LinkedList<TestNodeToken> queue = new LinkedList<TestNodeToken>();
