@@ -45,8 +45,9 @@ public class JavaSixScriptRunner implements ScriptRunner
   }
 
   @Override
-  public Object executeScript(final Engine engine, final NodeToken token, final String script, String scriptType)
+  public Object executeScript(final Engine engine, final NodeToken token, final String script, final String userScriptType)
   {
+    String scriptType = userScriptType;
     if ( scriptType == null || scriptType.trim().isEmpty() )
     {
       scriptType = "js";

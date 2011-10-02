@@ -32,11 +32,11 @@ public class ErrorReporter
     return e;
   }
 
-  public String reportError (final RecognitionException re, String message)
+  public String reportError (final RecognitionException re, final String message)
   {
-    message += " at line " + re.line + ", character " + re.charPositionInLine;
+    final String exceptionMessage = message + " at line " + re.line + ", character " + re.charPositionInLine;
 
-    JoinLangException ne = new JoinLangCompilationException( re, message );
+    JoinLangException ne = new JoinLangCompilationException( re, exceptionMessage );
 
     if ( e == null )
     {

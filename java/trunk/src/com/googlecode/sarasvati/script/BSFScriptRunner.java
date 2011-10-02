@@ -33,9 +33,11 @@ public class BSFScriptRunner implements ScriptRunner
   }
 
   @Override
-  public Object executeScript(final Engine engine, final NodeToken token, final String script, String scriptType)
+  public Object executeScript(final Engine engine, final NodeToken token, final String script, final String userScriptType)
   {
     BSFManager bsfManager = new BSFManager();
+
+    String scriptType = userScriptType;
 
     try
     {
