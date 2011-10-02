@@ -217,6 +217,12 @@ public class HibGraphFactory extends AbstractGraphFactory
     {
       HibNodeToken parent = (HibNodeToken)arcToken.getParentToken();
 
+      Env mergeEnv = parent.getEnv();
+      for ( String name : mergeEnv.getTransientAttributeNames() )
+      {
+        transientAttributes.put( name, mergeEnv.getTransientAttribute( name ) );
+      }
+
       if ( parent.getAttrSetToken() == null )
       {
         continue;
@@ -234,12 +240,6 @@ public class HibGraphFactory extends AbstractGraphFactory
       if ( isMerge )
       {
         attrMap.putAll( parent.getAttrSetToken().getAttrMap() );
-      }
-
-      Env mergeEnv = parent.getEnv();
-      for ( String name : mergeEnv.getTransientAttributeNames() )
-      {
-        transientAttributes.put( name, mergeEnv.getTransientAttribute( name ) );
       }
     }
 
@@ -306,8 +306,7 @@ public class HibGraphFactory extends AbstractGraphFactory
     return setMember;
   }
 
-  @Override
-  public void addType (final String type, final Class<? extends Node> clazz)
+  protected void ensureDatabaseTypeExists (final String type, final Class<? extends Node> clazz)
   {
     HibNodeType hibNodeType = (HibNodeType) session.get( HibNodeType.class, type );
 
@@ -353,5 +352,19 @@ public class HibGraphFactory extends AbstractGraphFactory
     }
 
     super.addType( type, clazz );
+  }
+
+  @Override
+  public void addType (final String type, final Class<? extends Node> clazz)
+  {
+    ensureDatabaseTypeExists(type, clazz);
+    super.addType( type, clazz );
+  }
+
+  @Override
+  public void addGlobalCustomType(final String type, final Class<? extends CustomNode> nodeClass)
+  {
+    ensureDatabaseTypeExists(type, nodeClass);
+    super.addGlobalCustomType(type, nodeClass);
   }
 }
