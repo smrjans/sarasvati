@@ -1,0 +1,17 @@
+<projectDescription>
+  <name>sarasvati-core</name>
+  <comment>Sarasvati is a workflow/bpm engine based on graph execution. It has a simple core which allows for different implementations. For example one may change the persistence mechanism (or avoid it altogether), change token representation or build additional functionality on top. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects/>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+    <buildCommand>
+      <name>org.eclipse.m2e.core.maven2Builder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.m2e.core.maven2Nature</nature>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>

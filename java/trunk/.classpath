@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="editor"/>
-	<classpathentry kind="src" path="visual"/>
-	<classpathentry kind="src" path="unittest"/>
+	<classpathentry kind="src" path="sarasvati-visual/src/main/java"/>
+	<classpathentry kind="src" path="sarasvati-hibernate/src/main/java"/>
+	<classpathentry kind="src" path="sarasvati-editor/src/test/java"/>
+	<classpathentry kind="src" path="sarasvati-editor/src/main/java"/>
+	<classpathentry kind="src" path="sarasvati-core/src/main/java"/>
 	<classpathentry kind="src" path="examples"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry exported="true" kind="lib" path="lib/ejb3-persistence.jar"/>
@@ -19,7 +20,6 @@
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.6R7.jar"/>
 	<classpathentry kind="lib" path="lib/antlr3-ant.jar"/>
-	<classpathentry kind="lib" path="lib/antlr-3.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.5.jar"/>
 	<classpathentry kind="lib" path="lib/org-netbeans-api-visual.jar" sourcepath="lib/org-netbeans-api-visual-src.jar"/>
 	<classpathentry kind="lib" path="lib/org-openide-util.jar"/>
