@@ -14,38 +14,40 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008, 2009 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.unittest.rubric;
 
-import junit.framework.Assert;
+import java.util.Date;
 
-import org.junit.Test;
+import com.googlecode.sarasvati.rubric.env.RubricEnv;
 
-import com.googlecode.sarasvati.rubric.RubricCompiler;
-
-public class RubricNumberTest
+public class TestRubricEnv implements RubricEnv
 {
-  @Test public void testSimple ()
+  public static final TestRubricEnv INSTANCE = new TestRubricEnv();
+
+  @Override
+  public Date evalDateFunction (final String dateFunction)
   {
-    Integer expected = 1;
-    String script="1";
-    System.out.println( "SCRIPT: " + script );
-
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
-
-    Assert.assertEquals( expected, result );
+    return null;
   }
 
-  @Test public void testNegative ()
+  @Override
+  public String evalStringFunction (final String stringFunction)
   {
-    Integer expected = -10000;
-    String script="-10000";
-    System.out.println( "SCRIPT: " + script );
+    return null;
+  }
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+  @Override
+  public boolean evalPredicate (final String predicate)
+  {
+    return false;
+  }
 
-    Assert.assertEquals( expected, result );
+  @Override
+  public Date evalRelativeDate (final Date date, final boolean business, final int offset, final int unit)
+  {
+    return null;
   }
 }

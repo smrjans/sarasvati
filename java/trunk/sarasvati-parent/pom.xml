@@ -83,6 +83,8 @@
   </build>
   <modules>
     <module>../sarasvati-core</module>
+    <module>../sarasvati-hibernate</module>
+    <module>../sarasvati-test</module>
     <module>../sarasvati-visual</module>
     <module>../sarasvati-editor</module>
   </modules>

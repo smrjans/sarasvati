@@ -4,15 +4,15 @@
 		<artifactId>sarasvati-parent</artifactId>
 		<groupId>com.googlecode.sarasvati</groupId>
 		<version>1.0.6</version>
-    <relativePath>../sarasvati-parent</relativePath>
+    <relativePath>../sarasvati-parent</relativePath>    
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>sarasvati-hibernate</artifactId>
-	<name>sarasvati-hibernate</name>
+	<artifactId>sarasvati-test</artifactId>
+	<name>sarasvati-test</name>
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>sarasvati-core</artifactId>
+      <artifactId>sarasvati-hibernate</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>

@@ -28,7 +28,6 @@ import com.googlecode.sarasvati.impl.AcceptTokenGuardResult;
 import com.googlecode.sarasvati.impl.DiscardTokenGuardResult;
 import com.googlecode.sarasvati.impl.SkipNodeGuardResult;
 import com.googlecode.sarasvati.rubric.RubricCompiler;
-import com.googlecode.sarasvati.unittest.framework.TestRubricEnv;
 
 public class RubricGuardResultTest
 {

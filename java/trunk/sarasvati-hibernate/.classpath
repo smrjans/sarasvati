@@ -1,14 +1,11 @@
 <classpath>
-  <classpathentry kind="src" path="src/test/java" output="target/test-classes" including="**/*.java"/>
   <classpathentry kind="src" path="src/main/java" including="**/*.java"/>
-  <classpathentry kind="src" path="target/generated-sources/antlr3" including="**/*.java"/>
-  <classpathentry kind="src" path="src/main/resources" including="**/*.xsd" excluding="**/*.java"/>
   <classpathentry kind="output" path="target/classes"/>
   <classpathentry kind="var" path="M2_REPO/antlr/antlr/2.7.7/antlr-2.7.7.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/antlr/antlr-runtime/3.1.3/antlr-runtime-3.1.3.jar"/>
   <classpathentry kind="var" path="M2_REPO/bsf/bsf/2.4.0/bsf-2.4.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar"/>
-  <classpathentry kind="var" path="M2_REPO/junit/junit/4.6/junit-4.6.jar"/>
+  <classpathentry kind="src" path="/sarasvati-core"/>
   <classpathentry kind="var" path="M2_REPO/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 </classpath>
