@@ -112,7 +112,7 @@ public class ExecutionTest
 
   protected Graph ensureLoaded (final String name) throws Exception
   {
-    final File basePath = new File( "common/unit-test/" );
+    final File basePath = new File( "src/test/process-definition/" );
     assert basePath.exists();
     final GraphLoader<? extends Graph> loader = engine.getLoader();
 

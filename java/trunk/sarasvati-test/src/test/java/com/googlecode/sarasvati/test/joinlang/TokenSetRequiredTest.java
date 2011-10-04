@@ -21,7 +21,6 @@ package com.googlecode.sarasvati.test.joinlang;
 
 import junit.framework.Assert;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.googlecode.sarasvati.Graph;
@@ -174,7 +173,7 @@ public class TokenSetRequiredTest extends ExecutionTest
     Assert.assertTrue( "Process should be complete", p.isComplete() );
   }
 
-  @Ignore @Test public void testTwo() throws Exception
+  @Test public void testTwo() throws Exception
   {
     Graph g = ensureLoaded( TEST_GRAPH2_NAME );
     GraphProcess p = startProcess( g );
