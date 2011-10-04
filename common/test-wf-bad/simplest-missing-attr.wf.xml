@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-
-<process-definition name="test-bad" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
-  <node name="test">
-  </node>
-</process-definition>
