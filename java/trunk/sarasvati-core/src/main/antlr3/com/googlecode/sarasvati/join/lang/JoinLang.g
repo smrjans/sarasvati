@@ -57,7 +57,6 @@ import java.util.ArrayList;
 
 package com.googlecode.sarasvati.join.lang;
 
-import com.googlecode.sarasvati.join.lang.*;
 }
 
 program returns [JoinLangExpr value]

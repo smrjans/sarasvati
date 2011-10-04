@@ -15,6 +15,14 @@
       <artifactId>sarasvati-core</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
-    </dependency>
+      </dependency>      
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-annotations</artifactId>
+      </dependency>      
   </dependencies>
 </project>

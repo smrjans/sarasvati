@@ -1,0 +1,166 @@
+<?xml-stylesheet type="text/xsl" href="mathml.xsl"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Sarasvati Mathematical Model</title>
+
+  <style type="text/css">
+    div.formula
+    {
+      padding: 5px;
+      margin: 10px;
+      border: 1px solid black;
+      background-color: #CCC;
+    }
+
+  </style>
+  </head>
+  <body>
+
+    A Sarasvati graph <b>G</b> is defined as
+
+
+    <div class="formula">
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <apply>
+          <eq/>
+          <ci>G</ci>
+          <list>
+            <ci>N</ci>
+            <ci>A</ci>
+          </list>
+        </apply>
+      </math>
+    </div>
+
+    Where <b>N</b> is the set of nodes, and <b>A</b> is the set of directed arcs. An arc
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <in/>
+        <ci>a</ci>
+        <ci>A</ci>
+      </apply>
+    </math>
+
+    is defined as
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>a</ci>
+        <list>
+          <ci>
+            <msub>
+              <mi>n</mi>
+              <mi>start</mi>
+            </msub>
+          </ci>
+          <ci>
+            <msub>
+              <mi>n</mi>
+              <mi>end</mi>
+            </msub>
+          </ci>
+          <ci>
+            l
+          </ci>
+        </list>
+      </apply>
+    </math>
+
+    where
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <in/>
+        <ci>
+          <msub>
+            <mi>n</mi>
+            <mi>start</mi>
+          </msub>
+        </ci>
+        <ci type="set">
+          N
+        </ci>
+      </apply>
+    </math>,
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <in/>
+        <ci>
+          <msub>
+            <mi>n</mi>
+            <mi>end</mi>
+          </msub>
+        </ci>
+        <ci type="set">
+          N
+        </ci>
+      </apply>
+    </math>
+
+    and <b>l</b> is label for the arc. The label is non-unique.
+
+    <div class="formula">
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <apply>
+          <eq/>
+          <ci>S</ci>
+          <list>
+            <ci>G</ci>
+            <ci>
+              <msub>
+                <mi>T</mi>
+                <mi>N</mi>
+              </msub>
+            </ci>
+            <ci>
+              <msub>
+                <mi>T</mi>
+                <mi>A</mi>
+              </msub>
+            </ci>
+          </list>
+        </apply>
+      </math>
+    </div>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>
+          <msub>
+            <mi>S</mi>
+            <mi>i</mi>
+          </msub>
+        </ci>
+        <apply>
+          <sum/>
+          <bvar><ci>x</ci></bvar>
+          <lowlimit><ci>1</ci></lowlimit>
+          <uplimit><ci>2</ci></uplimit>
+        </apply>
+      </apply>
+    </math>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>
+          <msub>
+            <mi>S</mi>
+            <mi>i</mi>
+          </msub>
+        </ci>
+        <apply>
+          <sum/>
+          <bvar><ci>x</ci></bvar>
+          <lowlimit><ci>1</ci></lowlimit>
+          <uplimit><ci>2</ci></uplimit>
+        </apply>
+      </apply>
+    </math>
+
+  </body>
+</html>
