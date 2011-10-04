@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<process-definition name="nested-process"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node type="nested" name="1" isStart="true">
+    <arc to="2"/>
+
+    <custom>
+      <graph name="script-test"/>
+    </custom>
+  </node>
+
+  <node type="nested" name="2">
+    <arc to="3"/>
+
+    <custom>
+      <graph name="not-random-guard"/>
+    </custom>
+  </node>
+
+  <node type="task" name="3">
+    <arc to="4"/>
+
+    <custom>
+      <taskName>Test task</taskName>
+      <taskDesc>This is here to provide a wait state</taskDesc>
+    </custom>
+  </node>
+
+  <node type="nested" name="4">
+    <arc to="5"/>
+    <custom>
+      <graph name="script-test"/>
+    </custom>
+  </node>
+
+  <node type="nested" name="5">
+    <arc to="6"/>
+    <custom>
+      <graph name="not-random-guard"/>
+    </custom>
+  </node>
+
+  <node type="nested" name="6">
+    <arc to="7"/>
+    <custom>
+      <graph name="many-tasks"/>
+    </custom>
+  </node>
+
+  <node type="nested" name="7">
+    <arc to="8"/>
+    <custom>
+      <graph name="script-test"/>
+    </custom>
+  </node>
+
+  <node type="nested" name="8">
+    <custom>
+      <graph name="not-random-guard"/>
+    </custom>
+  </node>
+
+</process-definition>

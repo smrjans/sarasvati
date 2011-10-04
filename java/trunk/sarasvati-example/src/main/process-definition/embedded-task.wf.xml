@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<process-definition name="embedded-task"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node type="task" name="1" isStart="true">
+    <arc external="subwf-tasks" to="sub1"/>
+
+    <custom>
+      <taskName>Enter order</taskName>
+      <taskDesc>
+        Enter order into system
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node name="end"/>
+
+  <external name="subwf-tasks" processDefinition="subwf-tasks">
+    <arc from="sub4" to="end"/>
+  </external>
+
+</process-definition>

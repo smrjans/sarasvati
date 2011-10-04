@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<process-definition name="subwf-tasks"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node type="task" name="sub1">
+    <arc to="sub2"/>
+    <arc to="sub3"/>
+
+    <custom>
+      <taskName>Call Distributer</taskName>
+      <taskDesc>
+        This task should spawn tasks "Order Stuff" and "Request Status"
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="sub2">
+    <arc to="sub4"/>
+
+    <custom>
+      <taskName>Order Stuff</taskName>
+      <taskDesc>
+        Order stuff now.
+
+        Mark Complete shouldn't spawn until this and Request status are both complete.
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="sub3">
+    <arc to="sub4"/>
+
+    <custom>
+      <taskName>Request Status</taskName>
+      <taskDesc>
+        Get status on other orders.
+
+        Mark Complete shouldn't spawn until this and Order Stuff are both complete.
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="sub4" joinType="labelAnd">
+    <custom>
+      <taskName>Mark Complete</taskName>
+      <taskDesc>
+        Sign off in application in application.
+      </taskDesc>
+    </custom>
+  </node>
+
+</process-definition>

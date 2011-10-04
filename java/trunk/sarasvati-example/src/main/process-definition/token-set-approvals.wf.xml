@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+
+<process-definition name="token-set-approvals"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="setup-approvals" type="approvalSetup" isStart="true">
+    <arc to="approval"/>
+  </node>
+
+  <node name="approval" type="approval" >
+    <arc to="show-approval"/>
+  </node>
+
+  <node name="show-approval" type="script" >
+    <arc to="finish-approval"/>
+
+    <custom>
+      <execute type="js">
+        <![CDATA[
+          var tokenSetEnv = token.getTokenSet( "approvals" ).getEnv();
+          var secondRun = tokenSetEnv.getAttribute( "second-run", java.lang.Class.forName( "java.lang.Boolean" ), java.lang.Boolean.FALSE );
+          java.lang.System.out.println( "Second run: " + secondRun );
+          if ( secondRun.booleanValue() )
+          {
+            var group = token.getTokenSetMember( "approvals" ).getEnv().getAttribute( "group" );
+            java.lang.System.out.println( "Group: " + group );
+            engine.complete( token, null );
+          }
+          else
+          {
+            java.lang.System.out.println( "Testing backtracking" );
+            tokenSetEnv.setAttribute( "second-run", true );
+            var parent = token.parentTokens.get( 0 ).parentToken;
+            try
+            {
+              engine.backtrack( parent );
+            }
+            catch ( e )
+            {
+              java.lang.System.out.println( e )
+            }
+          }
+        ]]>
+      </execute>
+    </custom>
+
+  </node>
+
+  <node name="finish-approval" type="node" joinType="tokenSetAnd">
+    <join>approvals</join>
+    <guard>IF Approved THEN Skip approved ELSE Skip denied</guard>
+    <arc name="approved" to="approved"/>
+    <arc name="denied" to="denied"/>
+  </node>
+
+  <node name="approved" type="message">
+    <arc to="backtrack-test"/>
+    <custom>
+      <message>Your request has been approved</message>
+    </custom>
+  </node>
+
+  <node name="denied" type="message">
+    <arc to="backtrack-test"/>
+    <custom>
+      <message>Your request has been denied</message>
+    </custom>
+  </node>
+
+  <node name="backtrack-test" type="script">
+    <custom>
+      <execute type="js">
+        <![CDATA[
+          var processEnv = token.process.env;
+          var secondRun = processEnv.getAttribute( "second-run", java.lang.Class.forName( "java.lang.Boolean" ), java.lang.Boolean.FALSE );
+          java.lang.System.out.println( "Second run: " + secondRun );
+          if ( secondRun.booleanValue() )
+          {
+            engine.complete( token, null );
+          }
+          else
+          {
+            java.lang.System.out.println( "Testing backtracking" );
+            processEnv.setAttribute( "second-run", true );
+            var parent = token.parentTokens.get( 0 ).parentToken; // approved node
+            parent = parent.parentTokens.get( 0 ).parentToken; // finish-approval-node
+            parent = parent.parentTokens.get( 0 ).parentToken; // approval-node
+
+            try
+            {
+              engine.backtrack( parent );
+            }
+            catch ( e )
+            {
+              java.lang.System.out.println( e )
+            }
+          }
+        ]]>
+      </execute>
+    </custom>
+  </node>
+
+</process-definition>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<process-definition name="example1"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="start" isStart="true">
+    <arc to="1"/>
+  </node>
+
+  <node name="1" type="task">
+    <arc to="2"/>
+    <arc to="3"/>
+
+    <custom>
+      <taskName>Enter order</taskName>
+      <taskDesc>
+        Enter order and billing info
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="2">
+    <arc to="4"/>
+
+    <custom>
+      <taskName>Bill Customer</taskName>
+      <taskDesc>
+        Bill the Customer
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="3">
+    <arc to="4"/>
+
+    <custom>
+      <taskName>Ship product</taskName>
+      <taskDesc>
+        Package and ship product
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="4" joinType="labelAnd">
+
+    <custom>
+      <taskName>Market to Customer</taskName>
+      <taskDesc>
+        Send marketing material to customer
+      </taskDesc>
+    </custom>
+
+  </node>
+
+</process-definition>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<process-definition name="external-env-three" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="C" isStart="true">
+    <arc external="two" to="B"/>
+  </node>
+
+  <external name="two" processDefinition="external-env-two">
+    <custom>
+      <foo>baz</foo>
+    </custom>
+  </external>
+
+</process-definition>
