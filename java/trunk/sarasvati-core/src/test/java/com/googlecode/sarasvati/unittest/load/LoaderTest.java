@@ -16,7 +16,7 @@ public class LoaderTest
   public void testMissingExternals()
   {
     Engine engine = new MemEngine();
-    File basePath = new File( "common/unit-test/missing-external" );
+    File basePath = new File( "src/test/process-definition/missing-external" );
     assert basePath.exists();
     engine.getLoader().loadNewAndChanged( basePath );
   }
@@ -25,7 +25,7 @@ public class LoaderTest
   public void testExternalPresent()
   {
     Engine engine = new MemEngine();
-    File basePath = new File( "common/unit-test/external-present" );
+    File basePath = new File( "src/test/process-definition/external-present" );
     assert basePath.exists();
     engine.getLoader().loadNewAndChanged( basePath );
 

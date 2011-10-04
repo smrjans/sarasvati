@@ -77,18 +77,16 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
 
   private void loadSchema () throws SarasvatiLoadException
   {
-    InputStream is = getClass().getClassLoader().getResourceAsStream(
-        "com/googlecode/sarasvati/ProcessDefinition.xsd" );
+    InputStream is = getClass().getClassLoader().getResourceAsStream("ProcessDefinition.xsd");
 
     if (is == null)
     {
-      is = getClass().getClassLoader().getResourceAsStream(
-          "/com/googlecode/sarasvati/ProcessDefinition.xsd" );
+      is = getClass().getClassLoader().getResourceAsStream("/ProcessDefinition.xsd");
     }
 
     if (is == null)
     {
-      throw new SarasvatiLoadException( "ProcessDefinition.xsd not found in classpath" );
+      throw new SarasvatiLoadException("ProcessDefinition.xsd not found in classpath");
     }
 
     try
