@@ -87,6 +87,7 @@
     <module>../sarasvati-test</module>
     <module>../sarasvati-visual</module>
     <module>../sarasvati-editor</module>
+    <module>../sarasvati-example</module>
   </modules>
   <dependencyManagement>
     <dependencies>

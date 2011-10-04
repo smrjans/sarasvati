@@ -16,58 +16,56 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.example.visual;
 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.hibernate.Session;
 
-import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.adapter.Function;
-import com.googlecode.sarasvati.adapter.NodeAdapterManager;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
-import com.googlecode.sarasvati.visual.icon.OvalNodeIcon;
-import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
-import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
+import com.googlecode.sarasvati.hib.HibGraphProcess;
+import com.googlecode.sarasvati.visual.DefaultProcessLookAndFeel;
+import com.googlecode.sarasvati.visual.ProcessLookAndFeel;
+import com.googlecode.sarasvati.visual.process.SarasvatiProcessScene;
 
 /**
- * Base class for a standalone graph visualizer. Will show a list of
- * loaded graphs in the left pane, and a visualization of the selected
- * graph in the main pane.
- *
+ * Base class for a standalone process visualizer. Will show a list of
+ * available processes in the left pane, and a visualization of the selected
+ * process in the main pane.
  * <br>
- *
  * To manage database connectivity, users should override
- * {@link AbstractGraphVisualizer#init()} and
- * {@link AbstractGraphVisualizer#getSession()}.
- *
+ * {@link AbstractProcessVisualizer#init()} and
+ * {@link AbstractProcessVisualizer#getSession()}.
  * <br>
  * For custom rendering of nodes, subclasses may also override
- * {@link AbstractGraphVisualizer#getWidgetFactory()}.
-
+ * {@link AbstractProcessVisualizer#getWidgetFactory()}.
+ *
  * @author Paul Lorenz
  */
-public abstract class AbstractGraphVisualizer
+public abstract class AbstractProcessVisualizer
 {
-  protected Graph currentGraph = null;
-  protected SarasvatiGraphScene scene = new SarasvatiGraphScene( null, getWidgetFactory() );
+  protected Session               session        = null;
+  protected HibGraphProcess       currentProcess = null;
+  protected SarasvatiProcessScene scene = new SarasvatiProcessScene( null, getWidgetFactory() );
+
+  final JScrollPane scrollPane = new JScrollPane();
 
   /**
    * Place to perform hibernate initialization
@@ -83,40 +81,20 @@ public abstract class AbstractGraphVisualizer
    */
   public abstract Session getSession ();
 
-  public GraphLookAndFeel getWidgetFactory ()
+  public ProcessLookAndFeel getWidgetFactory ()
   {
-    return DefaultGraphLookAndFeel.INSTANCE;
+    return DefaultProcessLookAndFeel.INSTANCE;
   }
 
-  public void run () throws Exception
+  @SuppressWarnings("unchecked")
+  public synchronized void run () throws Exception
   {
     init ();
 
-    NodeAdapterManager.registerFactory( Component.class,
-        new Function<Component, Node>()
-        {
-          @Override public Component apply (final Node node)
-          {
-            if( "end".equalsIgnoreCase( node.getType() )){
-              return new JLabel( new SmallCircleNodeIcon());
-            }
-            return "task".equalsIgnoreCase( node.getType() ) ?
-              new JLabel( new RectangularNodeIcon( node, null ) ) :
-              new JLabel( new OvalNodeIcon( node, null ) );
-          }
-        });
+    session = getSession();
+    final HibEngine engine = new HibEngine( session );
 
-    NodeAdapterManager.registerFactory( String.class,
-        new Function<String,Node>()
-        {
-          @Override public String apply (final Node node)
-          {
-            return node.getName();
-          }
-        });
-
-    Session session = getSession();
-    HibEngine engine = new HibEngine( session );
+    List<GraphProcess> process = engine.getSession().createQuery( "from HibGraphProcess order by graph, createDate" ).list();
 
     JFrame frame = new JFrame( "Workflow Visualizer" );
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
@@ -125,10 +103,10 @@ public abstract class AbstractGraphVisualizer
     JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
     frame.getContentPane().add( splitPane );
 
-    DefaultListModel listModel = new DefaultListModel();
-    for ( Graph g : engine.getRepository().getGraphs() )
+    final DefaultListModel listModel = new DefaultListModel();
+    for ( GraphProcess p : process )
     {
-      listModel.addElement( g );
+      listModel.addElement( p );
     }
 
     ListCellRenderer cellRenderer = new DefaultListCellRenderer()
@@ -142,9 +120,9 @@ public abstract class AbstractGraphVisualizer
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 
-        Graph g = (Graph)value;
+        HibGraphProcess p = (HibGraphProcess)value;
 
-        setText( g.getName() + "." + g.getVersion() + "  " );
+        setText( p.getGraph().getName() + "-" + p.getId() + "  " );
         return this;
       }
     };
@@ -159,7 +137,6 @@ public abstract class AbstractGraphVisualizer
 
     splitPane.add( listScrollPane );
 
-    final JScrollPane scrollPane = new JScrollPane();
     scrollPane.setViewportView( scene.createView() );
     scrollPane.setHorizontalScrollBarPolicy( ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED );
     scrollPane.setVerticalScrollBarPolicy( ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED );
@@ -177,21 +154,82 @@ public abstract class AbstractGraphVisualizer
           return;
         }
 
-        final Graph g = (Graph)graphList.getSelectedValue();
+        final HibGraphProcess graphProcess = (HibGraphProcess)graphList.getSelectedValue();
 
-        if ( g != null && g.equals( currentGraph ) )
+        if ( graphProcess != null && graphProcess.equals( currentProcess ) )
         {
           return;
         }
 
-        currentGraph = g;
-        scene = new SarasvatiGraphScene( currentGraph, getWidgetFactory() );
+        if ( graphProcess != null )
+        {
+          session.clear();
+          session.refresh( graphProcess );
+        }
 
-        scrollPane.setViewportView( scene.createView() );
-        scrollPane.repaint();
+        setProcess( graphProcess );
       }
-    });
+    } );
 
     frame.setVisible( true );
+
+    new Thread()
+    {
+      @Override public void run ()
+      {
+        while ( true )
+        {
+          try
+          {
+            synchronized( this )
+            {
+              wait( 1000 );
+            }
+
+            SwingUtilities.invokeLater( new Runnable()
+            {
+              @Override public void run()
+              {
+                if ( currentProcess != null )
+                {
+                  Integer currentVersion = currentProcess.getVersion();
+                  session.clear();
+                  session.refresh( currentProcess );
+
+                  if ( currentVersion != null &&
+                       currentProcess.getVersion() != null &&
+                       currentVersion.intValue() !=  currentProcess.getVersion().intValue() )
+                  {
+                    setProcess( currentProcess );
+                  }
+                }
+
+                List<GraphProcess> processList = engine.getSession().createQuery( "from HibGraphProcess order by graph, createDate" ).list();
+                for ( GraphProcess p : processList )
+                {
+                  if ( !listModel.contains( p ) )
+                  {
+                    listModel.addElement( p );
+                  }
+                }
+              }
+            });
+          }
+          catch( InterruptedException ie )
+          {
+            return;
+          }
+        }
+      }
+    }.start();
+  }
+
+  public synchronized void setProcess (final HibGraphProcess graphProcess)
+  {
+    currentProcess = graphProcess;
+    scene = new SarasvatiProcessScene( currentProcess, getWidgetFactory() );
+
+    scrollPane.setViewportView( scene.createView() );
+    scene.repaint();
   }
 }

@@ -1,5 +1,9 @@
 package com.googlecode.sarasvati.test.framework;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AnnotationConfiguration;
+
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.mem.MemEngine;
