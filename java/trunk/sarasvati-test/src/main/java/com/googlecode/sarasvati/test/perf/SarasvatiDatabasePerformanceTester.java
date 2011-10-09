@@ -26,23 +26,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.Session;
-
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.example.ApprovalNode;
-import com.googlecode.sarasvati.example.ApprovalSetupNode;
-import com.googlecode.sarasvati.example.CustomTestNode;
-import com.googlecode.sarasvati.example.MessageNode;
-import com.googlecode.sarasvati.example.hib.AsyncNode;
-import com.googlecode.sarasvati.example.hib.DumpNode;
-import com.googlecode.sarasvati.example.hib.HibExampleTaskNode;
-import com.googlecode.sarasvati.example.hib.HibTestSetup;
-import com.googlecode.sarasvati.example.hib.InitNode;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraphProcess;
 import com.googlecode.sarasvati.hib.HibNode;
@@ -53,6 +42,7 @@ import com.googlecode.sarasvati.load.ProcessDefinitionResolver;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.rubric.env.RubricPredicate;
+import com.googlecode.sarasvati.test.framework.TestEnv;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 
@@ -81,34 +71,22 @@ public class SarasvatiDatabasePerformanceTester
 
   private final Map<String, TestPerfStats> graphs = new HashMap<String,TestPerfStats>();
 
-  private HibEngine newEngine () throws Exception
+  private HibEngine newEngine ()
   {
-    Session sess = HibTestSetup.openSession();
-    sess.beginTransaction();
-
-    HibEngine engine = new HibEngine( sess );
+    HibEngine engine = (HibEngine)TestEnv.getEngine();
 
     engine.addNodeType( "node", HibNode.class);
-    engine.addNodeType( "task", HibExampleTaskNode.class );
-    engine.addNodeType( "init", InitNode.class );
-    engine.addNodeType( "dump", DumpNode.class );
-    engine.addNodeType( "async", AsyncNode.class );
     engine.addNodeType( "custom", CustomNode.class );
     engine.addNodeType( "script", ScriptNode.class );
     engine.addNodeType( "nested", NestedProcessNode.class );
     engine.addNodeType( "wait", WaitNode.class );
-    engine.addNodeType( "dumpTypeDupe", DumpNode.class );
-    engine.addNodeType( "customTest", CustomTestNode.class );
-    engine.addNodeType( "approval", ApprovalNode.class );
-    engine.addNodeType( "approvalSetup", ApprovalSetupNode.class );
-    engine.addNodeType( "message", MessageNode.class );
 
     return engine;
   }
 
-  public long testLoad (final String name) throws Exception
+  public long testLoad (final String name)
   {
-    HibEngine engine = newEngine();
+    Engine engine = newEngine();
     long start = System.currentTimeMillis();
     Graph g = engine.getRepository().getLatestGraph( name );
     for ( Node node : g.getNodes() )
@@ -119,13 +97,13 @@ public class SarasvatiDatabasePerformanceTester
     {
       arc.getName();
     }
-    engine.getSession().close();
+    TestEnv.commitSession();
     return System.currentTimeMillis() - start;
   }
 
   public void init () throws Exception
   {
-    HibEngine engine = newEngine();
+    Engine engine = TestEnv.getEngine();
     XmlLoader xmlLoader = new XmlLoader();
 
     File baseDir = new File( "common/test-wf/" );
@@ -140,8 +118,7 @@ public class SarasvatiDatabasePerformanceTester
       graphs.put( xmlDef.getName(), new TestPerfStats( xmlDef ) );
     }
 
-    engine.getSession().getTransaction().commit();
-    engine.getSession().close();
+    TestEnv.commitSession();
   }
 
   public void runGraphTest (final int iterations,
@@ -152,15 +129,15 @@ public class SarasvatiDatabasePerformanceTester
 
     for ( int i = 0; i < iterations; i++ )
     {
-      HibEngine engine = newEngine();
+      Engine engine = TestEnv.getEngine();
       for ( TestPerfStats tg : graphs.values() )
       {
         long start = System.currentTimeMillis();
         engine.getLoader().loadDefinition( tg.getXmlProcDef() );
         tg.addInsertStat( System.currentTimeMillis() - start );
       }
-      engine.getSession().getTransaction().commit();
-      engine.getSession().close();
+
+      TestEnv.commitSession();
 
       for ( TestPerfStats tg : graphs.values() )
       {
@@ -182,17 +159,15 @@ public class SarasvatiDatabasePerformanceTester
 
   public void testProcess (final String graphName,
                            final int iterations)
-    throws Exception
   {
     for ( int count = 0; count < iterations; count++ )
     {
-      HibEngine engine = newEngine();
+      HibEngine engine = (HibEngine)TestEnv.getEngine();
       HibGraphProcess p = (HibGraphProcess) engine.startProcess( graphName );
 
       long processId = p.getId();
 
-      engine.getSession().getTransaction().commit();
-      engine.getSession().close();
+      TestEnv.commitSession();
 
       while ( !p.isComplete() )
       {
@@ -207,8 +182,8 @@ public class SarasvatiDatabasePerformanceTester
           engine.executeQueuedArcTokens( p );
           iter++;
         }
-        engine.getSession().getTransaction().commit();
-        engine.getSession().close();
+
+        TestEnv.commitSession();
         System.out.println( "Iteration " + count + ". Execute time: " + (System.currentTimeMillis() - start ) );
       }
     }
@@ -216,7 +191,8 @@ public class SarasvatiDatabasePerformanceTester
 
   public static void main (final String[] args) throws Exception
   {
-    HibTestSetup.init( false );
+    System.getProperties().put(TestEnv.ENGINE_KEY, TestEnv.ENGINE_HIBERNATE);
+    System.getProperties().put(TestEnv.DB_KEY, TestEnv.DATABASE_POSTGRESQL);
 
     SarasvatiDatabasePerformanceTester perfTester = new SarasvatiDatabasePerformanceTester();
     perfTester.init();
@@ -259,8 +235,6 @@ public class SarasvatiDatabasePerformanceTester
       }
     });
 
-
-    DumpNode.doPrint = false;
 
     System.out.println( "================================START========================================" );
     perfTester.testProcess( "random-guard", 1000 );

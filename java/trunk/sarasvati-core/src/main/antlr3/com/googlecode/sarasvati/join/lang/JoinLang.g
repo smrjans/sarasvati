@@ -29,7 +29,6 @@ package com.googlecode.sarasvati.join.lang;
 
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.rubric.lang.*;
-import com.googlecode.sarasvati.rubric.lang.*;
 import java.util.List;
 import java.util.ArrayList;
 

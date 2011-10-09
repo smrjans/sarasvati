@@ -10,18 +10,26 @@ import com.googlecode.sarasvati.mem.MemEngine;
 
 public class TestEnv
 {
+  public static final String ENGINE_KEY = "sarasvati.test.targetEngine";
+  public static final String DB_KEY = "sarasvati.test.targetDB";
+
+  public static final String ENGINE_HIBERNATE = "hibernate";
+  public static final String ENGINE_MEMORY    = "memory";
+
+  public static final String DATABASE_POSTGRESQL = "postgresql";
+
   protected static SessionFactory sessionFactory = null;
 
   static
   {
-    final String testEngine = System.getProperty("sarasvati.test.targetEngine");
-    final String testDatabase = System.getProperty("sarasvati.test.targetDB");
+    final String testEngine = System.getProperty(ENGINE_KEY);
+    final String testDatabase = System.getProperty(DB_KEY);
 
     try
     {
-      final boolean hibEngine = "hibernate".equals(testEngine);
+      final boolean hibEngine = ENGINE_HIBERNATE.equals(testEngine);
 
-      if (hibEngine && "postgresql".equals(testDatabase))
+      if (hibEngine && DATABASE_POSTGRESQL.equals(testDatabase))
       {
         init( "paul", "integtests",
               "org.postgresql.Driver",

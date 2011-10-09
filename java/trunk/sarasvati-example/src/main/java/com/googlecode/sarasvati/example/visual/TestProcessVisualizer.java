@@ -16,12 +16,11 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.test.visual;
+package com.googlecode.sarasvati.example.visual;
 
 import org.hibernate.Session;
 
 import com.googlecode.sarasvati.example.hib.HibTestSetup;
-import com.googlecode.sarasvati.visual.AbstractProcessVisualizer;
 
 public class TestProcessVisualizer extends AbstractProcessVisualizer
 {

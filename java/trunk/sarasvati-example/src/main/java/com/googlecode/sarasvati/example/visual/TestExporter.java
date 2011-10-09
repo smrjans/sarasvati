@@ -16,7 +16,7 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.test.visual;
+package com.googlecode.sarasvati.example.visual;
 
 import java.awt.Component;
 import java.awt.image.BufferedImage;

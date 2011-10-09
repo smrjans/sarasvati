@@ -20,5 +20,14 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>      
+    <dependency>
+      <groupId>org.openide</groupId>
+      <artifactId>util</artifactId>
+      <version>1.0.0</version>
+      <type>jar</type>
+      <scope>system</scope>
+      <systemPath>${basedir}/../lib/org-openide-util.jar</systemPath>
+    </dependency>
   </dependencies>
+  
 </project>
