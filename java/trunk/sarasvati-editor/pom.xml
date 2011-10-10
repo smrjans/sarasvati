@@ -65,7 +65,7 @@
         <includes>
           <include>**/*</include>
         </includes>
-        <targetPath>../</targetPath>
+        <targetPath>${project.build.directory}</targetPath>
       </resource>
       <resource>
         <directory>src/main/izpack/</directory>
@@ -73,7 +73,7 @@
         <includes>
           <include>install.xml</include>
         </includes>
-        <targetPath>../</targetPath>
+        <targetPath>${project.build.directory}</targetPath>
       </resource>
     </resources>
   
@@ -105,8 +105,8 @@
               <goal>izpack</goal>
             </goals>
             <configuration>
-              <baseDir>target</baseDir>
-              <installFile>target/install.xml</installFile>
+              <baseDir>${project.build.directory}</baseDir>
+              <installFile>${project.build.directory}/install.xml</installFile>
             </configuration>
           </execution>
         </executions>

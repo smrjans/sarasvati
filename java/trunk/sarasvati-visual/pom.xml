@@ -8,19 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sarasvati-visual</artifactId>
   <name>sarasvati-visual</name>
-  <build>
-  	<plugins>
-  		<plugin>
-  			<artifactId>maven-compiler-plugin</artifactId>
-  		</plugin>
-  		<plugin>
-  			<artifactId>maven-assembly-plugin</artifactId>
-  		</plugin>
-  		<plugin>
-  			<artifactId>maven-dependency-plugin</artifactId>
-  		</plugin>
-  	</plugins>
-  </build>
+
   <dependencies>
   	<dependency>
   		<groupId>org.eclipse</groupId>
@@ -37,4 +25,5 @@
   		<scope>compile</scope>
   	</dependency>
   </dependencies>
+
 </project>

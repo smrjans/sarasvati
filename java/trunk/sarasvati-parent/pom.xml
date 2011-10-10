@@ -66,11 +66,6 @@
               </goals>
             </execution>
           </executions>
-          <configuration>
-            <descriptorRefs>
-              <descriptorRef>jar-with-dependencies</descriptorRef>
-            </descriptorRefs>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -134,8 +129,9 @@
           </configuration>
         </plugin>    
       </plugins>
-    </pluginManagement>
+    </pluginManagement>         
   </build>
+  
   <modules>
     <module>../sarasvati-core</module>
     <module>../sarasvati-hibernate</module>
@@ -143,6 +139,7 @@
     <module>../sarasvati-visual</module>
     <module>../sarasvati-editor</module>
     <module>../sarasvati-example</module>
+    <module>../sarasvati-dist</module>
   </modules>
 
   <dependencyManagement>

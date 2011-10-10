@@ -42,7 +42,7 @@ import com.googlecode.sarasvati.load.ProcessDefinitionResolver;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.rubric.env.RubricPredicate;
-import com.googlecode.sarasvati.test.framework.TestEnv;
+import com.googlecode.sarasvati.test.TestEnv;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 

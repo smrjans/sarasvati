@@ -1,4 +1,4 @@
-package com.googlecode.sarasvati.test.framework;
+package com.googlecode.sarasvati.test;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
