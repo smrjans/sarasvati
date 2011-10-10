@@ -25,9 +25,6 @@
   	<dependency>
   		<groupId>org.eclipse</groupId>
   		<artifactId>draw2d</artifactId>
-  		<version>3.5.0</version>
-  		<scope>system</scope>
-  		<systemPath>${basedir}/../lib/eclipse-draw2d-3.5.0.jar</systemPath>
   	</dependency>
   	<dependency>
   		<groupId>org.netbeans.api</groupId>

@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/postgresql-8.3-603.jdbc4.jar"/>
-	<classpathentry kind="lib" path="lib/rhino-1.6R7.jar"/>
-	<classpathentry kind="lib" path="lib/org-netbeans-api-visual.jar" sourcepath="lib/org-netbeans-api-visual-src.jar"/>
-	<classpathentry kind="lib" path="lib/org-openide-util.jar"/>
-	<classpathentry kind="lib" path="lib/mysql.jar"/>
-	<classpathentry kind="lib" path="lib/eclipse-draw2d-3.5.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

@@ -9,11 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sarasvati-editor</artifactId>
   <name>sarasvati-editor</name>
-  
-  <properties>
-    <sarasvati.version>1.0.6</sarasvati.version>
-  </properties>
-  
+    
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -27,21 +23,14 @@
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
-    <!-- 
-    <dependency>
-      <groupId>org.codehaus.izpack</groupId>
-      <artifactId>izpack-standalone-compiler</artifactId>
-      <version>4.3.4</version>
-    </dependency>
-     -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-    </dependency>      
-    <dependency>
-      <groupId>org.openide</groupId>
-      <artifactId>util</artifactId>
     </dependency>
+    <dependency> 
+      <groupId>org.netbeans.api</groupId>
+      <artifactId>org-openide-util</artifactId>
+    </dependency>     
     <dependency>
       <groupId>org.eclipse</groupId>
       <artifactId>draw2d</artifactId>
