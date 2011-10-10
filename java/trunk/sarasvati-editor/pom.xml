@@ -9,13 +9,31 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sarasvati-editor</artifactId>
   <name>sarasvati-editor</name>
+  
+  <properties>
+    <sarasvati.version>1.0.6</sarasvati.version>
+  </properties>
+  
   <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>sarasvati-core</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>sarasvati-visual</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
+    <!-- 
+    <dependency>
+      <groupId>org.codehaus.izpack</groupId>
+      <artifactId>izpack-standalone-compiler</artifactId>
+      <version>4.3.4</version>
+    </dependency>
+     -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -23,11 +41,95 @@
     <dependency>
       <groupId>org.openide</groupId>
       <artifactId>util</artifactId>
-      <version>1.0.0</version>
-      <type>jar</type>
-      <scope>system</scope>
-      <systemPath>${basedir}/../lib/org-openide-util.jar</systemPath>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>draw2d</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.netbeans.api</groupId>
+      <artifactId>visual</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr-runtime</artifactId>
+    </dependency>        
   </dependencies>
+
+  <build>
+
+    <resources>
+      <resource>
+        <directory>src/main/resources/</directory>
+        <includes>
+          <include>**/*.xsd</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/java/</directory>
+        <includes>
+          <include>**/Bundle.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/izpack-resources/</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+        <targetPath>../</targetPath>
+      </resource>
+      <resource>
+        <directory>src/main/izpack/</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>install.xml</include>
+        </includes>
+        <targetPath>../</targetPath>
+      </resource>
+    </resources>
+  
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>     
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <configuration>
+         <escapeString>\</escapeString>
+          <delimiters>
+            <delimiter>@</delimiter>
+          </delimiters>
+        </configuration>
+      </plugin>
+          
+      <plugin>
+        <groupId>org.codehaus.izpack</groupId>
+        <artifactId>izpack-maven-plugin</artifactId>
+        <version>5.0.0-beta8</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>izpack</goal>
+            </goals>
+            <configuration>
+              <baseDir>target</baseDir>
+              <installFile>target/install.xml</installFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <licenses>
+    <license>
+      <name>GNU LGPL v3.0</name>
+      <url>LICENSE.txt</url>
+    </license>
+  </licenses>
   
 </project>

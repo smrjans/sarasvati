@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<installation version="1.0">
+  <info>
+    <appname>Sarasvati Graph Editor</appname>
+    <appversion>@version@</appversion>
+    <appsubpath>sarasvati-editor</appsubpath>
+    <authors>
+      <author name="Paul Lorenz" email="sarasvati-wf-users AT googlegroups.com"/>
+    </authors>
+    <url>http://sarasvati.googlecode.com</url>
+    <javaversion>1.5</javaversion>
+    <requiresjdk>no</requiresjdk>
+    <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
+  </info>
+
+  <guiprefs width="600" height="480" resizable="no"/>
+
+  <locale>
+    <langpack iso3="eng"/>
+  </locale>
+
+  <resources>
+    <res id="InfoPanel.info"        src="../../README"/>
+    <res id="LicencePanel.licence"  src="../LICENSE.txt"/>
+    <res id="shortcutSpec.xml"      src="shortcutSpec.xml"/>
+    <res id="Unix_shortcutSpec.xml" src="Unix_shortcutSpec.xml"/>
+  </resources>
+
+  <panels>
+    <panel classname="HelloPanel"/>
+    <panel classname="LicencePanel"/>
+    <panel classname="TargetPanel"/>
+    <panel classname="InstallPanel"/>
+    <panel classname="ShortcutPanel"/>
+    <panel classname="FinishPanel"/>
+  </panels>
+
+  <natives>
+    <native type="izpack" name="ShellLink.dll"/>
+  </natives>
+
+  <packs>
+    <pack name="Editor" required="yes">
+      <description>Process Definition Editor</description>
+      <file targetdir="$INSTALL_PATH" src="dependency/sarasvati-core-@version@.jar"/>
+      <file targetdir="$INSTALL_PATH" src="dependency/sarasvati-visual-${version}.jar"/>
+      <file targetdir="$INSTALL_PATH" src="sarasvati-editor-${version}.jar"/>
+      <file targetdir="$INSTALL_PATH" src="dependency/antlr-runtime-3.1.1.jar"/>
+      <file targetdir="$INSTALL_PATH" src="dependency/org-netbeans-api-visual.jar"/>
+      <file targetdir="$INSTALL_PATH" src="dependency/org-netbeans-api-visual-src.jar"/>
+      <file targetdir="$INSTALL_PATH" src="dependency/org-openide-util.jar" />
+      <file targetdir="$INSTALL_PATH" src="dependency/eclipse-draw2d-3.5.0.jar" />
+      <file targetdir="$INSTALL_PATH" src="run-editor.sh" />
+      <file targetdir="$INSTALL_PATH" src="run-editor.bat" />
+      <file targetdir="$INSTALL_PATH" src="addpath.bat" />
+
+      <parsable   targetfile="$INSTALL_PATH/run-editor.bat"/>
+      <parsable   targetfile="$INSTALL_PATH/run-editor.sh" type="shell"/>
+      <executable targetfile="$INSTALL_PATH/run-editor.sh" stage="never"/>
+
+    </pack>
+  </packs>
+
+</installation>

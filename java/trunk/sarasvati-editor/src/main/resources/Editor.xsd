@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://sarasvati.googlecode.com/Editor"
+           targetNamespace="http://sarasvati.googlecode.com/Editor"
+           elementFormDefault="qualified">
+
+    <xs:element name="editor-properties">
+      <xs:complexType>
+
+        <xs:annotation>
+          <xs:documentation>
+            A process definition consists of a unique name and a set of nodes.
+            The nodes are connected via arcs.
+          </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+          <xs:element name="node" type="EditorNode" minOccurs="1" maxOccurs="unbounded" >
+            <xs:annotation>
+              <xs:documentation>
+                Every process definition must have at least one
+                node. If a process definition contains no nodes
+                with the isStart attribute set to true, it can
+                not be run on it's own. This is still valid
+                however, since it could be referenced from
+                another process definition.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+
+          <xs:element name="external" type="EditorExternal" minOccurs="0" maxOccurs="unbounded" >
+            <xs:annotation>
+              <xs:documentation>
+                Every process definition may contain contain zero or more
+                references to external process definitions.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+
+        </xs:sequence>
+
+        <xs:attribute name="defaultNodeForIncomingArcs" type="xs:string" use="optional">
+          <xs:annotation>
+            <xs:documentation>
+              If this graph is being referenced as an external, a node can be specified
+              as being the default node to point to for incoming arcs.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="defaultNodeForOutgoingArcs" type="xs:string" use="optional">
+          <xs:annotation>
+            <xs:documentation>
+              If this graph is being referenced as an external, a node can be specified
+              as being the default node to point to for outgoing arcs.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+
+      </xs:complexType>
+
+    </xs:element>
+
+    <xs:complexType name="EditorNode">
+
+      <xs:attribute name="name" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            Node names must be unique within a given process definition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="x"
+                    type="xs:int"
+                    use="required"/>
+
+      <xs:attribute name="y"
+                    type="xs:int"
+                    use="required"/>
+
+    </xs:complexType>
+
+    <xs:complexType name="EditorExternal">
+
+      <xs:attribute name="name" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            Since it may be desirable to include the same external process definition
+            more than once, each external must define a name which must be unique in
+            the process definition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="x"
+                    type="xs:int"
+                    use="required"/>
+
+      <xs:attribute name="y"
+                    type="xs:int"
+                    use="required"/>
+
+    </xs:complexType>
+
+</xs:schema>

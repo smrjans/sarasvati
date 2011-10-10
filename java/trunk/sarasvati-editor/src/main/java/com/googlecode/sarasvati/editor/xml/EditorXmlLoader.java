@@ -76,7 +76,7 @@ public class EditorXmlLoader
 
   private void loadSchema () throws SarasvatiLoadException
   {
-    String xsdPath = "com/googlecode/sarasvati/editor/Editor.xsd";
+    String xsdPath = "Editor.xsd";
 
     InputStream is = getClass().getClassLoader().getResourceAsStream( xsdPath );
 

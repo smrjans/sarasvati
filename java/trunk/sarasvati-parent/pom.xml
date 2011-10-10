@@ -155,6 +155,33 @@
         <version>2.4.0</version>
         <scope>compile</scope>
       </dependency>
+      
+    <dependency>
+      <groupId>org.openide</groupId>
+      <artifactId>util</artifactId>
+      <version>1.0.0</version>
+      <type>jar</type>
+      <scope>system</scope>
+      <systemPath>${basedir}/../lib/org-openide-util.jar</systemPath>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>draw2d</artifactId>
+      <version>3.5.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/../lib/eclipse-draw2d-3.5.0.jar</systemPath>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.netbeans.api</groupId>
+      <artifactId>visual</artifactId>
+      <version>1.0.0</version>
+      <type>jar</type>
+      <scope>system</scope>
+      <systemPath>${basedir}/../lib/org-netbeans-api-visual.jar</systemPath>
+    </dependency>      
+      
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
