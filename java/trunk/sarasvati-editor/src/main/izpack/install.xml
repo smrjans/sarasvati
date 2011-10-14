@@ -46,10 +46,9 @@
       <file targetdir="$INSTALL_PATH" src="dependency/sarasvati-core-@version@.jar"/>
       <file targetdir="$INSTALL_PATH" src="dependency/sarasvati-visual-${version}.jar"/>
       <file targetdir="$INSTALL_PATH" src="sarasvati-editor-${version}.jar"/>
-      <file targetdir="$INSTALL_PATH" src="dependency/antlr-runtime-3.1.1.jar"/>
-      <file targetdir="$INSTALL_PATH" src="dependency/org-netbeans-api-visual.jar"/>
-      <file targetdir="$INSTALL_PATH" src="dependency/org-netbeans-api-visual-src.jar"/>
-      <file targetdir="$INSTALL_PATH" src="dependency/org-openide-util.jar" />
+      <file targetdir="$INSTALL_PATH" src="dependency/antlr-runtime-*.jar"/>
+      <file targetdir="$INSTALL_PATH" src="dependency/org-netbeans-api*.jar"/>
+      <file targetdir="$INSTALL_PATH" src="dependency/org-openide-util*.jar" />
       <file targetdir="$INSTALL_PATH" src="dependency/eclipse-draw2d-3.5.0.jar" />
       <file targetdir="$INSTALL_PATH" src="run-editor.sh" />
       <file targetdir="$INSTALL_PATH" src="run-editor.bat" />
