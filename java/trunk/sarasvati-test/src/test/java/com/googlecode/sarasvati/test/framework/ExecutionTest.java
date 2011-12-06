@@ -34,6 +34,7 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
@@ -204,14 +205,24 @@ public class ExecutionTest
 
   public GraphProcess startProcess(final String graphName) throws Exception
   {
+    return startProcess(graphName, null);
+  }
+  
+  public GraphProcess startProcess(final String graphName, final Env env) throws Exception
+  {
     ensureLoaded(graphName);
     final Graph graph = engine.getRepository().getLatestGraph( graphName );
-    return startProcess(graph);
+    return startProcess(graph, env);
   }
 
   public GraphProcess startProcess(final Graph graph)
   {
-    final GraphProcess p = engine.startProcess(graph);
+    return startProcess(graph, null);
+  }
+
+  public GraphProcess startProcess(final Graph graph, final Env env)
+  {
+    final GraphProcess p = engine.startProcess(graph, env);
     return p;
   }
 

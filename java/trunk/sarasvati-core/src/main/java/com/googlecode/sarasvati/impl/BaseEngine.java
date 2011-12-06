@@ -140,17 +140,29 @@ public abstract class BaseEngine implements Engine
   @Override
   public GraphProcess startProcess (final String graphName)
   {
+    return startProcess(graphName, null);
+  }
+
+  @Override
+  public GraphProcess startProcess (final String graphName, final Env initialEnv)
+  {
     final Graph graph = getRepository().getLatestGraph( graphName );
     if ( graph == null )
     {
       throw new SarasvatiException( "No graph found with name '" + graphName + "'" );
     }
 
-    return startProcess( graph );
+    return startProcess(graph, initialEnv);
   }
 
   @Override
   public GraphProcess startProcess (final Graph graph)
+  {
+    return startProcess(graph, null);
+  }
+
+  @Override
+  public GraphProcess startProcess (final Graph graph, Env env)
   {
     if ( graph == null )
     {
@@ -158,6 +170,10 @@ public abstract class BaseEngine implements Engine
     }
 
     final GraphProcess process = getFactory().newProcess( graph );
+    if (env != null)
+    {
+      process.getEnv().importEnv(env);
+    }
     ProcessEvent.fireCreatedEvent( this, process );
     startProcess( process );
     return process;

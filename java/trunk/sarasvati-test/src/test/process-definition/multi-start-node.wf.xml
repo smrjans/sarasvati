@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<process-definition name="multi-start-node" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="nodeA" type="node" isStart="true">
+    <guard>if isFooBar then Accept else Discard</guard>
+    <arc to="nodeC"/>    
+  </node>
+
+  <node name="nodeB" type="node" isStart="true">
+    <guard>if not isFooBar then Accept else Discard</guard>
+    <arc to="nodeC"/>
+  </node>
+
+  <node name="nodeC" type="node"/>
+
+</process-definition>

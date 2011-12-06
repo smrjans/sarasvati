@@ -71,6 +71,27 @@ public interface Engine
   GraphProcess startProcess (String graphName);
 
   /**
+   * Starts an instance of the latest graph with the given name.
+   * Is the equivalent of doing
+   * <pre>
+   *  Graph graph = engine.getRepository().getLatestGraph( graphName );
+   *  GraphProcess process = engine.startProcess( graph, initialEnv );
+   * </pre>
+   *
+   * If no process definition exists for the given name, a {@link SarasvatiException}
+   * will be thrown.
+   *
+   * @param graphName The name of the graph to execute.
+   * @param initialEnv A starting environment for the process. All attributes from
+   *                   the given environment will be copied into the process environment
+   *                   before execution begins.
+   * @throws SarasvatiException If no process definition is defined for that name.
+   *
+   * @return The new GraphProcess.
+   */
+  GraphProcess startProcess (String graphName, Env initialEnv);
+
+  /**
    * Given a {@link Graph}, creates a new {@link GraphProcess} executing that graph.
    * A {@link NodeToken} will be generated on each start nodes (determined by
    * {@link Graph#getStartNodes()}), and these NodeTokens will be executed.
@@ -82,6 +103,24 @@ public interface Engine
    */
   GraphProcess startProcess (Graph graph);
 
+  /**
+   * Given a {@link Graph}, creates a new {@link GraphProcess} executing that graph.
+   * A {@link NodeToken} will be generated on each start nodes (determined by
+   * {@link Graph#getStartNodes()}), and these NodeTokens will be executed.
+   * If the graph does not contain Nodes which go into a wait state, the
+   * {@link GraphProcess} returned will be completed. 
+   * <p>
+   * Before the process is started, the given initial environment will be copied 
+   * into that of the new process. Nulls passed in will be ignored.
+   *
+   * @param graph The {@link Graph} to execute.
+   * @param initialEnv A starting environment for the process. All attributes from
+   *                   the given environment will be copied into the process environment
+   *                   before execution begins.
+   * @return A {@link GraphProcess} executing the given {@link Graph}.
+   */
+  GraphProcess startProcess (Graph graph, Env initialEnv);
+  
   /**
    * Sometimes it is desirable to separate process creation from
    * starting execution of the process. For example, one may wish
