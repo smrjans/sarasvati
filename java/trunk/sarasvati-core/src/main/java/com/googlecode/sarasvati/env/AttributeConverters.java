@@ -24,7 +24,7 @@ import java.util.Map;
 
 /**
  * Static utility class for registering and using {@link AttributeConverter}s.
- * Note that registering converts is NOT thread-safe, and should be done at
+ * Note that registering converters is NOT thread-safe, and should be done at
  * startup.
  *
  * @author Paul Lorenz
