@@ -162,7 +162,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public GraphProcess startProcess (final Graph graph, Env env)
+  public GraphProcess startProcess (final Graph graph, final Env env)
   {
     if ( graph == null )
     {
@@ -352,7 +352,7 @@ public abstract class BaseEngine implements Engine
                                                 // a poorly timed lazy load of HibGraphProcess.activeNodeTokens can cause
                                                 // the token to be present therein
         NodeTokenEvent.fireDiscardedEvent( this, token );
-        NodeTokenEvent.fireCompletedEvent( this, token, null );
+        NodeTokenEvent.fireCompletedEvent( this, token);
         break;
 
       case SkipNode :
@@ -364,7 +364,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void complete (final NodeToken token, final String arcName)
+  public void complete(final NodeToken token, final String arcName)
   {
     final GraphProcess process = token.getProcess();
 
@@ -377,9 +377,28 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
+  public void complete(final NodeToken token, final String...arcNames)
+  {
+    final GraphProcess process = token.getProcess();
+
+    completeNodeExecution(token, false, arcNames);
+
+    if ( process.isExecuting() && !arcExecutionStarted )
+    {
+      executeQueuedArcTokens( process );
+    }
+  }
+
+  @Override
   public void completeAsynchronous (final NodeToken token, final String arcName)
   {
     completeNodeExecution( token, arcName, true );
+  }
+
+  @Override
+  public void completeAsynchronous (final NodeToken token, final String...arcNames)
+  {
+    completeNodeExecution(token, true, arcNames);
   }
 
   @Override
@@ -456,6 +475,26 @@ public abstract class BaseEngine implements Engine
     }
   }
 
+  protected void completeNodeExecution(final NodeToken token,
+                                       final boolean asynchronous,
+                                       final String...arcNames)
+  {
+    final GraphProcess process = token.getProcess();
+
+    if ( !process.isExecuting() || token.isComplete() )
+    {
+      return;
+    }
+
+    completeNodeToken(process, token, arcNames);
+
+    for (final Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcNames))
+    {
+      final ArcToken arcToken = generateArcToken(process, arc, token);
+      finishNewArcTokenProcessing(process, arcToken, asynchronous);
+    }
+  }
+
   private void completeNodeToken (final GraphProcess process,
                                   final NodeToken token,
                                   final String arcName)
@@ -463,6 +502,15 @@ public abstract class BaseEngine implements Engine
     process.removeActiveNodeToken( token );
     token.markComplete();
     NodeTokenEvent.fireCompletedEvent( this, token, arcName );
+  }
+
+  private void completeNodeToken (final GraphProcess process,
+                                  final NodeToken token,
+                                  final String...arcNames)
+  {
+    process.removeActiveNodeToken(token);
+    token.markComplete();
+    NodeTokenEvent.fireCompletedEvent(this, token, arcNames);
   }
 
   private ArcToken generateArcToken (final GraphProcess process,

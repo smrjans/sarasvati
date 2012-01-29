@@ -84,12 +84,26 @@ public abstract class ExecutionEvent
   /**
    * If this is either a node token event for either {@link ExecutionEventType#NODE_TOKEN_SKIPPED} or
    * {@link ExecutionEventType#NODE_TOKEN_COMPLETED}, this will return the name of the arc (or arcs)
-   * on which execution will be proceeding.
+   * on which execution will be proceeding. If execution proceeded on multiple arcs with different
+   * labels, this will return the first label.
    *
    * @return The arc name on which execution will proceed if this event is related
    *         to a node token skipped or node token completing event.
    */
   public String getExitArcsName ()
+  {
+    return null;
+  }
+
+  /**
+   * If this is either a node token event for either {@link ExecutionEventType#NODE_TOKEN_SKIPPED} or
+   * {@link ExecutionEventType#NODE_TOKEN_COMPLETED}, this will return the names of the arcs
+   * on which execution will be proceeding.
+   *
+   * @return The arc names on which execution will proceed if this event is related
+   *         to a node token skipped or node token completing event.
+   */
+  public String[] getExitArcsNames ()
   {
     return null;
   }

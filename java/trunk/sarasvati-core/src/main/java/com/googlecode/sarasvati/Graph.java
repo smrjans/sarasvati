@@ -105,6 +105,16 @@ public interface Graph extends HasEventQueue
   List<Arc> getOutputArcs (Node node, String arcName);
 
   /**
+   * Returns a list of arcs which have the given node as a starting point
+   * and which have the given name. The list may be empty but will never
+   * be null.
+   *
+   * @param node A node belonging to this graph
+   * @return A list of arcs
+   */
+  List<Arc> getOutputArcs (Node node, String...arcNames);
+
+  /**
    * Returns a list of the nodes at which nodes should be placed to
    * start a workflow process.
    *

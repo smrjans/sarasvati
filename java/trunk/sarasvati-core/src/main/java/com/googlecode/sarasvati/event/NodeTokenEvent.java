@@ -25,26 +25,26 @@ import com.googlecode.sarasvati.NodeToken;
 public class NodeTokenEvent extends ExecutionEvent
 {
   protected NodeToken nodeToken;
-  protected String    exitArcsName;
+  protected String[]    exitArcsNames;
 
   public static final EventActions fireCreatedEvent (final Engine engine, final NodeToken nodeToken)
   {
-    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_CREATED, nodeToken, null ) );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_CREATED, nodeToken) );
   }
 
   public static final EventActions fireAcceptedEvent (final Engine engine, final NodeToken nodeToken)
   {
-    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_ACCEPTED, nodeToken, null ) );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_ACCEPTED, nodeToken) );
   }
 
   public static final EventActions fireExecutedEvent (final Engine engine, final NodeToken nodeToken)
   {
-    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_EXECUTED, nodeToken, null ) );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_EXECUTED, nodeToken) );
   }
 
   public static final EventActions fireDiscardedEvent (final Engine engine, final NodeToken nodeToken)
   {
-    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_DISCARDED, nodeToken, null ) );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_DISCARDED, nodeToken) );
   }
 
   public static final EventActions fireSkippedEvent (final Engine engine, final NodeToken nodeToken, final String exitArcsName)
@@ -52,21 +52,21 @@ public class NodeTokenEvent extends ExecutionEvent
     return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_SKIPPED, nodeToken, exitArcsName ) );
   }
 
-  public static final EventActions fireCompletedEvent (final Engine engine, final NodeToken nodeToken, final String exitArcsName)
+  public static final EventActions fireCompletedEvent (final Engine engine, final NodeToken nodeToken, final String...exitArcsNames)
   {
-    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, exitArcsName ) );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, exitArcsNames) );
   }
 
   public static final EventActions fireBacktrackedEvent (final Engine engine, final NodeToken nodeToken)
   {
-    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_BACKTRACKED, nodeToken, null ) );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_BACKTRACKED, nodeToken) );
   }
 
-  private NodeTokenEvent (final Engine engine, final ExecutionEventType eventType, final NodeToken nodeToken, final String exitArcsName)
+  private NodeTokenEvent (final Engine engine, final ExecutionEventType eventType, final NodeToken nodeToken, final String...exitArcsName)
   {
     super( engine, eventType );
     this.nodeToken = nodeToken;
-    this.exitArcsName = exitArcsName;
+    this.exitArcsNames = exitArcsName;
   }
 
   @Override
@@ -78,7 +78,13 @@ public class NodeTokenEvent extends ExecutionEvent
   @Override
   public String getExitArcsName()
   {
-    return exitArcsName;
+    return exitArcsNames == null || exitArcsNames.length < 1 ? null : exitArcsNames[0];
+  }
+
+  @Override
+  public String[] getExitArcsNames()
+  {
+    return exitArcsNames;
   }
 
   @Override

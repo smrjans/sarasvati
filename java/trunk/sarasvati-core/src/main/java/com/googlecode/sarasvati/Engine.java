@@ -108,9 +108,9 @@ public interface Engine
    * A {@link NodeToken} will be generated on each start nodes (determined by
    * {@link Graph#getStartNodes()}), and these NodeTokens will be executed.
    * If the graph does not contain Nodes which go into a wait state, the
-   * {@link GraphProcess} returned will be completed. 
+   * {@link GraphProcess} returned will be completed.
    * <p>
-   * Before the process is started, the given initial environment will be copied 
+   * Before the process is started, the given initial environment will be copied
    * into that of the new process. Nulls passed in will be ignored.
    *
    * @param graph The {@link Graph} to execute.
@@ -120,7 +120,7 @@ public interface Engine
    * @return A {@link GraphProcess} executing the given {@link Graph}.
    */
   GraphProcess startProcess (Graph graph, Env initialEnv);
-  
+
   /**
    * Sometimes it is desirable to separate process creation from
    * starting execution of the process. For example, one may wish
@@ -196,6 +196,31 @@ public interface Engine
   void complete (NodeToken token, String arcName);
 
   /**
+   * Continues execution of a process in a wait state.
+   * If a call to {@link Node#execute(Engine, NodeToken)} does not contain a
+   * call to {@link Engine#complete(NodeToken, String)}, then execution
+   * of the graph will halt at that point. This is generally referred to as a wait
+   * state. It may happen, for example, if the action represented by that node
+   * must be done by a human or some external system.
+   *
+   * <br/>
+   *
+   * When the external system has determined that the {@link Node} has completed its
+   * work, it should invoke this method to continue executing the process.
+   *
+   * <br/>
+   *
+   * If the token belongs to a process which is _not_ in state {@link ProcessState#Executing}
+   * this call will return immediately.
+   *
+   * @param token    The {@link NodeToken} to resume execution on
+   * @param arcNames The names of the {@link Arc} to generate ArcTokens on. Multiple arcs may
+   *                 have the same name, this will execute on all arcs that match the given
+   *                 set of names.
+   */
+  void complete (NodeToken token, String...arcNames);
+
+  /**
    * Marks the given node token completed and generates the next set of arc tokens.
    * However, these arc tokens will not be processed. Execution may be
    * continued later with a call to {@link Engine#executeQueuedArcTokens(GraphProcess)}.
@@ -205,6 +230,18 @@ public interface Engine
    *                have the same name) to generate ArcTokens on.
    */
   void completeAsynchronous (NodeToken token, String arcName);
+
+  /**
+   * Marks the given node token completed and generates the next set of arc tokens.
+   * However, these arc tokens will not be processed. Execution may be
+   * continued later with a call to {@link Engine#executeQueuedArcTokens(GraphProcess)}.
+   *
+   * @param token   The token to mark completed
+   * @param arcNames The names of the {@link Arc} to generate ArcTokens on. Multiple arcs may
+   *                 have the same name, this will execute on all arcs that match the given
+   *                 set of names.
+   */
+  void completeAsynchronous (NodeToken token, String...arcNames);
 
   /**
    * Marks the given node token, creates new token set and generates the next set

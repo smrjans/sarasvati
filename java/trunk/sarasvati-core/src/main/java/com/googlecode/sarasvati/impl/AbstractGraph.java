@@ -135,6 +135,39 @@ public abstract class AbstractGraph implements Graph
     return result;
   }
 
+  /**
+   * @see Graph#getOutputArcs(Node, String)
+   */
+  @Override
+  public List<Arc> getOutputArcs (final Node node, final String...arcNames)
+  {
+    if (arcNames == null || arcNames.length == 0)
+    {
+      return Collections.emptyList();
+    }
+
+    final List<Arc> arcList = getOutputArcs( node );
+
+    if ( arcList.isEmpty() )
+    {
+      return arcList;
+    }
+
+    final List<Arc> result = new ArrayList<Arc>( arcList.size() );
+
+    for (final Arc arc : arcList)
+    {
+      for (final String arcName : arcNames)
+      {
+        if ( SvUtil.equals( arcName, arc.getName() ) )
+        {
+          result.add( arc );
+        }
+      }
+    }
+    return result;
+  }
+
   private void initialize ()
   {
     inputMap  = new HashMap<Node, List<Arc>>();
