@@ -1,8 +1,12 @@
 package com.googlecode.sarasvati.test;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.hib.HibEngine;
@@ -53,6 +57,7 @@ public class TestEnv
   {
     AnnotationConfiguration config = new AnnotationConfiguration();
 
+
     HibEngine.addToConfiguration( config, false );
 
     if ( url == null )
@@ -68,7 +73,14 @@ public class TestEnv
     config.setProperty( "hibernate.connection.password", password );
     config.setProperty( "hibernate.connection.driver_class", driver );
     config.setProperty( "hibernate.connection.url", url );
-    config.configure();
+
+    final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+    final Element root = doc.createElement("hibernate-configuration");
+    final Element sessionConfig = doc.createElement("session-factory");
+    doc.appendChild(root);
+    root.appendChild(sessionConfig);
+
+    config.configure(doc);
 
     sessionFactory = config.buildSessionFactory();
   }

@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>sarasvati-parent</artifactId>
 		<groupId>com.googlecode.sarasvati</groupId>
-		<version>1.0.6</version>
+		<version>1.1-SNAPSHOT</version>
     <relativePath>../sarasvati-parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>

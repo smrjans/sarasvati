@@ -1,14 +1,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.googlecode.sarasvati</groupId>
   <artifactId>sarasvati-parent</artifactId>
   <packaging>pom</packaging>
   <name>sarasvati</name>
-  <version>1.0.6</version>
+  <version>1.1-SNAPSHOT</version>
   <description>Sarasvati is a workflow/bpm engine based on graph execution. It has a simple core which allows for different implementations. For example one may change the persistence mechanism (or avoid it altogether), change token representation or build additional functionality on top. </description>
   <url>http://sarasvati.googlecode.com/</url>
+  <licenses>
+    <license>
+      <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
+      <url>http://www.gnu.org/licenses/</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <developers>
     <developer>
     <id>plorenz</id>
@@ -16,23 +28,16 @@
     </developer>
   </developers>
   <scm>    
-    <developerConnection>plorenz</developerConnection>
+    <connection>scm:svn:http://sarasvati.googlecode.com/svn/java/trunk/</connection>
+    <developerConnection>scm:svn:https://sarasvati.googlecode.com/svn/trunk/</developerConnection>
+    <url>http://sarasvati.googlecode.com/svn/trunk/</url>
   </scm>
-
-  <repositories>
-    <repository>
-      <id>netbeans</id>
-      <name>Repository for hosting NetBeans API artifacts</name>
-      <url>http://bits.netbeans.org/maven2/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>    
     
+  <properties>
+    <org.eclipse.draw2d.version>3.5.0</org.eclipse.draw2d.version>
+    <org.netbeans.api.visual.version>1.0.0</org.netbeans.api.visual.version>
+  </properties>
+
   <build>
     <resources>
     </resources>
@@ -43,6 +48,7 @@
     </testResources>
     <pluginManagement>
       <plugins>
+
         <plugin>
           <inherited>true</inherited>
           <groupId>org.apache.maven.plugins</groupId>
@@ -54,6 +60,7 @@
             <debug>true</debug>
           </configuration>
         </plugin>
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
@@ -67,6 +74,7 @@
             </execution>
           </executions>
         </plugin>
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
@@ -76,6 +84,20 @@
               <phase>package</phase>
               <goals>
                 <goal>copy-dependencies</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+    
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sign</goal>
               </goals>
             </execution>
           </executions>
@@ -152,43 +174,45 @@
       </dependency>
       
       <dependency>
+        <groupId>org.javassist</groupId>
+        <artifactId>javassist</artifactId>
+        <version>3.16.1-GA</version>
+        <scope>compile</scope>
+      </dependency>
+
+      <dependency>
         <groupId>org.antlr</groupId>
         <artifactId>antlr-runtime</artifactId>
         <version>3.4</version>
         <scope>compile</scope>
       </dependency>
-      
-      <dependency> 
-        <groupId>org.netbeans.api</groupId>
+
+      <dependency>
+        <groupId>uk.gov.nationalarchives.thirdparty.netbeans</groupId>
         <artifactId>org-openide-util</artifactId>
-        <version>RELEASE65</version>
-        <type>jar</type>
-        <scope>compile</scope>
-      </dependency>     
-
-      <dependency>
-        <groupId>org.eclipse</groupId>
-        <artifactId>draw2d</artifactId>
-        <version>3.5.0</version>
-        <scope>system</scope>
-        <systemPath>${basedir}/../lib/eclipse-draw2d-3.5.0.jar</systemPath>
+        <version>7.2</version>
       </dependency>
 
       <dependency>
-        <groupId>org.netbeans.api</groupId>
-        <artifactId>visual</artifactId>
-        <version>1.0.0</version>
-        <type>jar</type>
-        <scope>system</scope>
-        <systemPath>${basedir}/../lib/org-netbeans-api-visual.jar</systemPath>
-      </dependency>
-
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>1.6.6</version>
+     </dependency>
+                  
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.6</version>
         <scope>test</scope>
       </dependency>
+
+      <dependency>
+        <groupId>postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>9.1-901.jdbc4</version>
+        <scope>test</scope>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 </project>

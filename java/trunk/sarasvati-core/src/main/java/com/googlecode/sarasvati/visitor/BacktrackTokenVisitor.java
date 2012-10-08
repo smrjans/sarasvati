@@ -174,7 +174,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
           NodeTokenEvent.fireBacktrackedEvent( engine, backtrackToken );
 
           backtrackToken.markComplete();
-          NodeTokenEvent.fireCompletedEvent( engine, backtrackToken, null );
+          NodeTokenEvent.fireCompletedEvent( engine, backtrackToken );
         }
       }
     }
@@ -231,7 +231,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
     if ( !token.isComplete() )
     {
       token.markComplete();
-      NodeTokenEvent.fireCompletedEvent( engine, backtrackToken, null );
+      NodeTokenEvent.fireCompletedEvent( engine, backtrackToken );
 
       token.markBacktracked();
       NodeTokenEvent.fireBacktrackedEvent( engine, token );

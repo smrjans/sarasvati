@@ -3,7 +3,7 @@
   <parent>
     <artifactId>sarasvati-parent</artifactId>
     <groupId>com.googlecode.sarasvati</groupId>
-    <version>1.0.6</version>
+    <version>1.1-SNAPSHOT</version>
     <relativePath>../sarasvati-parent</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -39,17 +39,19 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
-    <dependency> 
-      <groupId>org.netbeans.api</groupId>
+    <dependency>
+      <groupId>uk.gov.nationalarchives.thirdparty.netbeans</groupId>
       <artifactId>org-openide-util</artifactId>
-    </dependency>     
+    </dependency>
     <dependency>
       <groupId>org.eclipse</groupId>
       <artifactId>draw2d</artifactId>
+      <version>${org.eclipse.draw2d.version}</version>
     </dependency>
     <dependency>
       <groupId>org.netbeans.api</groupId>
       <artifactId>visual</artifactId>
+      <version>${org.netbeans.api.visual.version}</version>
     </dependency>
     <dependency>
       <groupId>org.antlr</groupId>
