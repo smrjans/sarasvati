@@ -6,7 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.hib.HibEngine;
@@ -14,13 +13,14 @@ import com.googlecode.sarasvati.mem.MemEngine;
 
 public class TestEnv
 {
-  public static final String ENGINE_KEY = "sarasvati.test.targetEngine";
-  public static final String DB_KEY = "sarasvati.test.targetDB";
+  public static final String ENGINE_KEY = "engine";
+  public static final String DB_KEY = "db";
 
   public static final String ENGINE_HIBERNATE = "hibernate";
   public static final String ENGINE_MEMORY    = "memory";
 
   public static final String DATABASE_POSTGRESQL = "postgresql";
+  public static final String DATABASE_MYSQL = "mysql";
 
   protected static SessionFactory sessionFactory = null;
 
@@ -33,12 +33,26 @@ public class TestEnv
     {
       final boolean hibEngine = ENGINE_HIBERNATE.equals(testEngine);
 
-      if (hibEngine && DATABASE_POSTGRESQL.equals(testDatabase))
+      if (hibEngine)
       {
-        init( "paul", "integtests",
-              "org.postgresql.Driver",
-              "jdbc:postgresql://localhost:5432/paul",
-              "org.hibernate.dialect.PostgreSQLDialect" );
+        if (DATABASE_POSTGRESQL.equals(testDatabase))
+        {
+          init( "paul", "integtests",
+                "org.postgresql.Driver",
+                "jdbc:postgresql://localhost:5432/paul",
+                "org.hibernate.dialect.PostgreSQLDialect" );
+        }
+        else if (DATABASE_MYSQL.equals(testDatabase))
+        {
+          init( "root", "integtests",
+                "com.mysql.jdbc.Driver",
+                "jdbc:mysql://localhost:3306/sarasvati",
+                "org.hibernate.dialect.MySQLDialect" );
+        }
+        else
+        {
+          throw new Exception("Database type of " + testDatabase + " not supported in tests yet.");
+        }
       }
     }
     catch ( final Exception e )
@@ -60,14 +74,6 @@ public class TestEnv
 
     HibEngine.addToConfiguration( config, false );
 
-    if ( url == null )
-    {
-      System.out.println( "ERROR: No hibernate.cfg.xml found in classpath!\n" +
-                          "\tIn order to run the examples, you must create hibernate.cfg.xml in the examples/ directory.\n" +
-                          "\tYou can use the entries in conf/ as a starting point." );
-      System.exit( -1 );
-    }
-
     config.setProperty( "hibernate.dialect", dialect );
     config.setProperty( "hibernate.connection.username", username );
     config.setProperty( "hibernate.connection.password", password );
@@ -75,10 +81,8 @@ public class TestEnv
     config.setProperty( "hibernate.connection.url", url );
 
     final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-    final Element root = doc.createElement("hibernate-configuration");
-    final Element sessionConfig = doc.createElement("session-factory");
-    doc.appendChild(root);
-    root.appendChild(sessionConfig);
+    doc.appendChild(doc.createElement("hibernate-configuration"));
+    doc.getFirstChild().appendChild(doc.createElement("session-factory"));
 
     config.configure(doc);
 
