@@ -1,10 +1,14 @@
 package com.googlecode.sarasvati.test;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
 import org.w3c.dom.Document;
 
 import com.googlecode.sarasvati.Engine;
@@ -21,6 +25,7 @@ public class TestEnv
 
   public static final String DATABASE_POSTGRESQL = "postgresql";
   public static final String DATABASE_MYSQL = "mysql";
+  public static final String DATABASE_ORACLE = "oracle";
 
   protected static SessionFactory sessionFactory = null;
 
@@ -32,22 +37,34 @@ public class TestEnv
     try
     {
       final boolean hibEngine = ENGINE_HIBERNATE.equals(testEngine);
-
+      
+      final Properties props = readDbProperties();
+      
       if (hibEngine)
       {
         if (DATABASE_POSTGRESQL.equals(testDatabase))
         {
-          init( "paul", "integtests",
-                "org.postgresql.Driver",
-                "jdbc:postgresql://localhost:5432/paul",
-                "org.hibernate.dialect.PostgreSQLDialect" );
+          init(props.getProperty("postgresql.username"), 
+               props.getProperty("postgresql.password"),
+               "org.postgresql.Driver",
+               props.getProperty("postgresql.url"),
+               "org.hibernate.dialect.PostgreSQLDialect");
         }
         else if (DATABASE_MYSQL.equals(testDatabase))
         {
-          init( "root", "integtests",
-                "com.mysql.jdbc.Driver",
-                "jdbc:mysql://localhost:3306/sarasvati",
-                "org.hibernate.dialect.MySQLDialect" );
+          init(props.getProperty("mysql.username"), 
+               props.getProperty("mysql.password"),
+               "com.mysql.jdbc.Driver",
+               props.getProperty("mysql.url"),
+               "org.hibernate.dialect.MySQLDialect");
+        }
+        else if (DATABASE_ORACLE.equals(testDatabase))
+        {
+          init(props.getProperty("oracle.username"), 
+               props.getProperty("oracle.password"),
+               "oracle.jdbc.driver.OracleDriver",
+               props.getProperty("oracle.url"), 
+               "org.hibernate.dialect.Oracle10gDialect" );
         }
         else
         {
@@ -69,8 +86,7 @@ public class TestEnv
                            final String url,
                            final String dialect) throws Exception
   {
-    AnnotationConfiguration config = new AnnotationConfiguration();
-
+    Configuration config = new Configuration();
 
     HibEngine.addToConfiguration( config, false );
 
@@ -89,6 +105,33 @@ public class TestEnv
     sessionFactory = config.buildSessionFactory();
   }
 
+  private static Properties readDbProperties()
+  {
+    Properties props = new Properties();
+    try
+    {
+      final InputStream in = TestEnv.class.getResourceAsStream("/db.properties");
+      
+      if (in == null)
+      {
+        throw new RuntimeException("db.properties not found");
+      }
+      try
+      {
+        props.load(in);
+        return props;
+      }
+      finally
+      {
+        in.close();      
+      }
+    }
+    catch(final IOException ioe)
+    {
+      throw new RuntimeException("Failed to load database properties from db.properties", ioe);
+    }
+  }
+  
   public static void openSession ()
   {
     session = sessionFactory.openSession();

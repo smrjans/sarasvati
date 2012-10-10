@@ -34,7 +34,7 @@ public class RubricStringTest
     String script="\"foo\"";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }
@@ -45,7 +45,7 @@ public class RubricStringTest
     String script="\"foo\\\"bar\\\"\"";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }
@@ -55,7 +55,7 @@ public class RubricStringTest
   {
     String script="\"foo";
     System.out.println( "SCRIPT: " + script );
-    RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
   }
 
   @Test public void testWithSpaces ()
@@ -64,7 +64,7 @@ public class RubricStringTest
     String script="\"This is a long statement, include a \\\"quote with stuff\\\"\"";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }

@@ -28,6 +28,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.googlecode.sarasvati.ArcTokenSetMember;
@@ -37,7 +38,8 @@ import com.googlecode.sarasvati.ArcTokenSetMember;
 public class HibArcTokenSetMember implements ArcTokenSetMember
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GeneratedValue(strategy=GenerationType.AUTO, generator="sequence_generator")
+  @SequenceGenerator(name="sequence_generator", sequenceName="wf_token_set_arcmem_seq")
   protected Long    id;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)

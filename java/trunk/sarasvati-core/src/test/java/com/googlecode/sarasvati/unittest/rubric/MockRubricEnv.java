@@ -23,9 +23,9 @@ import java.util.Date;
 
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 
-public class TestRubricEnv implements RubricEnv
+public class MockRubricEnv implements RubricEnv
 {
-  public static final TestRubricEnv INSTANCE = new TestRubricEnv();
+  public static final MockRubricEnv INSTANCE = new MockRubricEnv();
 
   @Override
   public Date evalDateFunction (final String dateFunction)

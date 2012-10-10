@@ -22,6 +22,7 @@ package com.googlecode.sarasvati.mem;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
@@ -33,6 +34,9 @@ import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 public class MemArcToken implements ArcToken
 {
+  private static AtomicLong idGenerator = new AtomicLong(0);
+  
+  protected final Long id;
   protected Arc arc;
   protected GraphProcess process;
   protected NodeToken parentToken;
@@ -45,11 +49,18 @@ public class MemArcToken implements ArcToken
 
   public MemArcToken (final Arc arc, final GraphProcess process, final ExecutionType executionType, final NodeToken parentToken)
   {
+    this.id = idGenerator.incrementAndGet();
     this.arc = arc;
     this.process = process;
     this.executionType = executionType;
     this.parentToken = parentToken;
     this.pending = true;
+  }  
+  
+  @Override
+  public Long getId()
+  {
+    return id;
   }
 
   @Override

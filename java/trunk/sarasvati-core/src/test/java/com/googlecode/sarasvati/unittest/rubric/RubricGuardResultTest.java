@@ -37,7 +37,7 @@ public class RubricGuardResultTest
     String script="Accept";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }
@@ -48,7 +48,7 @@ public class RubricGuardResultTest
     String script="Discard";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }
@@ -59,7 +59,7 @@ public class RubricGuardResultTest
     String script="Skip";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }
@@ -70,7 +70,7 @@ public class RubricGuardResultTest
     String script="Skip testArc";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }
@@ -81,7 +81,7 @@ public class RubricGuardResultTest
     String script="Skip \"testArc\"";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }
@@ -92,7 +92,7 @@ public class RubricGuardResultTest
     String script="Skip \"test Arc\"";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }
@@ -103,7 +103,7 @@ public class RubricGuardResultTest
     String script="Skip \"test \\\"Arc\\\"\"";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }

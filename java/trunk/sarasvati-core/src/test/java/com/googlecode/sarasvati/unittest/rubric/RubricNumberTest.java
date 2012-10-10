@@ -33,7 +33,7 @@ public class RubricNumberTest
     String script="1";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }
@@ -44,7 +44,7 @@ public class RubricNumberTest
     String script="-10000";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( MockRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }

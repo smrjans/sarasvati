@@ -30,6 +30,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.Session;
@@ -58,7 +59,8 @@ import com.googlecode.sarasvati.impl.MapEnv;
 public class HibNode implements Node
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GeneratedValue(strategy=GenerationType.AUTO, generator="sequence_generator")
+  @SequenceGenerator(name="sequence_generator", sequenceName="wf_node_seq")
   @Column( name="id", nullable=false)
   protected Long   id;
 

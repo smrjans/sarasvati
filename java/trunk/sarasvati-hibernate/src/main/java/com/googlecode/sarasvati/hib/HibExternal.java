@@ -32,6 +32,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -46,7 +47,8 @@ import com.googlecode.sarasvati.impl.MapEnv;
 public class HibExternal implements External
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GeneratedValue(strategy=GenerationType.AUTO, generator="sequence_generator")
+  @SequenceGenerator(name="sequence_generator", sequenceName="wf_external_seq")
   protected Long   id;
 
   protected String name;

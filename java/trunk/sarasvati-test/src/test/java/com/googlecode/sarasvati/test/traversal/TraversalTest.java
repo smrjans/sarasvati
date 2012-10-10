@@ -18,13 +18,18 @@
 */
 package com.googlecode.sarasvati.test.traversal;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.Token;
 import com.googlecode.sarasvati.test.framework.ExecutionTest;
 import com.googlecode.sarasvati.visitor.TokenTraversals;
 import com.googlecode.sarasvati.visitor.TokenVisitorAdaptor;
@@ -43,6 +48,42 @@ public class TraversalTest extends ExecutionTest
     }
   }
 
+  public static class BreadthFirstTestVisitor extends TokenVisitorAdaptor
+  {
+    final Map<Token, Integer> levelMap = new HashMap<>();
+    int currentNodeLevel = 1;
+
+    @Override
+    public void visit (final NodeToken token)
+    {
+      int level = 0;
+      if (!token.getParentTokens().isEmpty())
+      {
+        level = Integer.MAX_VALUE;
+        for (final ArcToken parent : token.getParentTokens())
+        {
+          Integer parentLevel = levelMap.get(parent.getParentToken());
+          level = Math.min(level, parentLevel == null ? Integer.MAX_VALUE : parentLevel);
+        }
+      }
+      
+      level++;
+      levelMap.put(token, level);
+      
+      if (level != currentNodeLevel)
+      {
+        if (level == currentNodeLevel + 1)
+        {
+          currentNodeLevel++;
+        }
+        else
+        {
+          throw new RuntimeException("Current level is " + currentNodeLevel + " hit node at level " + level);
+        }
+      }
+    }    
+  }
+  
   public NodeToken executeTraversal () throws Exception
   {
     Graph g = ensureLoaded( "traversal" );
@@ -67,12 +108,7 @@ public class TraversalTest extends ExecutionTest
   @Test public void testBreadthFirst () throws Exception
   {
     NodeToken tokenA = executeTraversal();
-
-    TestVisitor visitor = new TestVisitor();
-    TokenTraversals.traverseChildrenBreadthFirst( tokenA, visitor );
-
-    String compare = "ABCDEFGHIJ";
-    Assert.assertEquals( compare, visitor.buf.toString() );
+    TokenTraversals.traverseChildrenBreadthFirst( tokenA, new BreadthFirstTestVisitor() );
   }
 
   @Test public void testDepthFirst () throws Exception

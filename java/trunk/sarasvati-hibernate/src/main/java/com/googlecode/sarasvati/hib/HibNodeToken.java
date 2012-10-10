@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.hib;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,6 +41,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -65,7 +67,8 @@ import com.googlecode.sarasvati.visitor.TokenVisitor;
 public class HibNodeToken implements NodeToken
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GeneratedValue(strategy=GenerationType.AUTO, generator="sequence_generator")
+  @SequenceGenerator(name="sequence_generator", sequenceName="wf_node_token_seq")
   protected Long    id;
 
   @ForeignKey(name="FK_nodetok_process")
@@ -221,7 +224,7 @@ public class HibNodeToken implements NodeToken
 
   public void setParentTokens (final List<ArcToken> parentTokens)
   {
-    this.parentTokens = parentTokens;
+    this.parentTokens = sort(parentTokens);
   }
 
   @Override
@@ -232,7 +235,7 @@ public class HibNodeToken implements NodeToken
 
   public void setChildTokens (final List<ArcToken> childTokens)
   {
-    this.childTokens = childTokens;
+    this.childTokens = sort(childTokens);    
   }
 
   @Override
@@ -517,5 +520,22 @@ public class HibNodeToken implements NodeToken
   public String toString ()
   {
     return "[HibNodeToken id=" + id + " guardAction=" + guardAction + " execType=" + executionType + " complete=" + isComplete() + "]";
+  }
+  
+  private List<ArcToken> sort(final List<ArcToken> tokens)
+  {
+    if (tokens != null)
+    {
+      Collections.sort(tokens, new Comparator<ArcToken>()
+      {
+        @Override
+        public int compare(final ArcToken o1, final ArcToken o2)
+        {
+          final long diff = o1.getId() - o2.getId();
+          return diff < 0 ? -1 : diff == 0 ? 0 : 1; 
+        }
+      });
+    }    
+    return tokens;
   }
 }

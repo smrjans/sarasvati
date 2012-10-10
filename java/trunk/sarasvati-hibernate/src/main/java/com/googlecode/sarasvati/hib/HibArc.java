@@ -25,6 +25,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ForeignKey;
@@ -39,7 +40,8 @@ import com.googlecode.sarasvati.Node;
 public class HibArc implements Arc
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GeneratedValue(strategy=GenerationType.AUTO, generator="sequence_generator")
+  @SequenceGenerator(name="sequence_generator", sequenceName="wf_arc_seq")
   protected Long id;
   protected String name;
 

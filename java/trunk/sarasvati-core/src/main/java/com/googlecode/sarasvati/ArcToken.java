@@ -32,6 +32,12 @@ import java.util.Set;
 public interface ArcToken extends Token
 {
   /**
+   * Returns a unique identifier for this arc token
+   * @return a unique identifier for this arc token
+   */
+  Long getId();
+  
+  /**
    * Returns the arc that this arc token points to.
    *
    * @return The associated arc

@@ -29,6 +29,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -52,7 +53,8 @@ import com.googlecode.sarasvati.impl.NestedReadEnv;
 public class HibNodeRef implements Node
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GeneratedValue(strategy=GenerationType.AUTO, generator="sequence_generator")
+  @SequenceGenerator(name="sequence_generator", sequenceName="wf_node_ref_seq")
   protected Long   id;
 
   @ForeignKey(name="FK_ref_node")

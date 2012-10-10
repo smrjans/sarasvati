@@ -26,6 +26,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ForeignKey;
@@ -35,7 +36,8 @@ import org.hibernate.annotations.ForeignKey;
 public class HibTokenSetMemberAttribute
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GeneratedValue(strategy=GenerationType.AUTO, generator="sequence_generator")
+  @SequenceGenerator(name="sequence_generator", sequenceName="wf_token_set_member_attr_seq")
   protected Long id;
 
   @ForeignKey( name="FK_token_set_mbr_attr" )
