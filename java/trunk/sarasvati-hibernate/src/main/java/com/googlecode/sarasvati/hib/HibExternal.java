@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008, 2012 Paul Lorenz
 */
 package com.googlecode.sarasvati.hib;
 
@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,10 +31,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
 
 import com.googlecode.sarasvati.External;
@@ -61,9 +62,9 @@ public class HibExternal implements External
   protected HibGraph externalGraph;
 
   @ForeignKey(name="FK_external_attr")
-  @CollectionOfElements
+  @ElementCollection(targetClass=String.class)
   @JoinTable( name="wf_external_attr", joinColumns={@JoinColumn( name="external_id")})
-  @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
+  @MapKeyColumn(name="name")
   @Column( name="value")
   protected Map<String, String> attrMap;
 

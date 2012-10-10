@@ -127,18 +127,18 @@ public abstract class AbstractGraphVisualizer
     JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
     frame.getContentPane().add( splitPane );
 
-    DefaultListModel listModel = new DefaultListModel();
+    DefaultListModel<Graph> listModel = new DefaultListModel<Graph>();
     for ( Graph g : engine.getRepository().getGraphs() )
     {
       listModel.addElement( g );
     }
 
-    ListCellRenderer cellRenderer = new DefaultListCellRenderer()
+    ListCellRenderer<Object> cellRenderer = new DefaultListCellRenderer()
     {
       private static final long serialVersionUID = 1L;
 
       @Override
-      public Component getListCellRendererComponent( final JList list, final Object value,
+      public Component getListCellRendererComponent( final JList<?> list, final Object value,
                                                      final int index, final boolean isSelected,
                                                      final boolean cellHasFocus )
       {
@@ -151,7 +151,7 @@ public abstract class AbstractGraphVisualizer
       }
     };
 
-    final JList graphList = new JList( listModel );
+    final JList<Graph> graphList = new JList<Graph>( listModel );
     graphList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
     graphList.setCellRenderer( cellRenderer );
 
@@ -179,7 +179,7 @@ public abstract class AbstractGraphVisualizer
           return;
         }
 
-        final Graph g = (Graph)graphList.getSelectedValue();
+        final Graph g = graphList.getSelectedValue();
 
         if ( g != null && g.equals( currentGraph ) )
         {

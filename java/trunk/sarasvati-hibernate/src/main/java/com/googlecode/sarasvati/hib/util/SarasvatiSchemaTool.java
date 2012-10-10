@@ -23,10 +23,10 @@ import java.io.File;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Settings;
-import org.hibernate.classic.Session;
 
 import com.googlecode.sarasvati.hib.HibEngine;
 

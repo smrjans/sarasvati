@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008-2009 Paul Lorenz
+    Copyright 2008-2009, 2012 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.hib;
@@ -29,6 +29,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -37,6 +38,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,7 +48,6 @@ import javax.persistence.Version;
 
 import org.hibernate.Query;
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Where;
@@ -120,9 +121,9 @@ public class HibGraphProcess implements GraphProcess
   protected List<HibProcessListener>  listeners;
 
   @ForeignKey(name="FK_process_attr")
-  @CollectionOfElements
+  @ElementCollection(targetClass=String.class)
   @JoinTable( name="wf_process_attr", joinColumns={@JoinColumn( name="process_id")})
-  @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
+  @MapKeyColumn(name="name")
   @Column( name="value")
   @Cascade( org.hibernate.annotations.CascadeType.DELETE )
   protected Map<String, String> attrMap;

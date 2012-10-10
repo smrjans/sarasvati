@@ -39,7 +39,7 @@ import com.googlecode.sarasvati.editor.model.Library;
 /**
  * @author Paul Lorenz
  */
-@SuppressWarnings("synthetic-access")
+@SuppressWarnings({"synthetic-access", "rawtypes", "unchecked"})
 public class ExternalPropertiesPanel extends javax.swing.JPanel {
 
     private static final long serialVersionUID = 1L;

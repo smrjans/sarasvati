@@ -35,7 +35,7 @@ import com.googlecode.sarasvati.editor.model.EditorPreferences;
 /**
  * @author Paul Lorenz
  */
-@SuppressWarnings("synthetic-access")
+@SuppressWarnings({"synthetic-access", "rawtypes", "unchecked"})
 public class GeneralPreferencesPanel extends BasePrefsPage {
 
     private static final long serialVersionUID = 1L;

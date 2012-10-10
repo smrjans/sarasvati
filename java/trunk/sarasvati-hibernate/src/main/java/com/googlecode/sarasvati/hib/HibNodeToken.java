@@ -29,6 +29,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -37,6 +38,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -44,7 +46,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -83,9 +84,9 @@ public class HibNodeToken implements NodeToken
   protected HibNodeToken attrSetToken;
 
   @ForeignKey(name="FK_nodetok_attr")
-  @CollectionOfElements
+  @ElementCollection(targetClass=String.class)
   @JoinTable( name="wf_token_attr", joinColumns={@JoinColumn( name="attr_set_id")})
-  @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
+  @MapKeyColumn(name="name")
   @Column( name="value")
   @Cascade( org.hibernate.annotations.CascadeType.DELETE )
   protected Map<String, String> attrMap;

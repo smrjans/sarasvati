@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
@@ -258,7 +258,7 @@ public class HibEngine extends BaseEngine
     return query.list();
   }
 
-  public static void addToConfiguration (final AnnotationConfiguration config, final boolean enableCaching)
+  public static void addToConfiguration (final Configuration config, final boolean enableCaching)
   {
     config.addAnnotatedClass( HibArc.class );
     config.addAnnotatedClass( HibArcToken.class );

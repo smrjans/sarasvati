@@ -40,7 +40,7 @@ import com.googlecode.sarasvati.util.SvUtil;
 /**
  * @author Paul Lorenz
  */
-@SuppressWarnings("synthetic-access")
+@SuppressWarnings({"synthetic-access", "rawtypes", "unchecked"})
 public class ArcPropertiesPanel extends javax.swing.JPanel {
 
   private static final long serialVersionUID = 1L;

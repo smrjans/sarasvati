@@ -22,20 +22,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.MapKeyColumn;
 
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
 
 @Entity
 public class HibPropertyNode extends HibNode
 {
   @ForeignKey(name="FK_node_attr")
-  @CollectionOfElements
+  @ElementCollection(targetClass=String.class)
   @JoinTable( name="wf_node_attr", joinColumns={@JoinColumn( name="node_id")})
-  @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
+  @MapKeyColumn(name="name")
   @Column( name="value")
   protected Map<String, String> attrMap;
 

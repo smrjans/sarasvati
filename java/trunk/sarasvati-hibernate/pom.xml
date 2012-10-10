@@ -10,19 +10,28 @@
 	<artifactId>sarasvati-hibernate</artifactId>
 	<name>sarasvati-hibernate</name>
   <dependencies>
+
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>sarasvati-core</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
+
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>      
     </dependency>
+    
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-annotations</artifactId>
     </dependency>
-  </dependencies>
+
+    <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.0-api</artifactId>
+    </dependency>
+    
+  </dependencies>  
 </project>

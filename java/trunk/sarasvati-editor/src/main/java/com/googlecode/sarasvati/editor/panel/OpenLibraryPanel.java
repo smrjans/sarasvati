@@ -38,7 +38,7 @@ import com.googlecode.sarasvati.util.SvUtil;
  *
  * @author paul
  */
-@SuppressWarnings("synthetic-access")
+@SuppressWarnings({"synthetic-access", "rawtypes", "unchecked"})
 public class OpenLibraryPanel extends javax.swing.JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -288,6 +288,9 @@ public class OpenLibraryPanel extends javax.swing.JPanel {
     public void openSelected ()
     {
       final GraphEditor graphEditor = GraphEditor.getInstance();
+
+      // TODO: Fix this once 1.7 is standard
+      @SuppressWarnings("deprecation")
       final Object[] selected = pdList.getSelectedValues();
       if ( selected != null )
       {

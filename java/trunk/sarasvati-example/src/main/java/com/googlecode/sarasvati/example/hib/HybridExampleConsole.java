@@ -24,9 +24,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.StringType;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
@@ -124,7 +124,7 @@ public class HybridExampleConsole
       List<String> graphNames =
         engine.getSession()
               .createSQLQuery( "select distinct name from wf_graph order by name" )
-              .addScalar( "name", Hibernate.STRING )
+              .addScalar( "name", StringType.INSTANCE )
               .list();
 
       List<HibGraph> graphs = new ArrayList<HibGraph>( graphNames.size() );

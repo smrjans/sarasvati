@@ -103,18 +103,18 @@ public abstract class AbstractProcessVisualizer
     JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
     frame.getContentPane().add( splitPane );
 
-    final DefaultListModel listModel = new DefaultListModel();
+    final DefaultListModel<GraphProcess> listModel = new DefaultListModel<GraphProcess>();
     for ( GraphProcess p : process )
     {
       listModel.addElement( p );
     }
 
-    ListCellRenderer cellRenderer = new DefaultListCellRenderer()
+    ListCellRenderer<Object> cellRenderer = new DefaultListCellRenderer()
     {
       private static final long serialVersionUID = 1L;
 
       @Override
-      public Component getListCellRendererComponent( final JList list, final Object value,
+      public Component getListCellRendererComponent( final JList<?> list, final Object value,
                                                      final int index, final boolean isSelected,
                                                      final boolean cellHasFocus )
       {
@@ -127,7 +127,7 @@ public abstract class AbstractProcessVisualizer
       }
     };
 
-    final JList graphList = new JList( listModel );
+    final JList<GraphProcess> graphList = new JList<GraphProcess>( listModel );
     graphList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
     graphList.setCellRenderer( cellRenderer );
 

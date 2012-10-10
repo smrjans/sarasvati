@@ -27,6 +27,7 @@ import javax.swing.ListModel;
  *
  * @author paul
  */
+@SuppressWarnings({ "rawtypes", "unchecked"})
 public class ContentAssistPanel extends javax.swing.JPanel {
 
     private static final long serialVersionUID = 1L;
