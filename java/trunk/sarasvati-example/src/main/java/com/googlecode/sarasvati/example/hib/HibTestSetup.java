@@ -23,7 +23,7 @@ import java.net.URL;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 
 import com.googlecode.sarasvati.hib.HibEngine;
@@ -34,7 +34,7 @@ public class HibTestSetup
 
   public static void init (final boolean createSchema) throws Exception
   {
-    AnnotationConfiguration config = new AnnotationConfiguration();
+    final Configuration config = new Configuration();
 
     if ( createSchema )
     {

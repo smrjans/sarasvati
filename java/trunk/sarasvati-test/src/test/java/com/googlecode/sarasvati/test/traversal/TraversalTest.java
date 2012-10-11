@@ -14,12 +14,15 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008, 2012 Paul Lorenz
 */
 package com.googlecode.sarasvati.test.traversal;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 import junit.framework.Assert;
 
@@ -36,21 +39,9 @@ import com.googlecode.sarasvati.visitor.TokenVisitorAdaptor;
 
 public class TraversalTest extends ExecutionTest
 {
-  public static class TestVisitor extends TokenVisitorAdaptor
-  {
-    StringBuilder buf = new StringBuilder();
-
-    @Override
-    public void visit (final NodeToken token)
-    {
-      String name = token.getNode().getName();
-      buf.append( name.substring( 4 ) );
-    }
-  }
-
   public static class BreadthFirstTestVisitor extends TokenVisitorAdaptor
   {
-    final Map<Token, Integer> levelMap = new HashMap<>();
+    final Map<Token, Integer> levelMap = new HashMap<Token, Integer>();
     int currentNodeLevel = 1;
 
     @Override
@@ -84,6 +75,70 @@ public class TraversalTest extends ExecutionTest
     }    
   }
   
+  public static class DepthFirstTestVisitor extends TokenVisitorAdaptor
+  {
+    final Set<Token> doneSet = new HashSet<Token>();
+    final LinkedList<Token> stack = new LinkedList<Token>();
+    final Map<Token, Integer> levelMap = new HashMap<Token, Integer>();
+    int currentNodeLevel = 1;
+    
+    @Override
+    public void visit (final NodeToken token)
+    {
+      int level = 0;
+      
+      if (!token.getParentTokens().isEmpty())
+      {
+        boolean parentFoundInStack = false;
+        level = Integer.MAX_VALUE;
+        for (final ArcToken parent : token.getParentTokens())
+        {
+          Integer parentLevel = levelMap.get(parent.getParentToken());
+          level = Math.min(level, parentLevel == null ? Integer.MAX_VALUE : parentLevel);
+          
+          parentFoundInStack |= stack.contains(parent.getParentToken());
+        }
+        
+        if (!parentFoundInStack)
+        {
+          throw new RuntimeException("No parent found in stack. Not depth first!");
+        }
+      }
+      
+      level++;
+      levelMap.put(token, level);
+      
+      if (level == currentNodeLevel)
+      {
+        if (!stack.isEmpty())
+        {
+          doneSet.add(stack.removeLast());
+        }
+        stack.add(token);
+      }
+      else if (level > currentNodeLevel)
+      {
+        stack.add(token);
+      }
+      else if (level < currentNodeLevel)
+      {
+        int diff = currentNodeLevel - level;
+        for (int i = 0; i < diff; i++)
+        {
+          Token stackToken = stack.removeLast();
+          if (doneSet.contains(stackToken))
+          {
+            throw new RuntimeException("Rencountered tree section that was already traversed!");
+          }
+          doneSet.add(stackToken);
+        }
+        stack.add(token);
+      }
+      
+      currentNodeLevel = level;
+    }    
+  }
+  
   public NodeToken executeTraversal () throws Exception
   {
     Graph g = ensureLoaded( "traversal" );
@@ -105,20 +160,31 @@ public class TraversalTest extends ExecutionTest
     return tokenA;
   }
 
-  @Test public void testBreadthFirst () throws Exception
+  @Test 
+  public void testBreadthFirst () throws Exception
   {
     NodeToken tokenA = executeTraversal();
     TokenTraversals.traverseChildrenBreadthFirst( tokenA, new BreadthFirstTestVisitor() );
   }
 
-  @Test public void testDepthFirst () throws Exception
+  @Test 
+  public void testDepthFirst () throws Exception
   {
     NodeToken tokenA = executeTraversal();
+    TokenTraversals.traverseChildrenDepthFirst( tokenA, new DepthFirstTestVisitor() );
+  }
+  
+  @Test(expected=RuntimeException.class)
+  public void testBreadthFirstWithDepthFirstTester() throws Exception
+  {
+    NodeToken tokenA = executeTraversal();
+    TokenTraversals.traverseChildrenBreadthFirst( tokenA, new DepthFirstTestVisitor());
+  }
 
-    TestVisitor visitor = new TestVisitor();
-    TokenTraversals.traverseChildrenDepthFirst( tokenA, visitor );
-
-    String compare = "ABDJEFCGHI";
-    Assert.assertEquals( compare, visitor.buf.toString() );
+  @Test(expected=RuntimeException.class) 
+  public void testDepthFirstWithBreadthFirstTester() throws Exception
+  {
+    NodeToken tokenA = executeTraversal();
+    TokenTraversals.traverseChildrenDepthFirst( tokenA, new BreadthFirstTestVisitor());
   }
 }

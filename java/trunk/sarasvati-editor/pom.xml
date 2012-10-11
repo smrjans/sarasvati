@@ -69,21 +69,6 @@
           <include>**/Bundle.properties</include>
         </includes>
       </resource>
-      <resource>
-        <directory>src/main/izpack-resources/</directory>
-        <includes>
-          <include>**/*</include>
-        </includes>
-        <targetPath>${project.build.directory}</targetPath>
-      </resource>
-      <resource>
-        <directory>src/main/izpack/</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>install.xml</include>
-        </includes>
-        <targetPath>${project.build.directory}</targetPath>
-      </resource>
     </resources>
   
     <plugins>
@@ -128,7 +113,40 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <!-- here the phase you need -->
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/</outputDirectory>
+              <resources>          
+                <resource>
+                  <directory>src/main/izpack-resources/</directory>
+                  <filtering>true</filtering>
+                </resource>
+                <resource>
+                  <directory>src/main/izpack/</directory>
+                  <filtering>true</filtering>
+                  <includes>
+                    <include>install.xml</include>
+                  </includes>
+                </resource>
+              </resources>              
+            </configuration>            
+          </execution>
+        </executions>
+      </plugin>
+   
     </plugins>
+       
   </build>
   
   <licenses>

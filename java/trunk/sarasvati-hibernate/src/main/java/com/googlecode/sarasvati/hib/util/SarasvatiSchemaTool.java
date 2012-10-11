@@ -14,25 +14,28 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009 Paul Lorenz
+    Copyright 2009, 2012 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.hib.util;
 
 import java.io.File;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.cfg.Settings;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.jdbc.Work;
 
 import com.googlecode.sarasvati.hib.HibEngine;
 
 public class SarasvatiSchemaTool
 {
-  private AnnotationConfiguration config = new AnnotationConfiguration();
+  private final Configuration config = new Configuration();
+  private Dialect dialect = null;
 
   public SarasvatiSchemaTool (final String hibernateCfg)
   {
@@ -40,16 +43,54 @@ public class SarasvatiSchemaTool
     config.configure( new File( hibernateCfg ) );
   }
 
+  public Dialect getDialect(final SessionFactory factory)
+  {
+    Class<?> clazz = null;
+    
+    try
+    {
+      try
+      {
+        clazz = Class.forName("org.hibernate.engine.spi.SessionFactoryImplementor");
+      }
+      catch(final ClassNotFoundException cnfe)
+      {
+        clazz = Class.forName("org.hibernate.engine.SessionFactoryImplementor");
+      }
+      
+      return (Dialect)clazz.getMethod("getDialect").invoke(factory);
+    }
+    catch(final Exception e)
+    {
+      throw new RuntimeException("Failed to invoked SessionFactoryImplementor#getDialect", e);
+    }
+  }
+  
+  public Dialect getDialect()
+  {    
+    if (dialect == null)
+    {
+      final SessionFactory sessionFactory = config.buildSessionFactory();
+      try
+      {
+        dialect = getDialect(sessionFactory);
+      }
+      finally
+      {
+        sessionFactory.close();
+      }
+    }
+    return dialect;
+  }
+  
   public String[] generateCreateSchemaDDL ()
   {
-    Settings settings = config.buildSettings();
-    return config.generateSchemaCreationScript( settings.getDialect() );
+    return config.generateSchemaCreationScript(getDialect());
   }
 
   public String[] generateDropSchemaDDL ()
   {
-    Settings settings = config.buildSettings();
-    return config.generateDropSchemaScript( settings.getDialect() );
+    return config.generateDropSchemaScript(getDialect());
   }
 
   public void executeDDL (final String[] ddl) throws Exception
@@ -74,24 +115,30 @@ public class SarasvatiSchemaTool
     }
   }
 
-  @SuppressWarnings("deprecation")
   public void executeDDL (final Session session, final String[] ddl)
     throws SQLException
   {
-    Statement stmt = session.connection().createStatement();
-
-    try
-    {
-      for ( String ddlStmt : ddl )
+    session.doWork(new Work()
+    {      
+      @Override
+      public void execute(Connection connection) throws SQLException
       {
-        System.out.println( "DDL: " + ddlStmt );
-        stmt.execute( ddlStmt );
+        Statement stmt = connection.createStatement();
+
+        try
+        {
+          for ( String ddlStmt : ddl )
+          {
+            System.out.println( "DDL: " + ddlStmt );
+            stmt.execute( ddlStmt );
+          }
+        }
+        finally
+        {
+          stmt.close();
+        }        
       }
-    }
-    finally
-    {
-      stmt.close();
-    }
+    });
   }
 
   public void createSchema () throws Exception
@@ -106,7 +153,20 @@ public class SarasvatiSchemaTool
 
   public static void main (final String[] args) throws Exception
   {
-    SarasvatiSchemaTool createSchema = new SarasvatiSchemaTool( "/home/paul/workspace/wf-java/conf/hibernate.cfg.xml" );
+    if (args.length < 1)
+    {
+      System.out.println("No hibernate.cfg.xml specifed.");
+      System.exit(-1);
+    }
+    
+    File file = new File(args[0]); 
+    if (!file.exists() || !file.canRead() || !file.isFile())
+    {
+      System.out.println("Given hibernate config file is not present, not readable or not a file");
+      System.exit(-1);      
+    }
+    
+    SarasvatiSchemaTool createSchema = new SarasvatiSchemaTool(args[0]);
     // createSchema.dropSchema();
     createSchema.createSchema();
   }

@@ -19,7 +19,6 @@
 package com.googlecode.sarasvati.hib;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -224,7 +223,7 @@ public class HibNodeToken implements NodeToken
 
   public void setParentTokens (final List<ArcToken> parentTokens)
   {
-    this.parentTokens = sort(parentTokens);
+    this.parentTokens = parentTokens;
   }
 
   @Override
@@ -235,7 +234,7 @@ public class HibNodeToken implements NodeToken
 
   public void setChildTokens (final List<ArcToken> childTokens)
   {
-    this.childTokens = sort(childTokens);    
+    this.childTokens = childTokens;
   }
 
   @Override
@@ -520,22 +519,5 @@ public class HibNodeToken implements NodeToken
   public String toString ()
   {
     return "[HibNodeToken id=" + id + " guardAction=" + guardAction + " execType=" + executionType + " complete=" + isComplete() + "]";
-  }
-  
-  private List<ArcToken> sort(final List<ArcToken> tokens)
-  {
-    if (tokens != null)
-    {
-      Collections.sort(tokens, new Comparator<ArcToken>()
-      {
-        @Override
-        public int compare(final ArcToken o1, final ArcToken o2)
-        {
-          final long diff = o1.getId() - o2.getId();
-          return diff < 0 ? -1 : diff == 0 ? 0 : 1; 
-        }
-      });
-    }    
-    return tokens;
   }
 }
