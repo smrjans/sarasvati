@@ -13,6 +13,8 @@ drop table if exists wf_execution_type cascade;
 drop table if exists wf_arc cascade;
 drop table if exists wf_node_ref cascade;
 drop table if exists wf_node_attr cascade;
+drop table if exists wf_external cascade;
+drop table if exists wf_external_attr cascade;
 drop table if exists wf_node cascade;
 drop table if exists wf_node_type cascade;
 drop table if exists wf_node_join_type cascade;
@@ -23,13 +25,43 @@ drop table if exists wf_process_state cascade;
 drop table if exists wf_graph_listener cascade;
 drop table if exists wf_graph cascade;
 
+drop sequence if exists wf_graph_seq;
+drop sequence if exists wf_graph_listener_seq;
+drop sequence if exists wf_process_seq;
+drop sequence if exists wf_process_listener_seq;
+drop sequence if exists wf_node_seq;
+drop sequence if exists wf_external_seq;
+drop sequence if exists wf_node_ref_seq;
+drop sequence if exists wf_arc_seq;
+drop sequence if exists wf_node_token_seq;
+drop sequence if exists wf_arc_token_seq;
+drop sequence if exists wf_token_set_seq;
+drop sequence if exists wf_token_set_arcmem_seq;
+drop sequence if exists wf_token_set_nodemem_seq;
+drop sequence if exists wf_token_set_member_attr_seq;
+
 -- -----------------------------------------------------------------------------
 -- CREATE NEW TABLES
 -- -----------------------------------------------------------------------------
 
+create sequence wf_graph_seq start with 1 increment by 1;
+create sequence wf_graph_listener_seq start with 1 increment by 1;
+create sequence wf_process_seq start with 1 increment by 1;
+create sequence wf_process_listener_seq start with 1 increment by 1;
+create sequence wf_node_seq start with 1 increment by 1;
+create sequence wf_external_seq start with 1 increment by 1;
+create sequence wf_node_ref_seq start with 1 increment by 1;
+create sequence wf_arc_seq start with 1 increment by 1;
+create sequence wf_node_token_seq start with 1 increment by 1;
+create sequence wf_arc_token_seq start with 1 increment by 1;
+create sequence wf_token_set_seq start with 1 increment by 1;
+create sequence wf_token_set_arcmem_seq start with 1 increment by 1;
+create sequence wf_token_set_nodemem_seq start with 1 increment by 1;
+create sequence wf_token_set_member_attr_seq start with 1 increment by 1;
+
 create table wf_graph
 (
-  id              serial    NOT NULL PRIMARY KEY,
+  id              int    NOT NULL PRIMARY KEY,
   name            text      NOT NULL,
   version         int       NOT NULL,
   custom_id       text      NULL,
@@ -42,7 +74,7 @@ ALTER TABLE wf_graph
 
 create table wf_graph_listener
 (
-  id              serial NOT NULL PRIMARY KEY,
+  id              int NOT NULL PRIMARY KEY,
   type            text   NOT NULL,
   event_type_mask int    NOT NULL,
   graph_id        int    NOT NULL REFERENCES wf_graph
@@ -67,7 +99,7 @@ insert into wf_process_state values ( 5, 'Canceled' );
 
 create table wf_process
 (
-  id              serial       NOT NULL PRIMARY KEY,
+  id              int       NOT NULL PRIMARY KEY,
   graph_id        int          NOT NULL REFERENCES wf_graph,
   state           int          NOT NULL REFERENCES wf_process_state,
   parent_token_id int          NULL,
@@ -89,7 +121,7 @@ ALTER TABLE wf_process_attr
 
 create table wf_process_listener
 (
-  id              serial NOT NULL PRIMARY KEY,
+  id              int NOT NULL PRIMARY KEY,
   type            text   NOT NULL,
   event_type_mask int    NOT NULL,
   process_id      int    NOT NULL REFERENCES wf_process
@@ -129,7 +161,7 @@ insert into wf_node_join_type values ( 7, 'JoinLang: Evaluates the join lang sta
 
 create table wf_node
 (
-  id              serial  NOT NULL PRIMARY KEY,
+  id              int  NOT NULL PRIMARY KEY,
   graph_id        int     NOT NULL REFERENCES wf_graph,
   name            text    NOT NULL,
   join_type       int     NOT NULL REFERENCES wf_node_join_type,
@@ -155,7 +187,7 @@ ALTER TABLE wf_node_attr
 
 create table wf_external
 (
-  id                serial   NOT NULL PRIMARY KEY,
+  id                int   NOT NULL PRIMARY KEY,
   name              text     NOT NULL,
   graph_id          int      NOT NULL references wf_graph,
   external_graph_id int      NOT NULL references wf_graph
@@ -173,7 +205,7 @@ ALTER TABLE wf_external_attr
 
 create table wf_node_ref
 (
-  id          serial      NOT NULL PRIMARY KEY,
+  id          int      NOT NULL PRIMARY KEY,
   node_id     int         NOT NULL REFERENCES wf_node,
   graph_id    int         NOT NULL REFERENCES wf_graph,
   parent_id   int         NULL REFERENCES wf_node_ref,
@@ -184,7 +216,7 @@ create index wf_node_ref_graph_idx on wf_node_ref (graph_id);
 
 create table wf_arc
 (
-  id            serial NOT NULL PRIMARY KEY,
+  id            int NOT NULL PRIMARY KEY,
   graph_id      int    NOT NULL REFERENCES wf_graph,
   a_node_ref_id int    NOT NULL REFERENCES wf_node_ref,
   z_node_ref_id int    NOT NULL REFERENCES wf_node_ref,
@@ -217,7 +249,7 @@ insert into wf_execution_type values ( 4, 'U-Turn/Backtracked' );
 
 create table wf_node_token
 (
-  id              serial    NOT NULL PRIMARY KEY,
+  id              int    NOT NULL PRIMARY KEY,
   process_id      int       NOT NULL REFERENCES wf_process,
   node_ref_id     int       NOT NULL REFERENCES wf_node_ref,
   attr_set_id     int       NULL     REFERENCES wf_node_token,
@@ -236,7 +268,7 @@ ALTER TABLE wf_process
 
 create table wf_arc_token
 (
-  id              serial    NOT NULL PRIMARY KEY,
+  id              int    NOT NULL PRIMARY KEY,
   process_id      int       NOT NULL REFERENCES wf_process,
   arc_id          int       NOT NULL REFERENCES wf_arc,
   parent_token_id int       NOT NULL REFERENCES wf_node_token,
@@ -273,7 +305,7 @@ ALTER TABLE wf_token_attr
 
 create table wf_token_set
 (
-  id               serial  NOT NULL PRIMARY KEY,
+  id               int  NOT NULL PRIMARY KEY,
   process_id       int     NOT NULL REFERENCES wf_process,
   name             text    NOT NULL,
   max_member_index int     NOT NULL,
@@ -292,7 +324,7 @@ ALTER TABLE wf_token_set_attr
 
 create table wf_token_set_arcmem
 (
-  id            serial  NOT NULL PRIMARY KEY,
+  id            int  NOT NULL PRIMARY KEY,
   token_set_id  int     NOT NULL REFERENCES wf_token_set,
   token_id      int     NOT NULL REFERENCES wf_arc_token,
   member_index  int     NOT NULL
@@ -303,7 +335,7 @@ create index wf_token_set_arcmem_ts_idx on wf_token_set_arcmem(token_set_id);
 
 create table wf_token_set_nodemem
 (
-  id            serial  NOT NULL PRIMARY KEY,
+  id            int  NOT NULL PRIMARY KEY,
   token_set_id  int     NOT NULL REFERENCES wf_token_set,
   token_id      int     NOT NULL REFERENCES wf_node_token,
   member_index  int     NOT NULL
@@ -314,7 +346,7 @@ create index wf_token_set_nodemem_ts_idx on wf_token_set_nodemem(token_set_id);
 
 create table wf_token_set_member_attr
 (
-  id            serial NOT NULL PRIMARY KEY,
+  id            int NOT NULL PRIMARY KEY,
   token_set_id  int    NOT NULL REFERENCES wf_token_set,
   member_index  int    NOT NULL,
   name          text   NOT NULL,
