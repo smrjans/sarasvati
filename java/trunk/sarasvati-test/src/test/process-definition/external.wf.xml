@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<process-definition xmlns="http://sarasvati.googlecode.com/ProcessDefinition" name="external">
+    <node name="N1" joinType="or" type="wait">
+        <arc to="N2"/>
+        <arc to="N3"/>
+    </node>
+    <node name="N2" joinType="or" type="wait">
+        <arc to="N4"/>
+    </node>
+    <node name="N5" joinType="labelAnd" type="wait"/>
+    <node name="N4" joinType="or" type="wait">
+        <arc to="N5"/>
+    </node>
+    <node name="N3" joinType="or" type="wait">
+        <arc to="N5"/>
+    </node>
+</process-definition>

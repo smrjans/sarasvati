@@ -262,10 +262,31 @@ public class TestProcess
 
   private Node getNode (final String name)
   {
+    boolean checkExternal = false;
+
+    String externalName = null;
+    String nodeName = name;
+
+    if (name.startsWith(":"))
+    {
+      checkExternal = true;
+      nodeName = name.substring(1);
+    }
+    else if (name.contains(":"))
+    {
+      checkExternal = true;
+      String[] parts = name.split(":");
+      externalName = parts[0];
+      nodeName = parts[1];
+    }
+
     List<Node> nodes = new ArrayList<Node>();
     for ( Node node : graph.getNodes() )
     {
-      if ( name.equals( node.getName() ) )
+      if (nodeName.equals(node.getName()) &&
+          (!checkExternal ||
+           (node.getExternal() != null && node.getExternal().getName().equals(externalName)) ||
+           (node.getExternal() == null && externalName == null)))
       {
         nodes.add( node );
       }
