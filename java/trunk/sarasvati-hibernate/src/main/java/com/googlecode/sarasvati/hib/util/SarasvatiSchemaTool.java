@@ -46,7 +46,7 @@ public class SarasvatiSchemaTool
   public Dialect getDialect(final SessionFactory factory)
   {
     Class<?> clazz = null;
-    
+
     try
     {
       try
@@ -57,7 +57,7 @@ public class SarasvatiSchemaTool
       {
         clazz = Class.forName("org.hibernate.engine.SessionFactoryImplementor");
       }
-      
+
       return (Dialect)clazz.getMethod("getDialect").invoke(factory);
     }
     catch(final Exception e)
@@ -65,9 +65,9 @@ public class SarasvatiSchemaTool
       throw new RuntimeException("Failed to invoked SessionFactoryImplementor#getDialect", e);
     }
   }
-  
+
   public Dialect getDialect()
-  {    
+  {
     if (dialect == null)
     {
       final SessionFactory sessionFactory = config.buildSessionFactory();
@@ -82,7 +82,7 @@ public class SarasvatiSchemaTool
     }
     return dialect;
   }
-  
+
   public String[] generateCreateSchemaDDL ()
   {
     return config.generateSchemaCreationScript(getDialect());
@@ -116,12 +116,11 @@ public class SarasvatiSchemaTool
   }
 
   public void executeDDL (final Session session, final String[] ddl)
-    throws SQLException
   {
     session.doWork(new Work()
-    {      
+    {
       @Override
-      public void execute(Connection connection) throws SQLException
+      public void execute(final Connection connection) throws SQLException
       {
         Statement stmt = connection.createStatement();
 
@@ -136,7 +135,7 @@ public class SarasvatiSchemaTool
         finally
         {
           stmt.close();
-        }        
+        }
       }
     });
   }
@@ -158,14 +157,14 @@ public class SarasvatiSchemaTool
       System.out.println("No hibernate.cfg.xml specifed.");
       System.exit(-1);
     }
-    
-    File file = new File(args[0]); 
+
+    File file = new File(args[0]);
     if (!file.exists() || !file.canRead() || !file.isFile())
     {
       System.out.println("Given hibernate config file is not present, not readable or not a file");
-      System.exit(-1);      
+      System.exit(-1);
     }
-    
+
     SarasvatiSchemaTool createSchema = new SarasvatiSchemaTool(args[0]);
     // createSchema.dropSchema();
     createSchema.createSchema();

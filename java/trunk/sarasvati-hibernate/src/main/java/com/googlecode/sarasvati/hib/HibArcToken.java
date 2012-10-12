@@ -118,6 +118,7 @@ public class HibArcToken implements ArcToken
     this.tokenSetMemberships = new HashSet<ArcTokenSetMember>();
   }
 
+  @Override
   public Long getId ()
   {
     return id;

@@ -37,14 +37,14 @@ public class TestEnv
     try
     {
       final boolean hibEngine = ENGINE_HIBERNATE.equals(testEngine);
-      
-      final Properties props = readDbProperties();
-      
+
       if (hibEngine)
       {
+        final Properties props = readDbProperties();
+
         if (DATABASE_POSTGRESQL.equals(testDatabase))
         {
-          init(props.getProperty("postgresql.username"), 
+          init(props.getProperty("postgresql.username"),
                props.getProperty("postgresql.password"),
                "org.postgresql.Driver",
                props.getProperty("postgresql.url"),
@@ -52,7 +52,7 @@ public class TestEnv
         }
         else if (DATABASE_MYSQL.equals(testDatabase))
         {
-          init(props.getProperty("mysql.username"), 
+          init(props.getProperty("mysql.username"),
                props.getProperty("mysql.password"),
                "com.mysql.jdbc.Driver",
                props.getProperty("mysql.url"),
@@ -60,10 +60,10 @@ public class TestEnv
         }
         else if (DATABASE_ORACLE.equals(testDatabase))
         {
-          init(props.getProperty("oracle.username"), 
+          init(props.getProperty("oracle.username"),
                props.getProperty("oracle.password"),
                "oracle.jdbc.driver.OracleDriver",
-               props.getProperty("oracle.url"), 
+               props.getProperty("oracle.url"),
                "org.hibernate.dialect.Oracle10gDialect" );
         }
         else
@@ -111,7 +111,7 @@ public class TestEnv
     try
     {
       final InputStream in = TestEnv.class.getResourceAsStream("/db.properties");
-      
+
       if (in == null)
       {
         throw new RuntimeException("db.properties not found");
@@ -123,7 +123,7 @@ public class TestEnv
       }
       finally
       {
-        in.close();      
+        in.close();
       }
     }
     catch(final IOException ioe)
@@ -131,7 +131,7 @@ public class TestEnv
       throw new RuntimeException("Failed to load database properties from db.properties", ioe);
     }
   }
-  
+
   public static void openSession ()
   {
     session = sessionFactory.openSession();
