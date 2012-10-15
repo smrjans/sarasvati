@@ -12,11 +12,34 @@ import org.hibernate.cfg.Configuration;
 import org.w3c.dom.Document;
 
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.hib.HibEngine;
+import com.googlecode.sarasvati.hib.HibGraphProcess;
+import com.googlecode.sarasvati.hib.HibNodeToken;
 import com.googlecode.sarasvati.mem.MemEngine;
 
 public class TestEnv
 {
+  public static enum ExecutionMode
+  {
+    OneSession
+    {
+      @Override
+      public boolean doCommits()
+      {
+        return false;
+      }
+    },
+    EachInNewSession,
+    Async;
+
+    public boolean doCommits()
+    {
+      return true;
+    }
+  }
+
   public static final String ENGINE_KEY = "engine";
   public static final String DB_KEY = "db";
 
@@ -28,6 +51,18 @@ public class TestEnv
   public static final String DATABASE_ORACLE = "oracle";
 
   protected static SessionFactory sessionFactory = null;
+
+  private static ExecutionMode mode = ExecutionMode.OneSession;
+
+  public static void setExeuctionMode(final ExecutionMode mode)
+  {
+    TestEnv.mode = mode;
+  }
+
+  public static ExecutionMode getMode()
+  {
+    return TestEnv.mode;
+  }
 
   static
   {
@@ -170,4 +205,25 @@ public class TestEnv
 
     return engine;
   }
+
+  public static GraphProcess refreshedProcess(final GraphProcess p)
+  {
+    if (session != null)
+    {
+      HibEngine hengine = (HibEngine)engine;
+      return hengine.getRepository().loadProcess(((HibGraphProcess)p).getId());
+    }
+    return p;
+  }
+
+  public static NodeToken refreshedToken(final NodeToken token)
+  {
+    if (session != null)
+    {
+      HibEngine hengine = (HibEngine)engine;
+      return hengine.getRepository().loadNodeToken(((HibNodeToken)token).getId());
+    }
+    return token;
+  }
+
 }

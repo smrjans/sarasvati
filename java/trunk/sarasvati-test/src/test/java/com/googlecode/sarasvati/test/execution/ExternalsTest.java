@@ -26,23 +26,74 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.test.TestEnv;
+import com.googlecode.sarasvati.test.TestEnv.ExecutionMode;
 import com.googlecode.sarasvati.test.framework.ExecutionTest;
 import com.googlecode.sarasvati.test.framework.TestProcess;
 
 public class ExternalsTest extends ExecutionTest
 {
-  @Test public void testExternal() throws Exception
+  private void validateEnv(final NodeToken token, final boolean external)
+  {
+    if (external)
+    {
+      Assert.assertNotNull("External must not be null", token.getNode().getExternal());
+
+      if ("E1".equals(token.getNode().getExternal().getName()))
+      {
+        Assert.assertEquals("A", token.getNode().getExternalEnv().getAttribute("name"));
+        Assert.assertNull(token.getNode().getExternalEnv().getAttribute("extra"));
+      }
+      else if ("E2".equals(token.getNode().getExternal().getName()))
+      {
+        Assert.assertEquals("B", token.getNode().getExternalEnv().getAttribute("name"));
+        Assert.assertEquals("ThisIsExtra", token.getNode().getExternalEnv().getAttribute("extra"));
+      }
+      else
+      {
+        throw new RuntimeException("Unknow external name encountered: " + token.getNode().getExternal().getName());
+      }
+    }
+    else
+    {
+      Assert.assertNull("External must be null", token.getNode().getExternal());
+    }
+  }
+
+  @Test
+  public void testExternalsInOneSession() throws Exception
+  {
+    TestEnv.setExeuctionMode(ExecutionMode.OneSession);
+    testExternals();
+  }
+
+  @Test
+  public void testExternalsEachInNewSession() throws Exception
+  {
+    TestEnv.setExeuctionMode(ExecutionMode.EachInNewSession);
+    testExternals();
+  }
+
+  @Test
+  public void testExternalsWithAsync() throws Exception
+  {
+    TestEnv.setExeuctionMode(ExecutionMode.Async);
+    testExternals();
+  }
+
+  public void testExternals() throws Exception
   {
     ensureLoaded( "external" );
     Graph g = ensureLoaded( "external-user" );
     GraphProcess p = startProcess( g );
 
-    NodeToken tokenA = getActiveToken( p, ":N1" );
+    NodeToken token = getActiveToken( p, ":N1" );
+    validateEnv(token, false);
 
     String state = "[1 :N1 I F]";
     TestProcess.validate( p, state );
 
-    completeToken( tokenA, Arc.DEFAULT_ARC );
+    completeToken( token, Arc.DEFAULT_ARC );
 
     state =
       "[1 :N1 C F]" +
@@ -53,7 +104,9 @@ public class ExternalsTest extends ExecutionTest
       ;
     TestProcess.validate( p, state );
 
-    NodeToken token = getActiveToken( p, "E1:N1" );
+    token = getActiveToken( p, "E1:N1" );
+    validateEnv(token, true);
+
     completeToken( token, Arc.DEFAULT_ARC );
     state =
       "[1 :N1 C F]" +
@@ -69,6 +122,7 @@ public class ExternalsTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     token = getActiveToken( p, "E1:N3" );
+    validateEnv(token, true);
     completeToken( token, Arc.DEFAULT_ARC );
     state =
       "[1 :N1 C F]" +
@@ -85,6 +139,7 @@ public class ExternalsTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     token = getActiveToken( p, "E2:N1" );
+    validateEnv(token, true);
     completeToken( token, Arc.DEFAULT_ARC );
     state =
       "[1 :N1 C F]" +
@@ -105,6 +160,7 @@ public class ExternalsTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     token = getActiveToken( p, "E1:N2" );
+    validateEnv(token, true);
     completeToken( token, Arc.DEFAULT_ARC );
     state =
       "[1 :N1 C F]" +
@@ -127,6 +183,7 @@ public class ExternalsTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     token = getActiveToken( p, "E2:N2" );
+    validateEnv(token, true);
     completeToken( token, Arc.DEFAULT_ARC );
     state =
       "[1 :N1 C F]" +
@@ -151,6 +208,7 @@ public class ExternalsTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     token = getActiveToken( p, "E2:N4" );
+    validateEnv(token, true);
     completeToken( token, Arc.DEFAULT_ARC );
     state =
       "[1 :N1 C F]" +
@@ -176,6 +234,7 @@ public class ExternalsTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     token = getActiveToken( p, "E2:N3" );
+    validateEnv(token, true);
     completeToken( token, Arc.DEFAULT_ARC );
     state =
       "[1 :N1 C F]" +
@@ -203,6 +262,7 @@ public class ExternalsTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     token = getActiveToken( p, "E2:N5" );
+    validateEnv(token, true);
     completeToken( token, Arc.DEFAULT_ARC );
     state =
       "[1 :N1 C F]" +
@@ -231,6 +291,7 @@ public class ExternalsTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     token = getActiveToken( p, "E1:N4" );
+    validateEnv(token, true);
     completeToken( token, Arc.DEFAULT_ARC );
     state =
       "[1 :N1 C F]" +
@@ -261,6 +322,7 @@ public class ExternalsTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     token = getActiveToken( p, "E1:N5" );
+    validateEnv(token, true);
     completeToken( token, Arc.DEFAULT_ARC );
     state =
       "[1 :N1 C F]" +
@@ -293,6 +355,7 @@ public class ExternalsTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     token = getActiveToken( p, ":N2" );
+    validateEnv(token, false);
     completeToken( token, Arc.DEFAULT_ARC );
     state =
       "[1 :N1 C F]" +
@@ -324,6 +387,6 @@ public class ExternalsTest extends ExecutionTest
       ;
     TestProcess.validate( p, state );
 
-    Assert.assertTrue(p.isComplete());
+    verifyComplete(p);
   }
 }

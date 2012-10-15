@@ -129,7 +129,7 @@ public class AtLeastLabelArcsRequiredRequiredTest extends ExecutionTest
       "[6 joinNode C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 
   @Test public void testTwo() throws Exception
@@ -229,6 +229,6 @@ public class AtLeastLabelArcsRequiredRequiredTest extends ExecutionTest
       "[6 joinNode C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 }

@@ -18,8 +18,6 @@
 */
 package com.googlecode.sarasvati.test.backtracking;
 
-import java.util.Iterator;
-
 import org.junit.Test;
 
 import com.googlecode.sarasvati.Arc;
@@ -36,16 +34,8 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     Graph g = ensureLoaded( "backtrack-split-join" );
     GraphProcess p = startProcess( g );
 
-    Iterator<NodeToken> iter = p.getActiveNodeTokens().iterator();
-    NodeToken tokenA = iter.next();
-    NodeToken tokenB = iter.next();
-
-    if ( "nodeB".equals( tokenA.getNode().getName() ) )
-    {
-      NodeToken tmp = tokenA;
-      tokenA = tokenB;
-      tokenB = tmp;
-    }
+    NodeToken tokenA = getActiveToken(p, "nodeA");
+    NodeToken tokenB = getActiveToken(p, "nodeB");
 
     String state =
       "[1 nodeA I F]" +
@@ -72,16 +62,8 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[4 nodeD I F]";
     TestProcess.validate( p, state );
 
-    iter = p.getActiveNodeTokens().iterator();
-    NodeToken tokenC = iter.next();
-    NodeToken tokenD = iter.next();
-
-    if ( "nodeD".equals( tokenC.getNode().getName() ) )
-    {
-      NodeToken tmp = tokenC;
-      tokenC = tokenD;
-      tokenD = tmp;
-    }
+    NodeToken tokenC = getActiveToken(p, "nodeC");
+    NodeToken tokenD = getActiveToken(p, "nodeD");
 
     completeToken( tokenC, Arc.DEFAULT_ARC );
 
@@ -110,7 +92,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
 
     TestProcess.validate( p, state );
 
-    NodeToken tokenE = p.getActiveNodeTokens().iterator().next();
+    NodeToken tokenE = getActiveToken(p, "nodeE");
     completeToken( tokenE, Arc.DEFAULT_ARC );
 
     state =
@@ -130,16 +112,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
 
     TestProcess.validate( p, state );
 
-    iter = p.getActiveNodeTokens().iterator();
-    NodeToken tokenF = iter.next();
-    NodeToken tokenG = iter.next();
-
-    if ( "nodeF".equals( tokenG.getNode().getName() ) )
-    {
-      NodeToken tmp = tokenF;
-      tokenF = tokenG;
-      tokenG = tmp;
-    }
+    NodeToken tokenF = getActiveToken(p, "nodeF");
 
     completeToken( tokenF, Arc.DEFAULT_ARC );
 

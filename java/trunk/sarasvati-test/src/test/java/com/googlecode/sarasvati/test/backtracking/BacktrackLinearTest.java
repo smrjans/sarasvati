@@ -18,8 +18,6 @@
 */
 package com.googlecode.sarasvati.test.backtracking;
 
-import java.util.Collection;
-
 import org.junit.Test;
 
 import com.googlecode.sarasvati.Graph;
@@ -34,15 +32,14 @@ public class BacktrackLinearTest extends ExecutionTest
   {
     Graph g = ensureLoaded( "backtrack-linear" );
     GraphProcess p = startProcess( g );
-    Collection<NodeToken> tokens = p.getActiveNodeTokens();
-    NodeToken tokenA = tokens.iterator().next();
+
+    NodeToken tokenA = getActiveToken(p, "nodeA");
 
     String state = "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
     completeToken(tokenA);
 
-    tokens = p.getActiveNodeTokens();
 
     state = "[1 nodeA C F]" +
             "  (C F 2)" +
@@ -58,8 +55,7 @@ public class BacktrackLinearTest extends ExecutionTest
             "[3 nodeA I F]";
     TestProcess.validate( p, state );
 
-    tokens = p.getActiveNodeTokens();
-    tokenA = tokens.iterator().next();
+    tokenA = getActiveToken(p, "nodeA");
 
     completeToken(tokenA);
 
@@ -92,23 +88,19 @@ public class BacktrackLinearTest extends ExecutionTest
   {
     Graph g = ensureLoaded( "backtrack-twice-linear" );
     GraphProcess p = startProcess( g );
-    Collection<NodeToken> tokens = p.getActiveNodeTokens();
 
     String state = "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
-    NodeToken tokenA = tokens.iterator().next();
+    NodeToken tokenA = getActiveToken(p, "nodeA");
     completeToken( tokenA);
-
-    tokens = p.getActiveNodeTokens();
 
     state = "[1 nodeA C F]\n" +
             "  (C F 2)\n" +
             "[2 nodeB I F]";
     TestProcess.validate( p, state );
 
-    tokens = p.getActiveNodeTokens();
-    NodeToken tokenB = tokens.iterator().next();
+    NodeToken tokenB = getActiveToken(p, "nodeB");
 
     completeToken(tokenB);
 

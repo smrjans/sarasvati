@@ -19,8 +19,6 @@
 
 package com.googlecode.sarasvati.test.joinlang;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
 import com.googlecode.sarasvati.Graph;
@@ -113,7 +111,7 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
       "[5 nodeE C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 
   @Test public void testTwo() throws Exception
@@ -193,7 +191,7 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
       "[5 nodeE C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 
   @Test public void testThree() throws Exception
@@ -273,7 +271,7 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
       "[5 nodeE C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 
   @Test public void testFour() throws Exception
@@ -354,6 +352,6 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
       "[5 nodeE C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 }

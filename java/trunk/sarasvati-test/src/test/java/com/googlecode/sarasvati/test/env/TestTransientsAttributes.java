@@ -26,6 +26,8 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.test.TestEnv;
+import com.googlecode.sarasvati.test.TestEnv.ExecutionMode;
 import com.googlecode.sarasvati.test.framework.ExecutionTest;
 
 public class TestTransientsAttributes extends ExecutionTest
@@ -84,6 +86,7 @@ public class TestTransientsAttributes extends ExecutionTest
     GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");
+    p = TestEnv.refreshedProcess(p);
 
     Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) );
     Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) );
@@ -105,6 +108,7 @@ public class TestTransientsAttributes extends ExecutionTest
   @Test
   public void testSetGetTokenEnvBetweenTokens () throws Exception
   {
+    TestEnv.setExeuctionMode(ExecutionMode.OneSession);
     Graph graph = ensureLoaded( "two-node" );
     GraphProcess p = startProcess( graph );
 
@@ -124,6 +128,8 @@ public class TestTransientsAttributes extends ExecutionTest
   @Test
   public void testSetGetTokenFullEnvBetweenTokens () throws Exception
   {
+    TestEnv.setExeuctionMode(ExecutionMode.OneSession);
+
     Graph graph = ensureLoaded( "two-node" );
     GraphProcess p = startProcess( graph );
 
@@ -143,6 +149,8 @@ public class TestTransientsAttributes extends ExecutionTest
   @Test
   public void testSetGetProcessEnvBetweenTokens () throws Exception
   {
+    TestEnv.setExeuctionMode(ExecutionMode.OneSession);
+
     Graph graph = ensureLoaded( "two-node" );
     GraphProcess p = startProcess( graph );
 

@@ -70,7 +70,7 @@ public class BacktrackSplitTest extends ExecutionTest
 
     TestProcess.validate( p, state );
 
-    tokenA = p.getActiveNodeTokens().iterator().next();
+    tokenA = getActiveToken(p, "nodeA");
     completeToken( tokenA, Arc.DEFAULT_ARC );
     state =
       "[1 nodeA C FB]" +

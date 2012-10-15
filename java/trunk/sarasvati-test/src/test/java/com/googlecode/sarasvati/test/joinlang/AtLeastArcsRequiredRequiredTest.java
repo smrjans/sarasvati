@@ -87,7 +87,7 @@ public class AtLeastArcsRequiredRequiredTest extends ExecutionTest
       "[4 nodeD C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 
   public void testTwo() throws Exception

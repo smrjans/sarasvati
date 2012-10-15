@@ -150,7 +150,7 @@ public class BacktrackJoinTest extends ExecutionTest
       "[4 nodeA I F]";
     TestProcess.validate( p, state );
 
-    tokenA = p.getActiveNodeTokens().iterator().next();
+    tokenA = getActiveToken(p, "nodeA");
     completeToken( tokenA, Arc.DEFAULT_ARC );
 
     state =

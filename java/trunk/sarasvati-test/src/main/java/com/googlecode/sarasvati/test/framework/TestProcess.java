@@ -35,6 +35,7 @@ import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.test.TestEnv;
 
 /**
  *
@@ -68,18 +69,19 @@ public class TestProcess
 {
   public static void validate (final GraphProcess p, final String state)
   {
+    final GraphProcess process = TestEnv.refreshedProcess(p);
     TestProcess testProcess = null;
     try
     {
-      testProcess = new TestProcess( p.getGraph(), state );
-      testProcess.compare( p );
+      testProcess = new TestProcess( process.getGraph(), state );
+      testProcess.compare( process );
     }
     finally
     {
       if ( testProcess != null )
       {
         System.out.println( "================================================================================" );
-        ProcessPrinter.print( p );
+        ProcessPrinter.print( process );
         testProcess.dumpToStandardOut();
         System.out.println( "================================================================================" );
       }

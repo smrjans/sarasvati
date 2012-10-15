@@ -92,7 +92,7 @@ public class NodeRequiredTest extends ExecutionTest
       "[4 D C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 
   @Test public void testJoinWithMerge() throws Exception
@@ -155,7 +155,7 @@ public class NodeRequiredTest extends ExecutionTest
       "[4 D C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 
   @Test public void testJoinWithMerge2() throws Exception
@@ -218,6 +218,6 @@ public class NodeRequiredTest extends ExecutionTest
       "[4 D C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 }

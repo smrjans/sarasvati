@@ -170,7 +170,7 @@ public class TokenSetRequiredTest extends ExecutionTest
       "[8 nodeE C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 
   @Test public void testTwo() throws Exception
@@ -286,6 +286,6 @@ public class TokenSetRequiredTest extends ExecutionTest
       "[7 nodeE C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 }

@@ -19,8 +19,6 @@
 
 package com.googlecode.sarasvati.test.joinlang;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
 import com.googlecode.sarasvati.Graph;
@@ -86,7 +84,7 @@ public class ArcsRequiredRequiredTest extends ExecutionTest
       "[4 nodeD C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 
   @Test public void testTwo() throws Exception
@@ -143,6 +141,6 @@ public class ArcsRequiredRequiredTest extends ExecutionTest
       "[4 nodeD C F]";
     TestProcess.validate( p, state );
 
-    Assert.assertTrue( "Process should be complete", p.isComplete() );
+    verifyComplete(p);
   }
 }

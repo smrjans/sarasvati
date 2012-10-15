@@ -22,9 +22,8 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-import junit.framework.Assert;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 
 import com.googlecode.sarasvati.Arc;
@@ -41,6 +40,7 @@ import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.test.TestEnv;
+import com.googlecode.sarasvati.test.TestEnv.ExecutionMode;
 import com.googlecode.sarasvati.xml.XmlLoader;
 
 public class ExecutionTest
@@ -97,12 +97,11 @@ public class ExecutionTest
     }
   }
 
-  private Engine engine;
-
   @Before
   public void setup ()
   {
-    engine = TestEnv.getEngine();
+    TestEnv.setExeuctionMode(ExecutionMode.Async);
+    Engine engine = TestEnv.getEngine();
     engine.addExecutionListener( DuplicateEventDetector.class, ExecutionEventType.values());
   }
 
@@ -116,24 +115,33 @@ public class ExecutionTest
   {
     final File basePath = new File( "src/test/process-definition/" );
     assert basePath.exists();
-    final GraphLoader<? extends Graph> loader = engine.getLoader();
+    final GraphLoader<? extends Graph> loader = TestEnv.getEngine().getLoader();
 
-    if ( !loader.isLoaded( name ) )
+    //if ( !loader.isLoaded( name ) )
     {
       loader.loadDefinition( new XmlLoader(), new File( basePath, name + ".wf.xml" ) );
     }
-    engine = TestEnv.commitSession();
-    return engine.getRepository().getLatestGraph( name );
+    TestEnv.commitSession();
+    return TestEnv.getEngine().getRepository().getLatestGraph( name );
   }
 
-  public NodeToken getActiveToken(final GraphProcess p, final String nodeName)
+  public NodeToken getActiveToken(final GraphProcess p,
+                                  final String nodeName)
   {
     return getActiveToken(p, new TokenOnNodePredicate(nodeName));
   }
 
   public NodeToken getActiveToken(final GraphProcess p, final TestPredicate<NodeToken> test)
   {
-    for ( NodeToken token : p.getActiveNodeTokens() )
+    final ExecutionMode mode = TestEnv.getMode();
+    if (mode.doCommits())
+    {
+      TestEnv.commitSession();
+    }
+
+    final GraphProcess process = mode.doCommits() ? TestEnv.refreshedProcess(p) : p;
+
+    for ( NodeToken token : process.getActiveNodeTokens() )
     {
       if ( test.matches(token) )
       {
@@ -149,7 +157,7 @@ public class ExecutionTest
   {
     final NodeToken token = getActiveToken(p, new TokenOnNodePredicate(nodeName));
     System.out.println("Completing token: " + token + " on node " + token.getNode());
-    completeToken(token);
+    completeToken(token, true);
     return p;
   }
 
@@ -157,30 +165,53 @@ public class ExecutionTest
   {
     final NodeToken token = getActiveToken(p, test);
     System.out.println("Completing token: " + token + " on node " + token.getNode());
-    completeToken(token);
+    completeToken(token, true);
     return p;
   }
 
   public void completeToken (final NodeToken token)
   {
-    engine.complete(token, Arc.DEFAULT_ARC);
+    completeToken(token, false);
+  }
+
+  private void completeToken (final NodeToken token, final boolean tokenRefreshed)
+  {
+    completeToken(token, Arc.DEFAULT_ARC, tokenRefreshed);
   }
 
   public void completeToken (final NodeToken token, final String arcName)
   {
-    engine.complete(token, arcName );
+    completeToken(token, arcName, false);
+  }
+
+  private void completeToken (final NodeToken t, final String arcName, final boolean tokenRefreshed)
+  {
+    final ExecutionMode mode = TestEnv.getMode();
+
+    final NodeToken token = !tokenRefreshed && mode != ExecutionMode.OneSession ? TestEnv.refreshedToken(t) : t;
+
+    if (mode == ExecutionMode.Async)
+    {
+      TestEnv.getEngine().completeAsynchronous(token, arcName );
+      TestEnv.commitSession();
+      TestEnv.getEngine().executeQueuedArcTokens(TestEnv.refreshedProcess(token.getProcess()));
+    }
+    else
+    {
+      TestEnv.getEngine().complete(token, arcName );
+    }
   }
 
   public GraphProcess completeToken (final GraphProcess p, final String nodeName, final String arcName)
   {
     final NodeToken token = getActiveToken(p, new TokenOnNodePredicate(nodeName));
-    engine.complete(token, arcName);
-    return p;
+    completeToken(token, arcName, true);
+    return TestEnv.refreshedProcess(p);
   }
 
   public void backtrackToken(final NodeToken token)
   {
-    engine.backtrack(token);
+    TestEnv.getEngine().backtrack(TestEnv.refreshedToken(token));
   }
 
   public void completeToken (final GraphProcess p,
@@ -190,7 +221,7 @@ public class ExecutionTest
   {
     final NodeToken token = getActiveToken(p, new MemberSetPredicate(nodeName, tokenSetName, tokenSetIdx));
     System.out.println("Completing token: " + token);
-    engine.complete(token, Arc.DEFAULT_ARC);
+    completeToken(token, true);
   }
 
   public void completeToken (final GraphProcess p,
@@ -200,18 +231,18 @@ public class ExecutionTest
                              final int tokenSetIdx)
   {
     final NodeToken token = getActiveToken(p, new MemberSetPredicate(nodeName, tokenSetName, tokenSetIdx));
-    engine.complete(token, arcName);
+    TestEnv.getEngine().complete(token, arcName);
   }
 
   public GraphProcess startProcess(final String graphName) throws Exception
   {
     return startProcess(graphName, null);
   }
-  
+
   public GraphProcess startProcess(final String graphName, final Env env) throws Exception
   {
     ensureLoaded(graphName);
-    final Graph graph = engine.getRepository().getLatestGraph( graphName );
+    final Graph graph = TestEnv.getEngine().getRepository().getLatestGraph( graphName );
     return startProcess(graph, env);
   }
 
@@ -222,12 +253,17 @@ public class ExecutionTest
 
   public GraphProcess startProcess(final Graph graph, final Env env)
   {
-    final GraphProcess p = engine.startProcess(graph, env);
+    final GraphProcess p = TestEnv.getEngine().startProcess(graph, env);
     return p;
   }
 
   public void addGlobalCustomNodeType(final String typeName, final Class<? extends CustomNode> nodeClass)
   {
-    engine.addGlobalCustomNodeType( typeName, nodeClass );
+    TestEnv.getEngine().addGlobalCustomNodeType( typeName, nodeClass );
+  }
+
+  public void verifyComplete(final GraphProcess p)
+  {
+    Assert.assertTrue("Process should be complete", TestEnv.refreshedProcess(p).isComplete());
   }
 }
