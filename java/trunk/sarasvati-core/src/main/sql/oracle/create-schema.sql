@@ -36,14 +36,47 @@ CREATE OR REPLACE PROCEDURE sarasvatiDropConstraint(tableName VARCHAR2, constrai
 END;
 /
 
-execute sarasvatiDropConstraint( 'wf_process', 'FK_process_parent');
+-- -----------------------------------------
+-- Drop constraints
+-- -----------------------------------------
+execute sarasvatiDropConstraint('wf_process', 'FK_process_parent');
+
+-- -----------------------------------------
+-- Drop sequences
+-- -----------------------------------------
+execute sarasvatiDropSequence('wf_token_set_member_attr_seq');
+execute sarasvatiDropSequence('wf_token_set_nodemem_seq');
+execute sarasvatiDropSequence('wf_token_set_arcmem_seq');
+execute sarasvatiDropSequence('wf_token_set_attr_seq');
+execute sarasvatiDropSequence('wf_token_set_seq');
+execute sarasvatiDropSequence('wf_token_attr_seq');
+execute sarasvatiDropSequence('wf_node_token_parent_seq');
+execute sarasvatiDropSequence('wf_arc_token_seq');
+execute sarasvatiDropSequence('wf_node_token_seq');
+execute sarasvatiDropSequence('wf_guard_action_seq');
+execute sarasvatiDropSequence('wf_arc_seq');
+execute sarasvatiDropSequence('wf_node_ref_seq');
+execute sarasvatiDropSequence('wf_external_attr_seq');
+execute sarasvatiDropSequence('wf_external_seq');
+execute sarasvatiDropSequence('wf_node_attr_seq');
+execute sarasvatiDropSequence('wf_node_seq');
+execute sarasvatiDropSequence('wf_process_listener_seq');
+execute sarasvatiDropSequence('wf_process_attr_seq');
+execute sarasvatiDropSequence('wf_process_seq');
+execute sarasvatiDropSequence('wf_process_state_seq');
+execute sarasvatiDropSequence('wf_graph_listener_seq');
+execute sarasvatiDropSequence('wf_graph_seq');
 
 -- -------------------------------------
--- Start DROPs for example projects
+-- Drop tables for example projects
 -- -------------------------------------
 execute sarasvatiDropTable( 'wf_task' );       
 execute sarasvatiDropTable( 'wf_task_state' );
 execute sarasvatiDropTable( 'wf_node_task' ); 
+
+-- -------------------------------------
+-- Drop tables
+-- -------------------------------------
 
 execute sarasvatiDropTable( 'wf_token_set_attr' );
 execute sarasvatiDropTable( 'wf_token_set_member_attr' );
@@ -77,7 +110,7 @@ execute sarasvatiDropTable( 'wf_graph_listener' );
 execute sarasvatiDropTable( 'wf_graph' );
 
 -- -----------------------------------------------------------------------------
--- CREATE NEW TABLES
+-- Create sequences
 -- -----------------------------------------------------------------------------
 
 create sequence wf_graph_seq start with 1 increment by 1;
@@ -95,9 +128,13 @@ create sequence wf_token_set_arcmem_seq start with 1 increment by 1;
 create sequence wf_token_set_nodemem_seq start with 1 increment by 1;
 create sequence wf_token_set_member_attr_seq start with 1 increment by 1;
 
+-- -----------------------------------------------------------------------------
+-- Create tables
+-- -----------------------------------------------------------------------------
+
 create table wf_graph
 (
-  id              NUMBER(20)    NOT NULL PRIMARY KEY,
+  id              number(20)    NOT NULL PRIMARY KEY,
   name            VARCHAR2(255) NOT NULL,
   version         int           NOT NULL,
   custom_id       VARCHAR2(255) NULL,
@@ -110,10 +147,10 @@ ALTER TABLE wf_graph
 
 create table wf_graph_listener
 (
-  id              NUMBER(20)     NOT NULL PRIMARY KEY,
+  id              number(20)     NOT NULL PRIMARY KEY,
   type            varchar2(255)  NOT NULL,
   event_type_mask int            NOT NULL,
-  graph_id        NUMBER(20)     NOT NULL REFERENCES wf_graph
+  graph_id        number(20)     NOT NULL REFERENCES wf_graph
 );
 
 ALTER TABLE wf_graph_listener
@@ -122,7 +159,7 @@ ALTER TABLE wf_graph_listener
 
 create table wf_process_state
 (
-  id          int           NOT NULL PRIMARY KEY,
+  id          number(5)     NOT NULL PRIMARY KEY,
   description varchar2(255) NOT NULL
 );
 
@@ -135,10 +172,10 @@ insert into wf_process_state values ( 5, 'Canceled' );
 
 create table wf_process
 (
-  id              NUMBER(20)   NOT NULL PRIMARY KEY,
-  graph_id        NUMBER(20)   NOT NULL REFERENCES wf_graph,
-  state           int          NOT NULL REFERENCES wf_process_state,
-  parent_token_id NUMBER(20)   NULL,
+  id              number(20)   NOT NULL PRIMARY KEY,
+  graph_id        number(20)   NOT NULL REFERENCES wf_graph,
+  state           number(5)    NOT NULL REFERENCES wf_process_state,
+  parent_token_id number(20)   NULL,
   create_date     timestamp    DEFAULT current_timestamp NOT NULL,
   version         int          NOT NULL
 );
@@ -147,7 +184,7 @@ create index wf_process_idx on wf_process (graph_id, state);
 
 create table wf_process_attr
 (
-  process_id  NUMBER(20)    NOT NULL REFERENCES wf_process,
+  process_id  number(20)     NOT NULL REFERENCES wf_process,
   name        varchar2(64)   NOT NULL,
   value       varchar2(2000) NOT NULL
 );
@@ -157,10 +194,10 @@ ALTER TABLE wf_process_attr
 
 create table wf_process_listener
 (
-  id              number(20)   NOT NULL PRIMARY KEY,
+  id              number(20)    NOT NULL PRIMARY KEY,
   type            varchar2(255) NOT NULL,
-  event_type_mask int          NOT NULL,
-  process_id      number(20)   NOT NULL REFERENCES wf_process
+  event_type_mask int           NOT NULL,
+  process_id      number(20)    NOT NULL REFERENCES wf_process
 );
 
 ALTER TABLE wf_process_listener
@@ -182,7 +219,7 @@ insert into wf_node_type values ( 'nested', 'Node which executes a nested proces
 
 create table wf_node_join_type
 (
-  id          int          NOT NULL PRIMARY KEY,
+  id          number(5)     NOT NULL PRIMARY KEY,
   description varchar2(255) NOT NULL
 );
 
@@ -197,12 +234,12 @@ insert into wf_node_join_type values ( 7, 'JoinLang: Evaluates the join lang sta
 
 create table wf_node
 (
-  id              number(20)   NOT NULL PRIMARY KEY,
-  graph_id        number(20)   NOT NULL REFERENCES wf_graph,
+  id              number(20)    NOT NULL PRIMARY KEY,
+  graph_id        number(20)    NOT NULL REFERENCES wf_graph,
   name            varchar2(255) NOT NULL,
-  join_type       int          NOT NULL REFERENCES wf_node_join_type,
+  join_type       number(5)     NOT NULL REFERENCES wf_node_join_type,
   join_param      varchar2(255) NULL,
-  is_start        char(1)      NOT NULL,
+  is_start        char(1)       NOT NULL,
   type            varchar2(255) NOT NULL REFERENCES wf_node_type,
   guard           varchar2(255) NULL
 );
@@ -213,7 +250,7 @@ ALTER TABLE wf_node
 
 create table wf_node_attr
 (
-  node_id  number(20)    NOT NULL REFERENCES wf_node,
+  node_id  number(20)     NOT NULL REFERENCES wf_node,
   name     varchar2(64)   NOT NULL,
   value    varchar2(2000) NOT NULL
 );
@@ -231,7 +268,7 @@ create table wf_external
 
 create table wf_external_attr
 (
-  external_id  number(20)    NOT NULL REFERENCES wf_external,
+  external_id  number(20)     NOT NULL REFERENCES wf_external,
   name         varchar2(255)  NOT NULL,
   value        varchar2(2000) NULL
 );
@@ -244,8 +281,8 @@ create table wf_node_ref
   id          number(20)  NOT NULL PRIMARY KEY,
   node_id     number(20)  NOT NULL REFERENCES wf_node,
   graph_id    number(20)  NOT NULL REFERENCES wf_graph,
-  parent_id   number(20)  NULL REFERENCES wf_node_ref,
-  external_id number(20)  NULL REFERENCES wf_external
+  parent_id   number(20)  NULL     REFERENCES wf_node_ref,
+  external_id number(20)  NULL     REFERENCES wf_external
 );
 
 create index wf_node_ref_graph_idx on wf_node_ref (graph_id);
@@ -263,7 +300,7 @@ create index wf_arc_graph_idx on wf_arc (graph_id);
 
 create table wf_guard_action
 (
-  id           int          NOT NULL PRIMARY KEY,
+  id           number(5)    NOT NULL PRIMARY KEY,
   name         varchar2(50) NOT NULL
 );
 
@@ -273,7 +310,7 @@ insert into wf_guard_action values ( 2, 'Skip Node' );
 
 create table wf_execution_type
 (
-  id            int          NOT NULL PRIMARY KEY,
+  id            number(5)     NOT NULL PRIMARY KEY,
   name          varchar2(255) NOT NULL
 );
 
@@ -290,8 +327,8 @@ create table wf_node_token
   node_ref_id     number(20) NOT NULL REFERENCES wf_node_ref,
   attr_set_id     number(20) NULL     REFERENCES wf_node_token,
   create_date     timestamp  DEFAULT current_timestamp NOT NULL,
-  guard_action    int        NULL     REFERENCES wf_guard_action,
-  execution_type  int        NOT NULL REFERENCES wf_execution_type,
+  guard_action    number(5)  NULL     REFERENCES wf_guard_action,
+  execution_type  number(5)  NOT NULL REFERENCES wf_execution_type,
   complete_date   timestamp  NULL
 );
 
@@ -309,9 +346,9 @@ create table wf_arc_token
   arc_id          number(20) NOT NULL REFERENCES wf_arc,
   parent_token_id number(20) NOT NULL REFERENCES wf_node_token,
   pending         char(1)    NOT NULL,
-  execution_type  int        NOT NULL REFERENCES wf_execution_type,
+  execution_type  number(5)  NOT NULL REFERENCES wf_execution_type,
   create_date     timestamp  DEFAULT current_timestamp NOT NULL,
-  complete_date   timestamp NULL
+  complete_date   timestamp  NULL
 );
 
 create index wf_arc_token_idx on wf_arc_token(process_id, complete_date, pending);
