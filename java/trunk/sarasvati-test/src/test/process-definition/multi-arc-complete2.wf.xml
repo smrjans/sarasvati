@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<process-definition xmlns="http://sarasvati.googlecode.com/ProcessDefinition" name="multi-arc-complete2">
+    <node name="N1" joinType="or" type="wait" isStart="true">
+        <arc to="N2" name="arc1"/>
+        <arc to="N3" name="arc2"/>
+        <arc to="N4"/>
+    </node>
+    <node name="N5" joinType="first" type="wait"/>
+    <node name="N2" joinType="or" type="wait">
+        <arc to="N5"/>
+    </node>
+    <node name="N4" joinType="or" type="wait">
+        <arc to="N5"/>
+    </node>
+    <node name="N3" joinType="or" type="wait">
+        <arc to="N5"/>
+    </node>
+</process-definition>

@@ -34,7 +34,6 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.impl.MapEnv;
 import com.googlecode.sarasvati.test.TestEnv;
-import com.googlecode.sarasvati.test.TestEnv.ExecutionMode;
 import com.googlecode.sarasvati.test.framework.ExecutionTest;
 import com.googlecode.sarasvati.test.framework.TestProcess;
 
@@ -129,27 +128,6 @@ public class ExternalsTest extends ExecutionTest
   }
 
   @Test
-  public void testExternalsInOneSession() throws Exception
-  {
-    TestEnv.setExecutionMode(ExecutionMode.OneSession);
-    testExternals();
-  }
-
-  @Test
-  public void testExternalsEachInNewSession() throws Exception
-  {
-    TestEnv.setExecutionMode(ExecutionMode.EachInNewSession);
-    testExternals();
-  }
-
-  @Test
-  public void testExternalsWithAsync() throws Exception
-  {
-    TestEnv.setExecutionMode(ExecutionMode.Async);
-    testExternals();
-  }
-
-
   public void testExternals() throws Exception
   {
     processCount.set(0);

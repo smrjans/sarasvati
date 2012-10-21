@@ -52,7 +52,13 @@ public class TestEnv
 
   protected static SessionFactory sessionFactory = null;
 
+  private static ExecutionMode defaultMode = ExecutionMode.OneSession;
   private static ExecutionMode mode = ExecutionMode.OneSession;
+
+  public static void resetExecutionModeToDefault()
+  {
+    TestEnv.mode = TestEnv.defaultMode;
+  }
 
   public static void setExecutionMode(final ExecutionMode mode)
   {
@@ -69,8 +75,29 @@ public class TestEnv
     final String testEngine = System.getProperty(ENGINE_KEY);
     final String testDatabase = System.getProperty(DB_KEY);
 
+    init(ExecutionMode.OneSession, testEngine, testDatabase);
+  }
+
+  public static void init(final ExecutionMode initDefaultMode, final String testEngine, final String testDatabase)
+  {
+    TestEnv.defaultMode = initDefaultMode;
     try
     {
+      if (session != null)
+      {
+        session.getTransaction().rollback();
+        session.close();
+        session = null;
+      }
+
+      if (sessionFactory != null)
+      {
+        sessionFactory.close();
+        sessionFactory = null;
+      }
+
+      engine = null;
+
       final boolean hibEngine = ENGINE_HIBERNATE.equals(testEngine);
 
       if (hibEngine)

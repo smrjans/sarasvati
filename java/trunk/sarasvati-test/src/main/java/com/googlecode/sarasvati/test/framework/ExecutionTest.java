@@ -100,7 +100,7 @@ public class ExecutionTest
   @Before
   public void setup ()
   {
-    TestEnv.setExecutionMode(ExecutionMode.Async);
+    TestEnv.resetExecutionModeToDefault();
     Engine engine = TestEnv.getEngine();
     engine.addExecutionListener( DuplicateEventDetector.class, ExecutionEventType.values());
   }
@@ -184,6 +184,11 @@ public class ExecutionTest
     completeToken(token, arcName, false);
   }
 
+  public void completeToken (final NodeToken token, final String...arcNames)
+  {
+    completeToken(token, false, arcNames);
+  }
+
   private void completeToken (final NodeToken t, final String arcName, final boolean tokenRefreshed)
   {
     final ExecutionMode mode = TestEnv.getMode();
@@ -202,10 +207,35 @@ public class ExecutionTest
     }
   }
 
+  private void completeToken (final NodeToken t, final boolean tokenRefreshed, final String...arcNames)
+  {
+    final ExecutionMode mode = TestEnv.getMode();
+
+    final NodeToken token = !tokenRefreshed && mode != ExecutionMode.OneSession ? TestEnv.refreshedToken(t) : t;
+
+    if (mode == ExecutionMode.Async)
+    {
+      TestEnv.getEngine().completeAsynchronous(token, arcNames);
+      TestEnv.commitSession();
+      TestEnv.getEngine().executeQueuedArcTokens(TestEnv.refreshedProcess(token.getProcess()));
+    }
+    else
+    {
+      TestEnv.getEngine().complete(token, arcNames);
+    }
+  }
+
   public GraphProcess completeToken (final GraphProcess p, final String nodeName, final String arcName)
   {
     final NodeToken token = getActiveToken(p, new TokenOnNodePredicate(nodeName));
     completeToken(token, arcName, true);
+    return TestEnv.refreshedProcess(p);
+  }
+
+  public GraphProcess completeToken (final GraphProcess p, final String nodeName, final String...arcNames)
+  {
+    final NodeToken token = getActiveToken(p, new TokenOnNodePredicate(nodeName));
+    completeToken(token, true, arcNames);
     return TestEnv.refreshedProcess(p);
   }
 
@@ -265,5 +295,10 @@ public class ExecutionTest
   public void verifyComplete(final GraphProcess p)
   {
     Assert.assertTrue("Process should be complete", TestEnv.refreshedProcess(p).isComplete());
+  }
+
+  public void verifyIncomplete(final GraphProcess p)
+  {
+    Assert.assertFalse("Process should not be complete", TestEnv.refreshedProcess(p).isComplete());
   }
 }
