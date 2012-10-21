@@ -297,8 +297,8 @@ public class ExecutionTest
     Assert.assertTrue("Process should be complete", TestEnv.refreshedProcess(p).isComplete());
   }
 
-  public void verifyIncomplete(final GraphProcess p)
+  public void verifyExecuting(final GraphProcess p)
   {
-    Assert.assertFalse("Process should not be complete", TestEnv.refreshedProcess(p).isComplete());
+    Assert.assertFalse("Process should not be complete", TestEnv.refreshedProcess(p).isExecuting());
   }
 }

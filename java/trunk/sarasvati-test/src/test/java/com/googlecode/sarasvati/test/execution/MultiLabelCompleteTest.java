@@ -170,7 +170,7 @@ public class MultiLabelCompleteTest extends ExecutionTest
         ;
     TestProcess.validate( p, state );
 
-    verifyIncomplete(p);
+    verifyExecuting(p);
 
     token = getActiveToken( p, "N3" );
 

@@ -11,6 +11,7 @@ import com.googlecode.sarasvati.test.backtracking.BacktrackSplitJoinTest;
 import com.googlecode.sarasvati.test.backtracking.BacktrackUnevenTreesTest;
 import com.googlecode.sarasvati.test.env.TestTransientsAttributes;
 import com.googlecode.sarasvati.test.env.TokenSetMemberEnvTest;
+import com.googlecode.sarasvati.test.execution.ExecutionErrorsTest;
 import com.googlecode.sarasvati.test.execution.ExternalsTest;
 import com.googlecode.sarasvati.test.execution.MultiLabelCompleteTest;
 import com.googlecode.sarasvati.test.execution.MultiStartNodeTest;
@@ -32,6 +33,7 @@ import com.googlecode.sarasvati.test.traversal.TraversalTest;
   TestTransientsAttributes.class,
   TokenSetMemberEnvTest.class,
 
+  ExecutionErrorsTest.class,
   ExternalsTest.class,
   MultiLabelCompleteTest.class,
   MultiStartNodeTest.class,

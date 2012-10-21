@@ -140,6 +140,8 @@ public class ExternalsTest extends ExecutionTest
     initialEnv.setAttribute("count", processCount.get());
     GraphProcess p = startProcess(g, initialEnv);
 
+    verifyExecuting(p);
+
     NodeToken token = getActiveToken( p, ":N1" );
     validateEnv(token, false);
 

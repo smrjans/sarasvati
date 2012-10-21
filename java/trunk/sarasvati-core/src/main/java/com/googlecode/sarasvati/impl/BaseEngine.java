@@ -146,6 +146,11 @@ public abstract class BaseEngine implements Engine
   @Override
   public GraphProcess startProcess (final String graphName, final Env initialEnv)
   {
+    if ( graphName == null )
+    {
+      throw new SarasvatiException( "Can not start process for a null graph name" );
+    }
+
     final Graph graph = getRepository().getLatestGraph( graphName );
     if ( graph == null )
     {
@@ -166,7 +171,7 @@ public abstract class BaseEngine implements Engine
   {
     if ( graph == null )
     {
-      throw new NullPointerException( "Can not start process for a null graph" );
+      throw new SarasvatiException( "Can not start process for a null graph" );
     }
 
     final GraphProcess process = getFactory().newProcess( graph );
@@ -667,8 +672,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public GuardResult evaluateGuard (final NodeToken token,
-                                      final String guard)
+  public GuardResult evaluateGuard (final NodeToken token, final String guard)
   {
     if ( guard == null || guard.trim().length() == 0 )
     {
