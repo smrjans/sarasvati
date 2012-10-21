@@ -266,19 +266,22 @@ public class ExecutionTest
 
   public GraphProcess startProcess(final String graphName) throws Exception
   {
-    return startProcess(graphName, null);
+    ensureLoaded(graphName);
+    final GraphProcess p = TestEnv.getEngine().startProcess(graphName);
+    return p;
   }
 
   public GraphProcess startProcess(final String graphName, final Env env) throws Exception
   {
     ensureLoaded(graphName);
-    final Graph graph = TestEnv.getEngine().getRepository().getLatestGraph( graphName );
-    return startProcess(graph, env);
+    final GraphProcess p = TestEnv.getEngine().startProcess(graphName, env);
+    return p;
   }
 
   public GraphProcess startProcess(final Graph graph)
   {
-    return startProcess(graph, null);
+    final GraphProcess p = TestEnv.getEngine().startProcess(graph);
+    return p;
   }
 
   public GraphProcess startProcess(final Graph graph, final Env env)
@@ -297,8 +300,13 @@ public class ExecutionTest
     Assert.assertTrue("Process should be complete", TestEnv.refreshedProcess(p).isComplete());
   }
 
+  public void verifyCancelled(final GraphProcess p)
+  {
+    Assert.assertTrue("Process should be cancelled", TestEnv.refreshedProcess(p).isCanceled());
+  }
+
   public void verifyExecuting(final GraphProcess p)
   {
-    Assert.assertFalse("Process should not be complete", TestEnv.refreshedProcess(p).isExecuting());
+    Assert.assertTrue("Process should be executing", TestEnv.refreshedProcess(p).isExecuting());
   }
 }

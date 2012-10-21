@@ -60,6 +60,8 @@ public class MemNodeToken implements NodeToken
   protected Env env = new MapEnv();
   protected Env fullEnv = null;
 
+  protected MemGraphProcess nestedProcess;
+
   public MemNodeToken (final long id, final Node node, final GraphProcess process, final ExecutionType executionType, final List<ArcToken> parentTokens)
   {
     this.id = id;
@@ -188,6 +190,22 @@ public class MemNodeToken implements NodeToken
   public Set<NodeTokenSetMember> getTokenSetMemberships ()
   {
     return tokenSetMemberships;
+  }
+
+  /**
+   * @return the nestedProcess
+   */
+  public MemGraphProcess getNestedProcess()
+  {
+    return nestedProcess;
+  }
+
+  /**
+   * @param childProcess the childProcess to set
+   */
+  public void setNestedProcess(final MemGraphProcess nestedProcess)
+  {
+    this.nestedProcess = nestedProcess;
   }
 
   @Override

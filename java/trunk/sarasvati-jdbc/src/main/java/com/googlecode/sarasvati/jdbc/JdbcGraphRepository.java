@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.jdbc.action.DatabaseLoadAction;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 import com.googlecode.sarasvati.load.GraphRepository;
@@ -42,14 +43,14 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get (Class<T> clazz, Long id)
+    public <T> T get (final Class<T> clazz, final Long id)
     {
       String key = clazz.getName() + id;
       return (T)map.get( key );
     }
 
     @Override
-    public void notifyLoaded (JdbcObject obj)
+    public void notifyLoaded (final JdbcObject obj)
     {
       String key = obj.getClass().getName() + obj.getId();
       map.put( key, obj );
@@ -70,7 +71,7 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   }
 
   @Override
-  public void addGraph (JdbcGraph graph)
+  public void addGraph (final JdbcGraph graph)
   {
     // Does nothing, since this is handled by the DB
   }
@@ -115,7 +116,7 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
     return result.isEmpty() ? null : result.get( 0 );
   }
 
-  protected List<JdbcGraph> loadGraphs (List<JdbcGraph> list)
+  protected List<JdbcGraph> loadGraphs (final List<JdbcGraph> list)
   {
     List<JdbcGraph> result = new ArrayList<JdbcGraph>( list.size() );
 
@@ -155,5 +156,14 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   {
     DatabaseLoadAction<JdbcArc> action = getDialect().newArcLoadAction( graph );
     action.execute( engine );
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.load.GraphRepository#getActiveNestedProcesses(com.googlecode.sarasvati.GraphProcess)
+   */
+  @Override
+  public List<GraphProcess> getActiveNestedProcesses(final GraphProcess process)
+  {
+    throw new UnsupportedOperationException("getActiveNestedProcesses not yet implemented"); // TODO Implement
   }
 }

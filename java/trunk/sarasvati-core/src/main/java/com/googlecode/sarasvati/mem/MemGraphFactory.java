@@ -189,8 +189,9 @@ public class MemGraphFactory extends AbstractGraphFactory
   public MemGraphProcess newNestedProcess (final Graph graph,
                                            final NodeToken parentToken)
   {
-    MemGraphProcess process = newProcess( graph );
+    final MemGraphProcess process = newProcess( graph );
     process.setParentToken( parentToken );
+    ((MemNodeToken)parentToken).setNestedProcess(process);
     return process;
   }
 

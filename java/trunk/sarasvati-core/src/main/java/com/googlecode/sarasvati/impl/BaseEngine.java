@@ -205,8 +205,7 @@ public abstract class BaseEngine implements Engine
     {
       for ( final Node startNode : startNodes )
       {
-        final NodeToken startToken = getFactory().newNodeToken( process, startNode,
-                                                          new ArrayList<ArcToken>(0) );
+        final NodeToken startToken = getFactory().newNodeToken( process, startNode, new ArrayList<ArcToken>(0) );
         NodeTokenEvent.fireCreatedEvent(this, startToken);
         process.addNodeToken( startToken );
         executeNode( process, startToken );
@@ -228,6 +227,11 @@ public abstract class BaseEngine implements Engine
   @Override
   public void cancelProcess (final GraphProcess process)
   {
+    for (final GraphProcess subProcess : getRepository().getActiveNestedProcesses(process))
+    {
+      cancelProcess(subProcess);
+    }
+
     process.setState( ProcessState.PendingCancel );
     final EventActions actions = ProcessEvent.firePendingCancelEvent( this, process );
 

@@ -15,6 +15,7 @@ import com.googlecode.sarasvati.test.execution.ExecutionErrorsTest;
 import com.googlecode.sarasvati.test.execution.ExternalsTest;
 import com.googlecode.sarasvati.test.execution.MultiLabelCompleteTest;
 import com.googlecode.sarasvati.test.execution.MultiStartNodeTest;
+import com.googlecode.sarasvati.test.execution.NestedProcessesTest;
 import com.googlecode.sarasvati.test.joinlang.ArcsRequiredRequiredTest;
 import com.googlecode.sarasvati.test.joinlang.AtLeastArcsRequiredRequiredTest;
 import com.googlecode.sarasvati.test.joinlang.AtLeastLabelArcsRequiredRequiredTest;
@@ -37,6 +38,7 @@ import com.googlecode.sarasvati.test.traversal.TraversalTest;
   ExternalsTest.class,
   MultiLabelCompleteTest.class,
   MultiStartNodeTest.class,
+  NestedProcessesTest.class,
 
   ArcsRequiredRequiredTest.class,
   AtLeastArcsRequiredRequiredTest.class,

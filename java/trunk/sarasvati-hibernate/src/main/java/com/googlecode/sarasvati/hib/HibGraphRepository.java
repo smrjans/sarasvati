@@ -23,6 +23,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.load.GraphRepository;
 
 public class HibGraphRepository implements GraphRepository<HibGraph>
@@ -67,6 +68,20 @@ public class HibGraphRepository implements GraphRepository<HibGraph>
        (HibGraph)session.createQuery( query )
        .setString(  "name", name )
        .uniqueResult();
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.load.GraphRepository#getActiveNestedProcesses(com.googlecode.sarasvati.GraphProcess)
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<GraphProcess> getActiveNestedProcesses(final GraphProcess process)
+  {
+    String query = "from HibGraphProcess where parentToken.process.id = :processId and state in (0, 1, 2, 4)";
+
+    return session.createQuery( query )
+                  .setLong("processId", ((HibGraphProcess)process).getId())
+                  .list();
   }
 
   public HibGraph loadGraph (final long graphId)

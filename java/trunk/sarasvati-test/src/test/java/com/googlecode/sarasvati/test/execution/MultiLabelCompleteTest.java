@@ -51,6 +51,20 @@ public class MultiLabelCompleteTest extends ExecutionTest
       ;
     TestProcess.validate( p, state );
 
+    // double check that completeing the same token twice doesn't have any effect
+    completeToken( token, "arc1", "arc2", Arc.DEFAULT_ARC );
+
+    state =
+      "[1 :N1 C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[2 N2 I F]" +
+      "[3 N3 I F]" +
+      "[4 N4 I F]"
+      ;
+    TestProcess.validate( p, state );
+
     token = getActiveToken( p, "N3" );
 
     completeToken( token, Arc.DEFAULT_ARC );

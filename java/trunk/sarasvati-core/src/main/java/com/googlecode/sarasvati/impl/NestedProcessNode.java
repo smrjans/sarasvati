@@ -24,6 +24,7 @@ import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.SarasvatiException;
+import com.googlecode.sarasvati.event.ProcessEvent;
 
 /**
  * Node type for nested processes. Stores the name of the graph to be
@@ -46,18 +47,20 @@ public class NestedProcessNode extends CustomNode
   }
 
   @Override
-  public void execute (final Engine engine, final NodeToken token)
+  public void execute(final Engine engine, final NodeToken token)
   {
-    Graph subGraph = engine.getRepository().getLatestGraph( graphName );
+    final Engine nestedEngine = engine.newEngine(true);
+    final Graph subGraph = nestedEngine.getRepository().getLatestGraph( graphName );
 
     if ( subGraph == null )
     {
-      throw new SarasvatiException( "No version of graph named '" + graphName + "'. " +
-                                   "Used by node " + getName() + " in graph " + getGraph().getName() );
+      throw new SarasvatiException("No version of graph named '" + graphName + "'. " +
+                                   "Used by node " + getName() + " in graph " + getGraph().getName());
     }
 
-    GraphProcess subProcess =  engine.getFactory().newNestedProcess( subGraph, token );
-    subProcess.getEnv().importEnv( token.getFullEnv() );
-    engine.startProcess( subProcess );
+    final GraphProcess subProcess = nestedEngine.getFactory().newNestedProcess(subGraph, token);
+    subProcess.getEnv().importEnv(token.getFullEnv());
+    ProcessEvent.fireCreatedEvent(nestedEngine, subProcess);
+    nestedEngine.startProcess(subProcess);
   }
 }

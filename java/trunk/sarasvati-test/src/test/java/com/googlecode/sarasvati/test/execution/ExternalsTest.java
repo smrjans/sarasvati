@@ -159,6 +159,18 @@ public class ExternalsTest extends ExecutionTest
       ;
     TestProcess.validate( p, state );
 
+    // Verify that completing an already completed token has no effect
+    completeToken( token, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 :N1 C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "[2 E1:N1 I F]" +
+      "[3 E2:N1 I F]"
+      ;
+    TestProcess.validate( p, state );
+
     token = getActiveToken( p, "E1:N1" );
     validateEnv(token, true);
 

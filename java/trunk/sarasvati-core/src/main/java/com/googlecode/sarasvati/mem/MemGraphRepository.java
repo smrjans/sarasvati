@@ -21,10 +21,13 @@ package com.googlecode.sarasvati.mem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.load.GraphRepository;
 
 /**
@@ -78,5 +81,23 @@ public class MemGraphRepository implements GraphRepository<MemGraph>
   public MemGraph getLatestGraph(final String name)
   {
     return cache.get( name );
+  }
+
+  /* (non-Javadoc)
+   * @see com.googlecode.sarasvati.load.GraphRepository#getActiveNestedProcesses(com.googlecode.sarasvati.GraphProcess)
+   */
+  @Override
+  public List<GraphProcess> getActiveNestedProcesses(final GraphProcess process)
+  {
+    List<GraphProcess> processes = new LinkedList<GraphProcess>();
+    for (final NodeToken t : process.getActiveNodeTokens())
+    {
+      MemNodeToken token = (MemNodeToken) t;
+      if (token.getNestedProcess() != null && !token.getNestedProcess().isComplete() && !token.getNestedProcess().isCanceled())
+      {
+        processes.add(token.getNestedProcess());
+      }
+    }
+    return processes;
   }
 }

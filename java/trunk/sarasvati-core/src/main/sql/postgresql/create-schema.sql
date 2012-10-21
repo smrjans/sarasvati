@@ -61,7 +61,7 @@ create sequence wf_token_set_member_attr_seq start with 1 increment by 1;
 
 create table wf_graph
 (
-  id              int    NOT NULL PRIMARY KEY,
+  id              int       NOT NULL PRIMARY KEY,
   name            text      NOT NULL,
   version         int       NOT NULL,
   custom_id       text      NULL,
@@ -74,7 +74,7 @@ ALTER TABLE wf_graph
 
 create table wf_graph_listener
 (
-  id              int NOT NULL PRIMARY KEY,
+  id              int    NOT NULL PRIMARY KEY,
   type            text   NOT NULL,
   event_type_mask int    NOT NULL,
   graph_id        int    NOT NULL REFERENCES wf_graph
@@ -99,7 +99,7 @@ insert into wf_process_state values ( 5, 'Canceled' );
 
 create table wf_process
 (
-  id              int       NOT NULL PRIMARY KEY,
+  id              int          NOT NULL PRIMARY KEY,
   graph_id        int          NOT NULL REFERENCES wf_graph,
   state           int          NOT NULL REFERENCES wf_process_state,
   parent_token_id int          NULL,

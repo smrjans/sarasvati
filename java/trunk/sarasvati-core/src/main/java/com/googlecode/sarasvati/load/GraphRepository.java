@@ -21,6 +21,8 @@ package com.googlecode.sarasvati.load;
 import java.util.List;
 
 import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.impl.NestedProcessNode;
 
 /**
  * The graph repository is an engine specific way of accessing instances of
@@ -63,4 +65,13 @@ public interface GraphRepository<T extends Graph>
    * @param graph The graph to add to the repository.
    */
   void addGraph (T graph);
+
+  /**
+   * Returns any GraphProcesses that have been spawned by {@link NestedProcessNode} nodes.
+   *
+   * @param process The process whose nested children to find.
+   *
+   * @return A list of active nested processes
+   */
+  List<GraphProcess> getActiveNestedProcesses(final GraphProcess process);
 }
