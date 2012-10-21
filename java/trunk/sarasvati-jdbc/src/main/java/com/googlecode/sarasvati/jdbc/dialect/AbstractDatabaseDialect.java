@@ -56,7 +56,7 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
     "select id, name, version from wf_graph where id = ?";
 
   private static final String SELECT_NODES_SQL =
-    "select ref.id as ref_id, ref.instance, node.id, node.name, node.type, node.join_type, node.is_start, node.guard" +
+    "select ref.id as ref_id, ref.external_id, node.id, node.name, node.type, node.join_type, node.is_start, node.guard" +
     "  from wf_node_ref ref join wf_node node on ref.node_id = node.id " +
     " where ref.graph_id = ?";
 

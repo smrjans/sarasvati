@@ -457,6 +457,6 @@ public class ExternalsTest extends ExecutionTest
     verifyComplete(p);
 
     Assert.assertEquals("total count should match", processCount.get(), 12);
-    Assert.assertEquals("total count should match", TestEnv.refreshedProcess(p).getEnv().getAttribute("count", Integer.class).intValue(), 12);
+    Assert.assertEquals("total count should match", TestEnv.refreshProcess(p).getEnv().getAttribute("count", Integer.class).intValue(), 12);
   }
 }

@@ -161,7 +161,7 @@ insert into wf_node_join_type values ( 7, 'JoinLang: Evaluates the join lang sta
 
 create table wf_node
 (
-  id              int  NOT NULL PRIMARY KEY,
+  id              int     NOT NULL PRIMARY KEY,
   graph_id        int     NOT NULL REFERENCES wf_graph,
   name            text    NOT NULL,
   join_type       int     NOT NULL REFERENCES wf_node_join_type,
@@ -187,7 +187,7 @@ ALTER TABLE wf_node_attr
 
 create table wf_external
 (
-  id                int   NOT NULL PRIMARY KEY,
+  id                int      NOT NULL PRIMARY KEY,
   name              text     NOT NULL,
   graph_id          int      NOT NULL references wf_graph,
   external_graph_id int      NOT NULL references wf_graph
@@ -205,7 +205,7 @@ ALTER TABLE wf_external_attr
 
 create table wf_node_ref
 (
-  id          int      NOT NULL PRIMARY KEY,
+  id          int         NOT NULL PRIMARY KEY,
   node_id     int         NOT NULL REFERENCES wf_node,
   graph_id    int         NOT NULL REFERENCES wf_graph,
   parent_id   int         NULL REFERENCES wf_node_ref,
@@ -216,7 +216,7 @@ create index wf_node_ref_graph_idx on wf_node_ref (graph_id);
 
 create table wf_arc
 (
-  id            int NOT NULL PRIMARY KEY,
+  id            int    NOT NULL PRIMARY KEY,
   graph_id      int    NOT NULL REFERENCES wf_graph,
   a_node_ref_id int    NOT NULL REFERENCES wf_node_ref,
   z_node_ref_id int    NOT NULL REFERENCES wf_node_ref,

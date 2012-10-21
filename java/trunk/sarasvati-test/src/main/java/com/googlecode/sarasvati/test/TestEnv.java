@@ -4,20 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.w3c.dom.Document;
-
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.hib.HibGraphProcess;
-import com.googlecode.sarasvati.hib.HibNodeToken;
-import com.googlecode.sarasvati.mem.MemEngine;
+import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
+import com.googlecode.sarasvati.jdbc.dialect.PostgreSQLDatabaseDialect;
 
 public class TestEnv
 {
@@ -45,15 +36,16 @@ public class TestEnv
 
   public static final String ENGINE_HIBERNATE = "hibernate";
   public static final String ENGINE_MEMORY    = "memory";
+  public static final String ENGINE_JDBC      = "jdbc";
 
   public static final String DATABASE_POSTGRESQL = "postgresql";
   public static final String DATABASE_MYSQL = "mysql";
   public static final String DATABASE_ORACLE = "oracle";
 
-  protected static SessionFactory sessionFactory = null;
-
   private static ExecutionMode defaultMode = ExecutionMode.OneSession;
   private static ExecutionMode mode = ExecutionMode.OneSession;
+
+  private static TestEnvProvider envProvider = null;
 
   public static void resetExecutionModeToDefault()
   {
@@ -83,55 +75,64 @@ public class TestEnv
     TestEnv.defaultMode = initDefaultMode;
     try
     {
-      if (session != null)
+      if (envProvider != null)
       {
-        session.getTransaction().rollback();
-        session.close();
-        session = null;
+        envProvider.dispose();
       }
 
-      if (sessionFactory != null)
-      {
-        sessionFactory.close();
-        sessionFactory = null;
-      }
+      String username = null;
+      String password = null;
+      String driver   = null;
+      String url      = null;
+      String dialect  = null;
+      DatabaseDialect dbDialect = null;
 
-      engine = null;
-
-      final boolean hibEngine = ENGINE_HIBERNATE.equals(testEngine);
-
-      if (hibEngine)
+      if (ENGINE_HIBERNATE.equals(testEngine) || ENGINE_JDBC.equals(testEngine))
       {
         final Properties props = readDbProperties();
 
         if (DATABASE_POSTGRESQL.equals(testDatabase))
         {
-          init(props.getProperty("postgresql.username"),
-               props.getProperty("postgresql.password"),
-               "org.postgresql.Driver",
-               props.getProperty("postgresql.url"),
-               "org.hibernate.dialect.PostgreSQLDialect");
+          username = props.getProperty("postgresql.username");
+          password = props.getProperty("postgresql.password");
+          driver   = "org.postgresql.Driver";
+          url      = props.getProperty("postgresql.url");
+          dialect  = "org.hibernate.dialect.PostgreSQLDialect";
+          dbDialect = new PostgreSQLDatabaseDialect();
         }
         else if (DATABASE_MYSQL.equals(testDatabase))
         {
-          init(props.getProperty("mysql.username"),
-               props.getProperty("mysql.password"),
-               "com.mysql.jdbc.Driver",
-               props.getProperty("mysql.url"),
-               "org.hibernate.dialect.MySQLDialect");
+          username = props.getProperty("mysql.username");
+          password = props.getProperty("mysql.password");
+          driver   = "com.mysql.jdbc.Driver";
+          url      = props.getProperty("mysql.url");
+          dialect  = "org.hibernate.dialect.MySQLDialect";
         }
         else if (DATABASE_ORACLE.equals(testDatabase))
         {
-          init(props.getProperty("oracle.username"),
-               props.getProperty("oracle.password"),
-               "oracle.jdbc.driver.OracleDriver",
-               props.getProperty("oracle.url"),
-               "org.hibernate.dialect.Oracle10gDialect" );
+          username = props.getProperty("oracle.username");
+          password = props.getProperty("oracle.password");
+          driver   = "oracle.jdbc.driver.OracleDriver";
+          url      = props.getProperty("oracle.url");
+          dialect  = "org.hibernate.dialect.Oracle10gDialect";
         }
         else
         {
           throw new Exception("Database type of " + testDatabase + " not supported in tests yet.");
         }
+      }
+
+      if (ENGINE_HIBERNATE.equals(testEngine))
+      {
+        envProvider = new HibernateTestEnvProvider(username, password, driver, url, dialect);
+      }
+      else if (ENGINE_JDBC.equals(testEngine))
+      {
+        envProvider = new JdbcTestEnvProvider(url, username, password, driver, dbDialect);
+      }
+      else
+      {
+        envProvider = new MemTestEnvProvider();
       }
     }
     catch ( final Exception e )
@@ -142,30 +143,6 @@ public class TestEnv
     System.out.println("Running tests with profile: " + testDatabase);
   }
 
-  public static void init (final String username,
-                           final String password,
-                           final String driver,
-                           final String url,
-                           final String dialect) throws Exception
-  {
-    Configuration config = new Configuration();
-
-    HibEngine.addToConfiguration( config, false );
-
-    config.setProperty( "hibernate.dialect", dialect );
-    config.setProperty( "hibernate.connection.username", username );
-    config.setProperty( "hibernate.connection.password", password );
-    config.setProperty( "hibernate.connection.driver_class", driver );
-    config.setProperty( "hibernate.connection.url", url );
-
-    final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-    doc.appendChild(doc.createElement("hibernate-configuration"));
-    doc.getFirstChild().appendChild(doc.createElement("session-factory"));
-
-    config.configure(doc);
-
-    sessionFactory = config.buildSessionFactory();
-  }
 
   private static Properties readDbProperties()
   {
@@ -194,63 +171,23 @@ public class TestEnv
     }
   }
 
-  public static void openSession ()
-  {
-    session = sessionFactory.openSession();
-    session.beginTransaction();
-    engine = new HibEngine(session);
-  }
-
-  private static Engine engine = null;
-  private static Session session = null;
-
   public static Engine getEngine()
   {
-    if (engine == null)
-    {
-      if (sessionFactory == null)
-      {
-        engine = new MemEngine();
-      }
-      else
-      {
-        openSession();
-      }
-    }
-    return engine;
+    return envProvider.getEngine();
   }
 
-  public static Engine commitSession()
+  public static void commit()
   {
-    if (session != null)
-    {
-      session.flush();
-      session.getTransaction().commit();
-      session.close();
-      openSession();
-    }
-
-    return engine;
+    envProvider.commit();
   }
 
-  public static GraphProcess refreshedProcess(final GraphProcess p)
+  public static GraphProcess refreshProcess(final GraphProcess process)
   {
-    if (session != null)
-    {
-      HibEngine hengine = (HibEngine)engine;
-      return hengine.getRepository().loadProcess(((HibGraphProcess)p).getId());
-    }
-    return p;
+    return envProvider.refreshProcess(process);
   }
 
-  public static NodeToken refreshedToken(final NodeToken token)
+  public static NodeToken refreshToken(final NodeToken token)
   {
-    if (session != null)
-    {
-      HibEngine hengine = (HibEngine)engine;
-      return hengine.getRepository().loadNodeToken(((HibNodeToken)token).getId());
-    }
-    return token;
+    return envProvider.refreshToken(token);
   }
-
 }

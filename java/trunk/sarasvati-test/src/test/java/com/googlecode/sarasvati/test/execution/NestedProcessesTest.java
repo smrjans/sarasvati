@@ -294,7 +294,7 @@ public class NestedProcessesTest extends ExecutionTest
     TestProcess.validate( p2, state );
 
     verifyComplete(p2);
-    Assert.assertEquals(8, TestEnv.refreshedProcess(p2).getEnv().getAttribute("count", Integer.class).intValue());
+    Assert.assertEquals(8, TestEnv.refreshProcess(p2).getEnv().getAttribute("count", Integer.class).intValue());
 
     state =
         "[1 N1 C F]" +
@@ -384,7 +384,7 @@ public class NestedProcessesTest extends ExecutionTest
         ;
     TestProcess.validate( p3, state );
     verifyComplete(p3);
-    Assert.assertEquals(8, TestEnv.refreshedProcess(p3).getEnv().getAttribute("count", Integer.class).intValue());
+    Assert.assertEquals(8, TestEnv.refreshProcess(p3).getEnv().getAttribute("count", Integer.class).intValue());
 
     state =
         "[1 N1 C F]" +
@@ -422,7 +422,7 @@ public class NestedProcessesTest extends ExecutionTest
     TestProcess.validate( p, state );
     verifyComplete(p);
 
-    Assert.assertEquals(4, TestEnv.refreshedProcess(p).getEnv().getAttribute("count", Integer.class).intValue());
+    Assert.assertEquals(4, TestEnv.refreshProcess(p).getEnv().getAttribute("count", Integer.class).intValue());
   }
 
   @Test
@@ -525,7 +525,7 @@ public class NestedProcessesTest extends ExecutionTest
         ;
     TestProcess.validate( p2, state );
 
-    TestEnv.getEngine().cancelProcess(TestEnv.refreshedProcess(p));
+    TestEnv.getEngine().cancelProcess(TestEnv.refreshProcess(p));
     verifyCancelled(p);
 
     token = getActiveToken(p, "N3");

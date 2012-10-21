@@ -86,7 +86,7 @@ public class TestTransientsAttributes extends ExecutionTest
     GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");
-    p = TestEnv.refreshedProcess(p);
+    p = TestEnv.refreshProcess(p);
 
     Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) );
     Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) );

@@ -42,8 +42,8 @@ public class NodeLoadAction extends AbstractLoadAction<JdbcNodeRef>
   protected Map<Long, JdbcNode> nodeMap = new HashMap<Long,JdbcNode>();
 
   public NodeLoadAction (final String sql,
-                              final JdbcGraph graph,
-                              final JdbcEngine engine)
+                         final JdbcGraph graph,
+                         final JdbcEngine engine)
   {
     super( sql, false );
     this.graph = graph;
@@ -51,7 +51,7 @@ public class NodeLoadAction extends AbstractLoadAction<JdbcNodeRef>
   }
 
   @Override
-  protected JdbcNodeRef loadObject (ResultSet row) throws SQLException
+  protected JdbcNodeRef loadObject (final ResultSet row) throws SQLException
   {
     long nodeRefId    = row.getLong( 1 );
     // String instance   = row.getString( 2 );
@@ -100,7 +100,7 @@ public class NodeLoadAction extends AbstractLoadAction<JdbcNodeRef>
   }
 
   @Override
-  protected void setParameters (PreparedStatement stmt) throws SQLException
+  protected void setParameters (final PreparedStatement stmt) throws SQLException
   {
     stmt.setLong( 1, graph.getId() );
   }
