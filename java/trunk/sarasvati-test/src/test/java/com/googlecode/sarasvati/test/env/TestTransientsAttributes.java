@@ -108,7 +108,7 @@ public class TestTransientsAttributes extends ExecutionTest
   @Test
   public void testSetGetTokenEnvBetweenTokens () throws Exception
   {
-    TestEnv.setExeuctionMode(ExecutionMode.OneSession);
+    TestEnv.setExecutionMode(ExecutionMode.OneSession);
     Graph graph = ensureLoaded( "two-node" );
     GraphProcess p = startProcess( graph );
 
@@ -128,7 +128,7 @@ public class TestTransientsAttributes extends ExecutionTest
   @Test
   public void testSetGetTokenFullEnvBetweenTokens () throws Exception
   {
-    TestEnv.setExeuctionMode(ExecutionMode.OneSession);
+    TestEnv.setExecutionMode(ExecutionMode.OneSession);
 
     Graph graph = ensureLoaded( "two-node" );
     GraphProcess p = startProcess( graph );
@@ -149,7 +149,7 @@ public class TestTransientsAttributes extends ExecutionTest
   @Test
   public void testSetGetProcessEnvBetweenTokens () throws Exception
   {
-    TestEnv.setExeuctionMode(ExecutionMode.OneSession);
+    TestEnv.setExecutionMode(ExecutionMode.OneSession);
 
     Graph graph = ensureLoaded( "two-node" );
     GraphProcess p = startProcess( graph );

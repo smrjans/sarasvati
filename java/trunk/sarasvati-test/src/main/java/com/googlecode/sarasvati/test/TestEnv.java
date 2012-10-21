@@ -54,7 +54,7 @@ public class TestEnv
 
   private static ExecutionMode mode = ExecutionMode.OneSession;
 
-  public static void setExeuctionMode(final ExecutionMode mode)
+  public static void setExecutionMode(final ExecutionMode mode)
   {
     TestEnv.mode = mode;
   }

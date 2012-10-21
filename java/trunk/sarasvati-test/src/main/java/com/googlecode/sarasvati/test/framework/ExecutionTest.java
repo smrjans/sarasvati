@@ -100,7 +100,7 @@ public class ExecutionTest
   @Before
   public void setup ()
   {
-    TestEnv.setExeuctionMode(ExecutionMode.Async);
+    TestEnv.setExecutionMode(ExecutionMode.Async);
     Engine engine = TestEnv.getEngine();
     engine.addExecutionListener( DuplicateEventDetector.class, ExecutionEventType.values());
   }

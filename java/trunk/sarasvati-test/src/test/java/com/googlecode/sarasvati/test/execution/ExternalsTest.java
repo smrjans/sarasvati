@@ -18,14 +18,21 @@
 */
 package com.googlecode.sarasvati.test.execution;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.env.Env;
+import com.googlecode.sarasvati.impl.MapEnv;
 import com.googlecode.sarasvati.test.TestEnv;
 import com.googlecode.sarasvati.test.TestEnv.ExecutionMode;
 import com.googlecode.sarasvati.test.framework.ExecutionTest;
@@ -33,6 +40,64 @@ import com.googlecode.sarasvati.test.framework.TestProcess;
 
 public class ExternalsTest extends ExecutionTest
 {
+  public static final AtomicInteger processCount = new AtomicInteger(0);
+
+  public static class ExternalTestNode extends CustomNode
+  {
+    private void testProcessEnv(final Env env)
+    {
+      int count = env.getAttribute("count", Integer.class);
+      env.setAttribute("count", ++count);
+      processCount.incrementAndGet();
+    }
+
+    private void testTokenEnv(final NodeToken token)
+    {
+      String path = token.getEnv().getAttribute("path");
+      if (path == null)
+      {
+        Assert.assertTrue(token.getParentTokens().isEmpty());
+        path = token.getNode().getName();
+      }
+      else
+      {
+        String[] pathNodes = path.split(",");
+        NodeToken current = token;
+
+        for (int i = pathNodes.length - 1; i >= 0; i--)
+        {
+          String nodeName = pathNodes[i];
+          NodeToken parent = null;
+          for (final ArcToken t : current.getParentTokens())
+          {
+            if (nodeName.equals(t.getParentToken().getNode().getName()))
+            {
+              parent = t.getParentToken();
+            }
+          }
+          if (parent == null)
+          {
+            throw new AssertionError("Parent not found. Path: " + path);
+          }
+          current = parent;
+        }
+        path = path + "," + token.getNode().getName();
+      }
+
+      token.getEnv().setAttribute("path", path);
+    }
+
+    /**
+     * @see com.googlecode.sarasvati.Node#execute(com.googlecode.sarasvati.Engine, com.googlecode.sarasvati.NodeToken)
+     */
+    @Override
+    public void execute(final Engine engine, final NodeToken token)
+    {
+      testProcessEnv(token.getProcess().getEnv());
+      testTokenEnv(token);
+    }
+  }
+
   private void validateEnv(final NodeToken token, final boolean external)
   {
     if (external)
@@ -58,34 +123,44 @@ public class ExternalsTest extends ExecutionTest
     {
       Assert.assertNull("External must be null", token.getNode().getExternal());
     }
+
+    int count = token.getProcess().getEnv().getAttribute("count", Integer.class);
+    Assert.assertEquals("ProcessLevel count doesn't match: ", processCount.get(), count);
   }
 
   @Test
   public void testExternalsInOneSession() throws Exception
   {
-    TestEnv.setExeuctionMode(ExecutionMode.OneSession);
+    TestEnv.setExecutionMode(ExecutionMode.OneSession);
     testExternals();
   }
 
   @Test
   public void testExternalsEachInNewSession() throws Exception
   {
-    TestEnv.setExeuctionMode(ExecutionMode.EachInNewSession);
+    TestEnv.setExecutionMode(ExecutionMode.EachInNewSession);
     testExternals();
   }
 
   @Test
   public void testExternalsWithAsync() throws Exception
   {
-    TestEnv.setExeuctionMode(ExecutionMode.Async);
+    TestEnv.setExecutionMode(ExecutionMode.Async);
     testExternals();
   }
 
+
   public void testExternals() throws Exception
   {
+    processCount.set(0);
+    TestEnv.getEngine().addGlobalCustomNodeType("externalTest", ExternalTestNode.class);
+
     ensureLoaded( "external" );
     Graph g = ensureLoaded( "external-user" );
-    GraphProcess p = startProcess( g );
+
+    MapEnv initialEnv = new MapEnv();
+    initialEnv.setAttribute("count", processCount.get());
+    GraphProcess p = startProcess(g, initialEnv);
 
     NodeToken token = getActiveToken( p, ":N1" );
     validateEnv(token, false);
@@ -388,5 +463,8 @@ public class ExternalsTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     verifyComplete(p);
+
+    Assert.assertEquals("total count should match", processCount.get(), 12);
+    Assert.assertEquals("total count should match", TestEnv.refreshedProcess(p).getEnv().getAttribute("count", Integer.class).intValue(), 12);
   }
 }

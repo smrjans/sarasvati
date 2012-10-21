@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <process-definition xmlns="http://sarasvati.googlecode.com/ProcessDefinition" name="external-user">
-    <node name="N1" joinType="or" type="wait" isStart="true">
+    <node name="N1" joinType="or" type="externalTest" isStart="true">
         <arc external="E1" to="N1"/>
         <arc external="E2" to="N1"/>
     </node>
-    <node name="N2" joinType="labelAnd" type="wait"/>
+    <node name="N2" joinType="labelAnd" type="externalTest"/>
     <external processDefinition="external" name="E1">
         <arc from="N5" to="N2"/>
         <custom>
