@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>sarasvati-parent</artifactId>
+		<groupId>com.googlecode.sarasvati</groupId>
+		<version>1.1-SNAPSHOT</version>
+    <relativePath>../sarasvati-parent</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>sarasvati-jdbc</artifactId>
+	<name>sarasvati-jdbc</name>
+  <dependencies>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>sarasvati-core</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+  </dependencies>  
+</project>
