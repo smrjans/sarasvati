@@ -97,7 +97,7 @@ public class SarasvatiDatabasePerformanceTester
     {
       arc.getName();
     }
-    TestEnv.commitSession();
+    TestEnv.commit();
     return System.currentTimeMillis() - start;
   }
 
@@ -118,7 +118,7 @@ public class SarasvatiDatabasePerformanceTester
       graphs.put( xmlDef.getName(), new TestPerfStats( xmlDef ) );
     }
 
-    TestEnv.commitSession();
+    TestEnv.commit();
   }
 
   public void runGraphTest (final int iterations,
@@ -137,7 +137,7 @@ public class SarasvatiDatabasePerformanceTester
         tg.addInsertStat( System.currentTimeMillis() - start );
       }
 
-      TestEnv.commitSession();
+      TestEnv.commit();
 
       for ( TestPerfStats tg : graphs.values() )
       {
@@ -167,7 +167,7 @@ public class SarasvatiDatabasePerformanceTester
 
       long processId = p.getId();
 
-      TestEnv.commitSession();
+      TestEnv.commit();
 
       while ( !p.isComplete() )
       {
@@ -183,7 +183,7 @@ public class SarasvatiDatabasePerformanceTester
           iter++;
         }
 
-        TestEnv.commitSession();
+        TestEnv.commit();
         System.out.println( "Iteration " + count + ". Execute time: " + (System.currentTimeMillis() - start ) );
       }
     }

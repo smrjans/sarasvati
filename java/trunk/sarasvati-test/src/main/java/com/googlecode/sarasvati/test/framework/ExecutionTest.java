@@ -108,7 +108,7 @@ public class ExecutionTest
   @After
   public void cleanup()
   {
-    TestEnv.commitSession();
+    TestEnv.commit();
   }
 
   protected Graph ensureLoaded (final String name) throws Exception
@@ -121,7 +121,7 @@ public class ExecutionTest
     {
       loader.loadDefinition( new XmlLoader(), new File( basePath, name + ".wf.xml" ) );
     }
-    TestEnv.commitSession();
+    TestEnv.commit();
     return TestEnv.getEngine().getRepository().getLatestGraph( name );
   }
 
@@ -136,10 +136,10 @@ public class ExecutionTest
     final ExecutionMode mode = TestEnv.getMode();
     if (mode.doCommits())
     {
-      TestEnv.commitSession();
+      TestEnv.commit();
     }
 
-    final GraphProcess process = mode.doCommits() ? TestEnv.refreshedProcess(p) : p;
+    final GraphProcess process = mode.doCommits() ? TestEnv.refreshProcess(p) : p;
 
     for ( NodeToken token : process.getActiveNodeTokens() )
     {
@@ -193,13 +193,13 @@ public class ExecutionTest
   {
     final ExecutionMode mode = TestEnv.getMode();
 
-    final NodeToken token = !tokenRefreshed && mode != ExecutionMode.OneSession ? TestEnv.refreshedToken(t) : t;
+    final NodeToken token = !tokenRefreshed && mode != ExecutionMode.OneSession ? TestEnv.refreshToken(t) : t;
 
     if (mode == ExecutionMode.Async)
     {
       TestEnv.getEngine().completeAsynchronous(token, arcName );
-      TestEnv.commitSession();
-      TestEnv.getEngine().executeQueuedArcTokens(TestEnv.refreshedProcess(token.getProcess()));
+      TestEnv.commit();
+      TestEnv.getEngine().executeQueuedArcTokens(TestEnv.refreshProcess(token.getProcess()));
     }
     else
     {
@@ -211,13 +211,13 @@ public class ExecutionTest
   {
     final ExecutionMode mode = TestEnv.getMode();
 
-    final NodeToken token = !tokenRefreshed && mode != ExecutionMode.OneSession ? TestEnv.refreshedToken(t) : t;
+    final NodeToken token = !tokenRefreshed && mode != ExecutionMode.OneSession ? TestEnv.refreshToken(t) : t;
 
     if (mode == ExecutionMode.Async)
     {
       TestEnv.getEngine().completeAsynchronous(token, arcNames);
-      TestEnv.commitSession();
-      TestEnv.getEngine().executeQueuedArcTokens(TestEnv.refreshedProcess(token.getProcess()));
+      TestEnv.commit();
+      TestEnv.getEngine().executeQueuedArcTokens(TestEnv.refreshProcess(token.getProcess()));
     }
     else
     {
@@ -229,19 +229,19 @@ public class ExecutionTest
   {
     final NodeToken token = getActiveToken(p, new TokenOnNodePredicate(nodeName));
     completeToken(token, arcName, true);
-    return TestEnv.refreshedProcess(p);
+    return TestEnv.refreshProcess(p);
   }
 
   public GraphProcess completeToken (final GraphProcess p, final String nodeName, final String...arcNames)
   {
     final NodeToken token = getActiveToken(p, new TokenOnNodePredicate(nodeName));
     completeToken(token, true, arcNames);
-    return TestEnv.refreshedProcess(p);
+    return TestEnv.refreshProcess(p);
   }
 
   public void backtrackToken(final NodeToken token)
   {
-    TestEnv.getEngine().backtrack(TestEnv.refreshedToken(token));
+    TestEnv.getEngine().backtrack(TestEnv.refreshToken(token));
   }
 
   public void completeToken (final GraphProcess p,
@@ -297,16 +297,16 @@ public class ExecutionTest
 
   public void verifyComplete(final GraphProcess p)
   {
-    Assert.assertTrue("Process should be complete", TestEnv.refreshedProcess(p).isComplete());
+    Assert.assertTrue("Process should be complete", TestEnv.refreshProcess(p).isComplete());
   }
 
   public void verifyCancelled(final GraphProcess p)
   {
-    Assert.assertTrue("Process should be cancelled", TestEnv.refreshedProcess(p).isCanceled());
+    Assert.assertTrue("Process should be cancelled", TestEnv.refreshProcess(p).isCanceled());
   }
 
   public void verifyExecuting(final GraphProcess p)
   {
-    Assert.assertTrue("Process should be executing", TestEnv.refreshedProcess(p).isExecuting());
+    Assert.assertTrue("Process should be executing", TestEnv.refreshProcess(p).isExecuting());
   }
 }

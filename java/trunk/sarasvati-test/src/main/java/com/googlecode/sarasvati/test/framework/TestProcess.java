@@ -69,7 +69,7 @@ public class TestProcess
 {
   public static void validate (final GraphProcess p, final String state)
   {
-    final GraphProcess process = TestEnv.refreshedProcess(p);
+    final GraphProcess process = TestEnv.refreshProcess(p);
     TestProcess testProcess = null;
     try
     {
