@@ -46,7 +46,7 @@
 
   </node>
 
-  <node name="finish-approval" type="node" joinType="tokenSetAnd">
+  <node name="finish-approval" type="node" joinType="tokenSet">
     <join>approvals</join>
     <guard>IF Approved THEN Skip approved ELSE Skip denied</guard>
     <arc name="approved" to="approved"/>

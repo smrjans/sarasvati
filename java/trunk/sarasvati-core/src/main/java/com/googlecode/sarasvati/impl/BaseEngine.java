@@ -20,6 +20,7 @@ package com.googlecode.sarasvati.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -361,7 +362,8 @@ public abstract class BaseEngine implements Engine
                                                 // a poorly timed lazy load of HibGraphProcess.activeNodeTokens can cause
                                                 // the token to be present therein
         NodeTokenEvent.fireDiscardedEvent( this, token );
-        NodeTokenEvent.fireCompletedEvent( this, token);
+        final List<Arc> exitArcs = Collections.emptyList();
+        NodeTokenEvent.fireCompletedEvent( this, token, exitArcs);
         break;
 
       case SkipNode :
@@ -377,7 +379,7 @@ public abstract class BaseEngine implements Engine
   {
     final GraphProcess process = token.getProcess();
 
-    completeNodeExecution( token, arcName, false );
+    completeNodeExecution( token, false, arcName );
 
     if ( process.isExecuting() && !arcExecutionStarted )
     {
@@ -401,7 +403,7 @@ public abstract class BaseEngine implements Engine
   @Override
   public void completeAsynchronous (final NodeToken token, final String arcName)
   {
-    completeNodeExecution( token, arcName, true );
+    completeNodeExecution( token, true, arcName );
   }
 
   @Override
@@ -426,9 +428,10 @@ public abstract class BaseEngine implements Engine
       return;
     }
 
-    completeNodeToken( process, token, arcName );
-
     final List<Arc> outArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
+
+    completeNodeToken( process, token, outArcs, arcName );
+
 
     if ( !outArcs.isEmpty() )
     {
@@ -464,26 +467,6 @@ public abstract class BaseEngine implements Engine
     }
   }
 
-  protected void completeNodeExecution (final NodeToken token,
-                                        final String arcName,
-                                        final boolean asynchronous)
-  {
-    final GraphProcess process = token.getProcess();
-
-    if ( !process.isExecuting() || token.isComplete() )
-    {
-      return;
-    }
-
-    completeNodeToken( process, token, arcName );
-
-    for ( final Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcName ) )
-    {
-      final ArcToken arcToken = generateArcToken( process, arc, token );
-      finishNewArcTokenProcessing( process, arcToken, asynchronous );
-    }
-  }
-
   protected void completeNodeExecution(final NodeToken token,
                                        final boolean asynchronous,
                                        final String...arcNames)
@@ -495,9 +478,11 @@ public abstract class BaseEngine implements Engine
       return;
     }
 
-    completeNodeToken(process, token, arcNames);
+    final List<Arc> exitArcs = process.getGraph().getOutputArcs( token.getNode(), arcNames);
 
-    for (final Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcNames))
+    completeNodeToken(process, token, exitArcs, arcNames);
+
+    for (final Arc arc : exitArcs)
     {
       final ArcToken arcToken = generateArcToken(process, arc, token);
       finishNewArcTokenProcessing(process, arcToken, asynchronous);
@@ -506,20 +491,12 @@ public abstract class BaseEngine implements Engine
 
   private void completeNodeToken (final GraphProcess process,
                                   final NodeToken token,
-                                  final String arcName)
-  {
-    process.removeActiveNodeToken( token );
-    token.markComplete();
-    NodeTokenEvent.fireCompletedEvent( this, token, arcName );
-  }
-
-  private void completeNodeToken (final GraphProcess process,
-                                  final NodeToken token,
+                                  final List<Arc> exitArcs,
                                   final String...arcNames)
   {
     process.removeActiveNodeToken(token);
     token.markComplete();
-    NodeTokenEvent.fireCompletedEvent(this, token, arcNames);
+    NodeTokenEvent.fireCompletedEvent(this, token, exitArcs, arcNames);
   }
 
   private ArcToken generateArcToken (final GraphProcess process,

@@ -131,6 +131,14 @@ public class ExecutionTest
     return getActiveToken(p, new TokenOnNodePredicate(nodeName));
   }
 
+  public NodeToken getActiveToken(final GraphProcess p,
+                                  final String nodeName,
+                                  final String tokenSetName,
+                                  final int memberIndex)
+  {
+    return getActiveToken(p, new TokenWithTokenSetPredicate(nodeName, tokenSetName, memberIndex));
+  }
+
   public NodeToken getActiveToken(final GraphProcess p, final TestPredicate<NodeToken> test)
   {
     final ExecutionMode mode = TestEnv.getMode();

@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinResult;
@@ -50,25 +49,7 @@ public class TokenSetJoinStrategy implements JoinStrategy
 {
   public TokenSet getTokenSet (final ArcToken token)
   {
-    String tokenSetName = token.getArc().getEndNode().getJoinParam();
-
-    // If a token set name is specified, wait for that token set
-    if ( !SvUtil.isBlankOrNull( tokenSetName ) )
-    {
-      return SvUtil.getTokenSet( token, tokenSetName );
-    }
-
-    // Otherwise, wait on the first incomplete token set
-    for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
-    {
-      TokenSet tokenSet = setMember.getTokenSet();
-      if ( !tokenSet.isComplete() )
-      {
-        return tokenSet;
-      }
-    }
-
-    return null;
+    return SvUtil.getTokenSet(token);
   }
 
   /**

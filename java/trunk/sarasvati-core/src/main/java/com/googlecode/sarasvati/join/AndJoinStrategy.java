@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.join;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
@@ -36,32 +37,46 @@ import com.googlecode.sarasvati.JoinStrategy;
  */
 public class AndJoinStrategy implements JoinStrategy
 {
-  protected List<Arc> getJoiningArcs (final GraphProcess process, final ArcToken token)
+  protected List<Arc> getJoiningArcs(final GraphProcess process, final ArcToken token)
   {
-    return process.getGraph().getInputArcs( token.getArc().getEndNode() );
+    return process.getGraph().getInputArcs(token.getArc().getEndNode());
+  }
+
+  /**
+   * Returns the set of tokens to consider when joining
+   *
+   * @param engine Engine may be used by subclass to return different set of nodes
+   * @param arcToken The arc token being joined
+   *
+   * @return The set of tokens to consider when joining
+   */
+  protected Collection<ArcToken> getActiveTokens(final Engine engine, final ArcToken arcToken)
+  {
+    return arcToken.getProcess().getActiveArcTokens();
   }
 
   @Override
-  public JoinResult performJoin (final Engine engine, final ArcToken token)
+  public JoinResult performJoin(final Engine engine, final ArcToken token)
   {
-    GraphProcess process = token.getProcess();
-    List<Arc> joinArcs = getJoiningArcs( process, token );
+    final GraphProcess process = token.getProcess();
+    final List<Arc> joinArcs = getJoiningArcs(process, token);
 
-    ArrayList<ArcToken> tokens = new ArrayList<ArcToken>( joinArcs.size() );
+    final ArrayList<ArcToken> tokens = new ArrayList<ArcToken>(joinArcs.size());
 
-    for ( Arc arc : joinArcs )
+    final Collection<ArcToken> activeTokens = getActiveTokens(engine, token);
+
+    for (final Arc arc : joinArcs)
     {
-      for ( ArcToken arcToken : process.getActiveArcTokens() )
+      for (final ArcToken arcToken : activeTokens)
       {
-        if ( arcToken.getArc().equals( arc ) )
+        if (arcToken.getArc().equals(arc))
         {
-          tokens.add( arcToken );
+          tokens.add(arcToken);
           break;
         }
       }
     }
 
-    return joinArcs.size() == tokens.size() ? new CompleteJoinResult( tokens ) :
-                                              IncompleteJoinResult.INSTANCE;
+    return joinArcs.size() == tokens.size() ? new CompleteJoinResult(tokens) : IncompleteJoinResult.INSTANCE;
   }
 }

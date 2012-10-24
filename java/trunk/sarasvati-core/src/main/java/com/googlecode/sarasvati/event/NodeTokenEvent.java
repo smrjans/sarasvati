@@ -18,6 +18,10 @@
 */
 package com.googlecode.sarasvati.event;
 
+import java.util.Collections;
+import java.util.List;
+
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
@@ -25,7 +29,8 @@ import com.googlecode.sarasvati.NodeToken;
 public class NodeTokenEvent extends ExecutionEvent
 {
   protected NodeToken nodeToken;
-  protected String[]    exitArcsNames;
+  protected List<Arc> exitArcs;
+  protected String[]  exitArcsNames;
 
   public static final EventActions fireCreatedEvent (final Engine engine, final NodeToken nodeToken)
   {
@@ -47,14 +52,36 @@ public class NodeTokenEvent extends ExecutionEvent
     return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_DISCARDED, nodeToken) );
   }
 
-  public static final EventActions fireSkippedEvent (final Engine engine, final NodeToken nodeToken, final String exitArcsName)
+  public static final EventActions fireSkippedEvent (final Engine engine,
+                                                     final NodeToken nodeToken,
+                                                     final String exitArcsName)
   {
-    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_SKIPPED, nodeToken, exitArcsName ) );
+    return engine.fireEvent( new NodeTokenEvent( engine,
+                                                 ExecutionEventType.NODE_TOKEN_SKIPPED,
+                                                 nodeToken,
+                                                 exitArcsName ) );
   }
 
-  public static final EventActions fireCompletedEvent (final Engine engine, final NodeToken nodeToken, final String...exitArcsNames)
+  public static final EventActions fireCompletedEvent (final Engine engine,
+                                                       final NodeToken nodeToken,
+                                                       final String...exitArcsNames)
   {
-    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, exitArcsNames) );
+    return engine.fireEvent( new NodeTokenEvent( engine,
+                                                 ExecutionEventType.NODE_TOKEN_COMPLETED,
+                                                 nodeToken,
+                                                 exitArcsNames) );
+  }
+
+  public static final EventActions fireCompletedEvent (final Engine engine,
+                                                       final NodeToken nodeToken,
+                                                       final List<Arc> arcs,
+                                                       final String...exitArcsNames)
+  {
+    return engine.fireEvent( new NodeTokenEvent( engine,
+                                                 ExecutionEventType.NODE_TOKEN_COMPLETED,
+                                                 nodeToken,
+                                                 arcs,
+                                                 exitArcsNames) );
   }
 
   public static final EventActions fireBacktrackedEvent (final Engine engine, final NodeToken nodeToken)
@@ -62,10 +89,26 @@ public class NodeTokenEvent extends ExecutionEvent
     return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_BACKTRACKED, nodeToken) );
   }
 
-  private NodeTokenEvent (final Engine engine, final ExecutionEventType eventType, final NodeToken nodeToken, final String...exitArcsName)
+  private NodeTokenEvent (final Engine engine,
+                          final ExecutionEventType eventType,
+                          final NodeToken nodeToken,
+                          final String...exitArcsName)
   {
     super( engine, eventType );
     this.nodeToken = nodeToken;
+    this.exitArcs  = Collections.emptyList();
+    this.exitArcsNames = exitArcsName;
+  }
+
+  private NodeTokenEvent (final Engine engine,
+                          final ExecutionEventType eventType,
+                          final NodeToken nodeToken,
+                          final List<Arc> exitArcs,
+                          final String...exitArcsName)
+  {
+    super( engine, eventType );
+    this.nodeToken = nodeToken;
+    this.exitArcs  = exitArcs;
     this.exitArcsNames = exitArcsName;
   }
 
@@ -85,6 +128,11 @@ public class NodeTokenEvent extends ExecutionEvent
   public String[] getExitArcsNames()
   {
     return exitArcsNames;
+  }
+
+  public List<Arc> getExitArcs()
+  {
+    return exitArcs;
   }
 
   @Override

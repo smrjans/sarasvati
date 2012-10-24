@@ -148,7 +148,7 @@ public class ExternalsTest extends ExecutionTest
     String state = "[1 :N1 I F]";
     TestProcess.validate( p, state );
 
-    completeToken( token, Arc.DEFAULT_ARC );
+    completeToken( token );
 
     state =
       "[1 :N1 C F]" +
