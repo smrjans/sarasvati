@@ -249,7 +249,7 @@ insert into wf_execution_type values ( 4, 'U-Turn/Backtracked' );
 
 create table wf_node_token
 (
-  id              int    NOT NULL PRIMARY KEY,
+  id              int       NOT NULL PRIMARY KEY,
   process_id      int       NOT NULL REFERENCES wf_process,
   node_ref_id     int       NOT NULL REFERENCES wf_node_ref,
   attr_set_id     int       NULL     REFERENCES wf_node_token,
@@ -268,14 +268,15 @@ ALTER TABLE wf_process
 
 create table wf_arc_token
 (
-  id              int    NOT NULL PRIMARY KEY,
-  process_id      int       NOT NULL REFERENCES wf_process,
-  arc_id          int       NOT NULL REFERENCES wf_arc,
-  parent_token_id int       NOT NULL REFERENCES wf_node_token,
-  pending         char(1)   NOT NULL,
-  execution_type  int       NOT NULL REFERENCES wf_execution_type,
-  create_date     timestamp NOT NULL DEFAULT current_timestamp,
-  complete_date   timestamp NULL
+  id               int       NOT NULL PRIMARY KEY,
+  process_id       int       NOT NULL REFERENCES wf_process,
+  arc_id           int       NOT NULL REFERENCES wf_arc,
+  parent_token_id  int       NOT NULL REFERENCES wf_node_token,
+  pending          char(1)   NOT NULL,
+  token_set_member char(1)   NOT NULL,
+  execution_type   int       NOT NULL REFERENCES wf_execution_type,
+  create_date      timestamp NOT NULL DEFAULT current_timestamp,
+  complete_date    timestamp NULL
 );
 
 create index wf_arc_token_idx on wf_arc_token(process_id, complete_date, pending);

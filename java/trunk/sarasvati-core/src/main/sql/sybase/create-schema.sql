@@ -385,14 +385,15 @@ IF NOT EXISTS (SELECT name FROM sysobjects WHERE name='wf_arc_token')
 
       create table wf_arc_token
       (
-        id              bigint    IDENTITY NOT NULL PRIMARY KEY,
-        process_id      bigint             NOT NULL REFERENCES wf_process,
-        arc_id          bigint             NOT NULL REFERENCES wf_arc,
-        parent_token_id bigint             NOT NULL REFERENCES wf_node_token,
-        pending         char(1)            NOT NULL,
-        execution_type  int                NOT NULL REFERENCES wf_execution_type,
-        create_date     datetime           DEFAULT getDate() NOT NULL,
-        complete_date   datetime           NULL
+        id               bigint    IDENTITY NOT NULL PRIMARY KEY,
+        process_id       bigint             NOT NULL REFERENCES wf_process,
+        arc_id           bigint             NOT NULL REFERENCES wf_arc,
+        parent_token_id  bigint             NOT NULL REFERENCES wf_node_token,
+        pending          char(1)            NOT NULL,
+        token_set_member char(1)            NOT NULL,
+        execution_type   int                NOT NULL REFERENCES wf_execution_type,
+        create_date      datetime           DEFAULT getDate() NOT NULL,
+        complete_date    datetime           NULL
       ) with identity_gap = 100
 
       print 'Creating index on wf_arc_token(process_id, complete_date, pending)'

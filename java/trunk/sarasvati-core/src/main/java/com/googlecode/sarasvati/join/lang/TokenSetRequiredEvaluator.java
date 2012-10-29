@@ -64,9 +64,7 @@ class TokenSetRequiredEvaluator extends MultiTokenRequirementEvaluator<TokenSetR
   {
     if ( isSatisfied() )
     {
-      TokenSet tokenSet = getEnv().getTokenSet( getRequirement().getTokenSetName() );
-      tokenSet.markComplete( getEnv().getEngine() );
-      super.completeJoinAndContributeTokens( tokens );
+      super.completeJoinAndContributeTokens(tokens);
     }
   }
 }

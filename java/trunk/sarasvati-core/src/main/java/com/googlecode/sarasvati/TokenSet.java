@@ -88,29 +88,6 @@ public interface TokenSet
   int getMaxMemberIndex ();
 
   /**
-   * Returns true if the token set has been join on and contains no more
-   * active tokens, and false otherwise.
-   *
-   * @return True if the token set has been join on and contains no more
-   *         active tokens, and false otherwise.
-   */
-  boolean isComplete ();
-
-  /**
-   * Marks this token set as being complete, in the sense that a
-   * token set join has been performed on the token set.
-   */
-  void markComplete (Engine engine);
-
-  /**
-   * If a node or arc token in a previously completed token set is backtracked
-   * into, the token set should be marked as incomplete again.
-   *
-   * @param engine The engine currently executing
-   */
-  void reactivateForBacktrack (Engine engine);
-
-  /**
    * A token set provides an environment into which attributes can be stored.
    * This environment is shared across all tokens which are members of the
    * environment.

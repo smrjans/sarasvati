@@ -79,12 +79,8 @@ public class TokenSetJoinStrategy implements JoinStrategy
       return performFallbackJoin( engine, token.getProcess(), token );
     }
 
-    if ( !tokenSet.getActiveNodeTokens( engine ).isEmpty() )
-    {
-      return IncompleteJoinResult.INSTANCE;
-    }
-
     Node targetNode = token.getArc().getEndNode();
+
     Collection<ArcToken> activeMembers = tokenSet.getActiveArcTokens( engine );
 
     for ( ArcToken setMember : activeMembers )
@@ -95,9 +91,7 @@ public class TokenSetJoinStrategy implements JoinStrategy
       }
     }
 
-    tokenSet.markComplete( engine );
-
     ArrayList<ArcToken> result = new ArrayList<ArcToken>( activeMembers );
-    return new CompleteJoinResult( result );
+    return new CompleteJoinResult( result, tokenSet.getName() );
   }
 }

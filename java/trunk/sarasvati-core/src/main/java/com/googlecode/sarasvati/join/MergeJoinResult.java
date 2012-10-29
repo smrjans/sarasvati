@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.join;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.JoinAction;
@@ -64,9 +65,23 @@ public final class MergeJoinResult implements JoinResult
     return JoinAction.Merge;
   }
 
+  /**
+   * @see JoinResult#getMergeTarget()
+   */
   @Override
   public NodeToken getMergeTarget ()
   {
     return mergeTarget;
+  }
+
+  /**
+   * Always throws an {@link IllegalStateException}
+   *
+   * @see com.googlecode.sarasvati.JoinResult#getTerminatingTokenSets()
+   */
+  @Override
+  public List<String> getTerminatingTokenSets()
+  {
+    throw new IllegalStateException( "getTerminatingTokenSets should never be called for a JoinResult with an action of Merge" );
   }
 }

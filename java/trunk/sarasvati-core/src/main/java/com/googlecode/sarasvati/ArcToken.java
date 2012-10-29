@@ -36,7 +36,7 @@ public interface ArcToken extends Token
    * @return a unique identifier for this arc token
    */
   Long getId();
-  
+
   /**
    * Returns the arc that this arc token points to.
    *
@@ -111,4 +111,6 @@ public interface ArcToken extends Token
    */
   @Override
   Set<ArcTokenSetMember> getTokenSetMemberships ();
+
+  boolean isTokenSetMember();
 }

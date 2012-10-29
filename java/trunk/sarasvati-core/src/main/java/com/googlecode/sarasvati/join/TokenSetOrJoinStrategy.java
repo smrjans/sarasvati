@@ -16,15 +16,13 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.impl;
+package com.googlecode.sarasvati.join;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinType;
-import com.googlecode.sarasvati.join.OrJoinStrategy;
-import com.googlecode.sarasvati.join.TokenSetJoinStrategy;
 
 /**
  * Implements a join strategy in which nodes will wait for for all

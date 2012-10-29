@@ -34,9 +34,7 @@ public enum XmlJoinType
   @XmlEnumValue ("tokenSetOr")    TOKEN_SET_OR( JoinType.TOKEN_SET_OR ),
   @XmlEnumValue ("class")         CLASS( JoinType.CLASS ),
   @XmlEnumValue ("first")         FIRST( JoinType.FIRST),
-  @XmlEnumValue ("joinlang")      JOINLANG( JoinType.JOINLANG ),
-  @XmlEnumValue ("tokenSetAnd")   TOKEN_SET_AND( JoinType.TOKEN_SET_AND ),
-  @XmlEnumValue ("tokenSetLabel") TOKEN_SET_LABEL( JoinType.TOKEN_SET_OR );
+  @XmlEnumValue ("joinlang")      JOINLANG( JoinType.JOINLANG );
 
   private final JoinType joinType;
 

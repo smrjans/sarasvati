@@ -341,14 +341,15 @@ ALTER TABLE wf_process
 
 create table wf_arc_token
 (
-  id              number(20) NOT NULL PRIMARY KEY,
-  process_id      number(20) NOT NULL REFERENCES wf_process,
-  arc_id          number(20) NOT NULL REFERENCES wf_arc,
-  parent_token_id number(20) NOT NULL REFERENCES wf_node_token,
-  pending         char(1)    NOT NULL,
-  execution_type  number(5)  NOT NULL REFERENCES wf_execution_type,
-  create_date     timestamp  DEFAULT current_timestamp NOT NULL,
-  complete_date   timestamp  NULL
+  id               number(20) NOT NULL PRIMARY KEY,
+  process_id       number(20) NOT NULL REFERENCES wf_process,
+  arc_id           number(20) NOT NULL REFERENCES wf_arc,
+  parent_token_id  number(20) NOT NULL REFERENCES wf_node_token,
+  pending          char(1)    NOT NULL,
+  token_set_member char(1)    NOT NULL,
+  execution_type   number(5)  NOT NULL REFERENCES wf_execution_type,
+  create_date      timestamp  DEFAULT current_timestamp NOT NULL,
+  complete_date    timestamp  NULL
 );
 
 create index wf_arc_token_idx on wf_arc_token(process_id, complete_date, pending);

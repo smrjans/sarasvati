@@ -278,7 +278,7 @@ public abstract class BaseEngine implements Engine
 
       if ( JoinAction.Complete == result.getJoinAction() )
       {
-        completeExecuteArc( process, targetNode, result.getArcTokensCompletingJoin() );
+        completeExecuteArc( process, targetNode, result.getArcTokensCompletingJoin(), result.getTerminatingTokenSets() );
       }
       else if ( JoinAction.Merge == result.getJoinAction() )
       {
@@ -294,7 +294,8 @@ public abstract class BaseEngine implements Engine
 
   private void completeExecuteArc (final GraphProcess process,
                                    final Node targetNode,
-                                   final Collection<ArcToken> tokens)
+                                   final Collection<ArcToken> tokens,
+                                   final List<String> terminatingTokenSets)
   {
     final NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, new ArrayList<ArcToken>( tokens ) );
     process.addNodeToken( nodeToken );
@@ -307,7 +308,7 @@ public abstract class BaseEngine implements Engine
       for ( final ArcTokenSetMember setMember : token.getTokenSetMemberships() )
       {
         final TokenSet tokenSet = setMember.getTokenSet();
-        if ( !tokenSet.isComplete() && !tokenSets.contains( tokenSet ) )
+        if ( terminatingTokenSets.contains(tokenSet.getName()) && !tokenSets.contains( tokenSet ) )
         {
           tokenSets.add( tokenSet );
           final NodeTokenSetMember newSetMember = getFactory().newNodeTokenSetMember( tokenSet, nodeToken, setMember.getMemberIndex() );
@@ -503,18 +504,16 @@ public abstract class BaseEngine implements Engine
                                      final Arc arc,
                                      final NodeToken token)
   {
-    final ArcToken arcToken = getFactory().newArcToken( process, arc, ExecutionType.Forward, token );
+    final Set<NodeTokenSetMember> nodeSetTokenMemberships = token.getTokenSetMemberships();
+    final ArcToken arcToken = getFactory().newArcToken( process, arc, ExecutionType.Forward, token, !nodeSetTokenMemberships.isEmpty() );
     token.getChildTokens().add( arcToken );
 
-    for ( final NodeTokenSetMember setMember : token.getTokenSetMemberships() )
+    for ( final NodeTokenSetMember setMember : nodeSetTokenMemberships )
     {
       final TokenSet tokenSet = setMember.getTokenSet();
-      if ( !tokenSet.isComplete() )
-      {
-        final ArcTokenSetMember newSetMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, setMember.getMemberIndex() );
-        tokenSet.getActiveArcTokens( this ).add( arcToken );
-        arcToken.getTokenSetMemberships().add( newSetMember );
-      }
+      final ArcTokenSetMember newSetMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, setMember.getMemberIndex() );
+      tokenSet.getActiveArcTokens( this ).add( arcToken );
+      arcToken.getTokenSetMemberships().add( newSetMember );
     }
 
     return arcToken;

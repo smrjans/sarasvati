@@ -116,14 +116,11 @@ public class SvUtil
       return SvUtil.getTokenSet( token, tokenSetName );
     }
 
-    // Otherwise, wait on the first incomplete token set
+    // Otherwise, wait on the first token set that the token is a member of
     for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
     {
-      TokenSet tokenSet = setMember.getTokenSet();
-      if ( !tokenSet.isComplete() )
-      {
-        return tokenSet;
-      }
+      final TokenSet tokenSet = setMember.getTokenSet();
+      return tokenSet;
     }
 
     return null;

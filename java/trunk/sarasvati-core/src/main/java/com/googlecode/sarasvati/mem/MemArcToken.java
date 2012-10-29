@@ -35,7 +35,7 @@ import com.googlecode.sarasvati.visitor.TokenVisitor;
 public class MemArcToken implements ArcToken
 {
   private static AtomicLong idGenerator = new AtomicLong(0);
-  
+
   protected final Long id;
   protected Arc arc;
   protected GraphProcess process;
@@ -55,8 +55,8 @@ public class MemArcToken implements ArcToken
     this.executionType = executionType;
     this.parentToken = parentToken;
     this.pending = true;
-  }  
-  
+  }
+
   @Override
   public Long getId()
   {
@@ -134,6 +134,15 @@ public class MemArcToken implements ArcToken
   public Set<ArcTokenSetMember> getTokenSetMemberships ()
   {
     return tokenSetMemberships;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.ArcToken#isTokenSetMember()
+   */
+  @Override
+  public boolean isTokenSetMember()
+  {
+    return tokenSetMemberships.isEmpty();
   }
 
   @Override

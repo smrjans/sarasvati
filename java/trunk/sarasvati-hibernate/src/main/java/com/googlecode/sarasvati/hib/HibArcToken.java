@@ -97,6 +97,10 @@ public class HibArcToken implements ArcToken
   @Column( name="pending")
   protected boolean pending;
 
+  @Type (type="yes_no")
+  @Column( name="token_set_member")
+  protected boolean tokenSetMember;
+
   @Column (name="execution_type")
   @Enumerated( EnumType.ORDINAL )
   protected ExecutionType executionType;
@@ -107,7 +111,11 @@ public class HibArcToken implements ArcToken
 
   public HibArcToken () { /* Default constructor for hibernate */ }
 
-  public HibArcToken (final HibGraphProcess process, final HibArc arc, final ExecutionType executionType, final HibNodeToken parentToken)
+  public HibArcToken (final HibGraphProcess process,
+                      final HibArc arc,
+                      final ExecutionType executionType,
+                      final HibNodeToken parentToken,
+                      final boolean tokenSetMember)
   {
     this.process       = process;
     this.arc           = arc;
@@ -116,6 +124,7 @@ public class HibArcToken implements ArcToken
     this.createDate    = new Date();
     this.pending       = true;
     this.tokenSetMemberships = new HashSet<ArcTokenSetMember>();
+    this.tokenSetMember = tokenSetMember;
   }
 
   @Override
@@ -245,6 +254,23 @@ public class HibArcToken implements ArcToken
   public void setTokenSetMembers (final Set<ArcTokenSetMember> tokenSetMemberships)
   {
     this.tokenSetMemberships = tokenSetMemberships;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.ArcToken#isTokenSetMember()
+   */
+  @Override
+  public boolean isTokenSetMember()
+  {
+    return tokenSetMember;
+  }
+
+  /**
+   * @param tokenSetMember the tokenSetMember to set
+   */
+  public void setTokenSetMember(final boolean tokenSetMember)
+  {
+    this.tokenSetMember = tokenSetMember;
   }
 
   @Override

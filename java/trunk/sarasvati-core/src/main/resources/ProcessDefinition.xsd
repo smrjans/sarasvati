@@ -241,8 +241,6 @@
         <xs:enumeration value="class"/>
         <xs:enumeration value="first"/>
         <xs:enumeration value="joinlang"/>
-        <xs:enumeration value="tokenSetAnd"/>
-        <xs:enumeration value="tokenSetLabel"/>
       </xs:restriction>
     </xs:simpleType>
 

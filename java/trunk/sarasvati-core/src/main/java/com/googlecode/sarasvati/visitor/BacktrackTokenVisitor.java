@@ -179,8 +179,6 @@ public class BacktrackTokenVisitor implements TokenVisitor
       }
     }
 
-    reactivateTokenSets();
-
     return resultToken;
   }
 
@@ -265,7 +263,8 @@ public class BacktrackTokenVisitor implements TokenVisitor
         engine.getFactory().newArcToken( token.getProcess(),
                                          parent.getArc(),
                                          backtrackParent ? ExecutionType.Backtracked : ExecutionType.UTurn,
-                                         backtrackToken );
+                                         backtrackToken,
+                                         parent.isTokenSetMember());
       ArcTokenEvent.fireCreatedEvent( engine, backtrackArcToken );
       backtrackToken.getChildTokens().add( backtrackArcToken );
       shareTokenSets( backtrackArcToken, parent );
@@ -322,7 +321,8 @@ public class BacktrackTokenVisitor implements TokenVisitor
         engine.getFactory().newArcToken( token.getProcess(),
                                          parent.getArc(),
                                          ExecutionType.UTurn,
-                                         token );
+                                         token,
+                                         parent.isTokenSetMember() );
       ArcTokenEvent.fireCreatedEvent( engine, backtrackArcToken );
       token.getChildTokens().add( backtrackArcToken );
       parents.add( backtrackArcToken );
@@ -347,8 +347,6 @@ public class BacktrackTokenVisitor implements TokenVisitor
       parent.markComplete( backtrackToken );
       ArcTokenEvent.fireCompletedEvent( engine, parent );
     }
-
-    reactivateTokenSets();
 
     return backtrackToken;
   }
@@ -376,19 +374,6 @@ public class BacktrackTokenVisitor implements TokenVisitor
       newToken.getTokenSetMemberships().add( newSetMember );
       tokenSet.getActiveArcTokens( engine ).add( newToken );
       tokenSets.add( tokenSet );
-    }
-  }
-
-  private void reactivateTokenSets ()
-  {
-    for ( TokenSet tokenSet : tokenSets )
-    {
-      if ( tokenSet.isComplete() &&
-           ( !tokenSet.getActiveArcTokens( engine ).isEmpty() ||
-             !tokenSet.getActiveNodeTokens( engine ).isEmpty() ) )
-      {
-        tokenSet.reactivateForBacktrack( engine );
-      }
     }
   }
 }

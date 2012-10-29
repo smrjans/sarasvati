@@ -20,6 +20,7 @@ package com.googlecode.sarasvati.join;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.JoinAction;
@@ -35,15 +36,33 @@ import com.googlecode.sarasvati.NodeToken;
 public final class CompleteJoinResult implements JoinResult
 {
   private final Collection<ArcToken> tokens;
+  private final List<String> terminatingTokenSets;
 
   public CompleteJoinResult (final ArcToken token)
   {
-    this.tokens = Collections.singletonList( token );
+    this(Collections.singletonList(token));
   }
 
   public CompleteJoinResult (final Collection<ArcToken> tokens)
   {
+    this(tokens, emptyList());
+  }
+
+  public CompleteJoinResult (final Collection<ArcToken> tokens, final String terminatingTokenSet)
+  {
+    this(tokens, Collections.singletonList(terminatingTokenSet));
+  }
+
+  public CompleteJoinResult (final Collection<ArcToken> tokens, final List<String> terminatingTokenSets)
+  {
     this.tokens = tokens;
+    this.terminatingTokenSets = terminatingTokenSets;
+  }
+
+  // Java type inference isn't good enough for this to be in-line, yet
+  private static List<String> emptyList()
+  {
+    return Collections.emptyList();
   }
 
   /**
@@ -70,5 +89,14 @@ public final class CompleteJoinResult implements JoinResult
   public NodeToken getMergeTarget ()
   {
     throw new IllegalStateException( "getMergeTarget should never be called for a JoinResult with an action of Complete" );
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.JoinResult#getTerminatingTokenSets()
+   */
+  @Override
+  public List<String> getTerminatingTokenSets()
+  {
+    return terminatingTokenSets;
   }
 }

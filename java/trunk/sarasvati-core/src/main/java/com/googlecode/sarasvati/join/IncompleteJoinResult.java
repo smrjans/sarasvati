@@ -56,9 +56,25 @@ public final class IncompleteJoinResult implements JoinResult
     throw new IllegalStateException( "getArcTokensCompletingJoin should never be called for a JoinResult with an action of Nothing" );
   }
 
+  /**
+   * Always throws an {@link IllegalStateException}
+   *
+   * @see com.googlecode.sarasvati.JoinResult#getMergeTarget()
+   */
   @Override
   public NodeToken getMergeTarget ()
   {
     throw new IllegalStateException( "getMergeTarget should never be called for a JoinResult with an action of Nothing" );
+  }
+
+  /**
+   * Always throws an {@link IllegalStateException}
+   *
+   * @see com.googlecode.sarasvati.JoinResult#getTerminatingTokenSets()
+   */
+  @Override
+  public List<String> getTerminatingTokenSets()
+  {
+    throw new IllegalStateException( "getTerminatingTokenSets should never be called for a JoinResult with an action of Nothing" );
   }
 }

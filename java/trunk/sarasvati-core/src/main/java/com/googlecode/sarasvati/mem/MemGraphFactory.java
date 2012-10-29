@@ -152,7 +152,8 @@ public class MemGraphFactory extends AbstractGraphFactory
   public ArcToken newArcToken (final GraphProcess process,
                                final Arc arc,
                                final ExecutionType executionType,
-                               final NodeToken parent)
+                               final NodeToken parent,
+                               final boolean tokenSetMember)
   {
     return new MemArcToken( arc, process, executionType, parent );
   }

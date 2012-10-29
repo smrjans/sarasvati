@@ -28,6 +28,8 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
+import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.util.SvUtil;
 
 /**
  * Implements a join strategy in which nodes will wait for arc tokens to be
@@ -52,7 +54,37 @@ public class AndJoinStrategy implements JoinStrategy
    */
   protected Collection<ArcToken> getActiveTokens(final Engine engine, final ArcToken arcToken)
   {
-    return arcToken.getProcess().getActiveArcTokens();
+    if (!arcToken.isTokenSetMember())
+    {
+      return arcToken.getProcess().getActiveArcTokens();
+    }
+
+    final TokenSet ts = SvUtil.getTokenSet(arcToken);
+    if (ts != null)
+    {
+      int index = SvUtil.getTokenSetMember(arcToken, ts.getName()).getMemberIndex();
+      Collection<ArcToken> tokens = ts.getActiveArcTokens(engine);
+      List<ArcToken> result = new ArrayList<ArcToken>(tokens.size());
+      for (final ArcToken t : tokens)
+      {
+        if (SvUtil.getTokenSetMember(t, ts.getName()).getMemberIndex() == index)
+        {
+          result.add(t);
+        }
+      }
+      return result;
+    }
+
+    final Collection<ArcToken> tokens = arcToken.getProcess().getActiveArcTokens();
+    final List<ArcToken> result = new ArrayList<ArcToken>(tokens.size());
+    for (final ArcToken t : tokens)
+    {
+      if (t.getTokenSetMemberships().isEmpty())
+      {
+        result.add(t);
+      }
+    }
+    return result;
   }
 
   @Override

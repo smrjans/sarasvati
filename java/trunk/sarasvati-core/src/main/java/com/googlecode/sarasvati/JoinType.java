@@ -18,7 +18,6 @@
 */
 package com.googlecode.sarasvati;
 
-import com.googlecode.sarasvati.impl.TokenSetOrJoinStrategy;
 import com.googlecode.sarasvati.join.AndJoinStrategy;
 import com.googlecode.sarasvati.join.ClassJoinStrategy;
 import com.googlecode.sarasvati.join.JoinLangCompiler;
@@ -26,9 +25,8 @@ import com.googlecode.sarasvati.join.JoinLangJoinStrategy;
 import com.googlecode.sarasvati.join.LabelJoinStrategy;
 import com.googlecode.sarasvati.join.MergeJoinStrategy;
 import com.googlecode.sarasvati.join.OrJoinStrategy;
-import com.googlecode.sarasvati.join.TokenSetAndJoinStrategy;
 import com.googlecode.sarasvati.join.TokenSetJoinStrategy;
-import com.googlecode.sarasvati.join.TokenSetLabelJoinStrategy;
+import com.googlecode.sarasvati.join.TokenSetOrJoinStrategy;
 
 /**
  * Enumerates the types of joins.
@@ -115,15 +113,7 @@ public enum JoinType
    * {@link JoinLangCompiler}.
    */
   JOINLANG( new JoinLangJoinStrategy(),
-         "Evaluates the join lang statement given in the join parameter." ),
-
-  TOKEN_SET_AND( new TokenSetAndJoinStrategy(),
-                 "Behaves like an AND join, except that it will require all arc tokens being " +
-                 "joined to either belong to the same token set or all belong to no token set."),
-
-  TOKEN_SET_LABEL( new TokenSetLabelJoinStrategy(),
-                   "Behaves like a LABEL join, except that it will require all arc tokens being " +
-                   "joined to either belong to the same token set or all belong to no token set.")
+         "Evaluates the join lang statement given in the join parameter." )
   ;
 
   private JoinStrategy joinStrategy;

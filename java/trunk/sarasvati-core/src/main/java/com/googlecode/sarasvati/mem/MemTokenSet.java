@@ -82,24 +82,6 @@ public class MemTokenSet implements TokenSet
   }
 
   @Override
-  public boolean isComplete ()
-  {
-    return complete;
-  }
-
-  @Override
-  public void markComplete (final Engine engine)
-  {
-    complete = true;
-  }
-
-  @Override
-  public void reactivateForBacktrack (final Engine engine)
-  {
-    complete = false;
-  }
-
-  @Override
   public Env getEnv ()
   {
     return env;

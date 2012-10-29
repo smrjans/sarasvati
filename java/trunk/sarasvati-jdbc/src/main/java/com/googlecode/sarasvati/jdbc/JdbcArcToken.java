@@ -43,17 +43,21 @@ public class JdbcArcToken implements ArcToken, JdbcObject
   protected boolean pending;
   protected ExecutionType executionType;
 
+  protected boolean tokenSetMember;
+
   public JdbcArcToken (final JdbcGraphProcess process,
                        final JdbcArc arc,
                        final ExecutionType executionType,
-                       final JdbcNodeToken parentToken)
+                       final JdbcNodeToken parentToken,
+                       final boolean tokenSetMember)
   {
-    this.process       = process;
-    this.arc           = arc;
-    this.executionType = executionType;
-    this.parentToken   = parentToken;
-    this.createDate    = new Date();
-    this.pending       = true;
+    this.process        = process;
+    this.arc            = arc;
+    this.executionType  = executionType;
+    this.parentToken    = parentToken;
+    this.createDate     = new Date();
+    this.pending        = true;
+    this.tokenSetMember = tokenSetMember;
   }
 
   @Override
@@ -166,6 +170,15 @@ public class JdbcArcToken implements ArcToken, JdbcObject
   {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.ArcToken#isTokenSetMember()
+   */
+  @Override
+  public boolean isTokenSetMember()
+  {
+    return false;
   }
 
   @Override

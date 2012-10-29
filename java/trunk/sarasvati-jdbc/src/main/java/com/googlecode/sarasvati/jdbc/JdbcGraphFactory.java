@@ -241,12 +241,14 @@ public class JdbcGraphFactory extends AbstractGraphFactory
   public ArcToken newArcToken (final GraphProcess process,
                                final Arc arc,
                                final ExecutionType executionType,
-                               final NodeToken parent)
+                               final NodeToken parent,
+                               final boolean tokenSetMember)
   {
     JdbcArcToken token = new JdbcArcToken( (JdbcGraphProcess)process,
                                            (JdbcArc)arc,
                                            executionType,
-                                           (JdbcNodeToken)parent );
+                                           (JdbcNodeToken)parent,
+                                           tokenSetMember );
 
     getDialect().newArcTokenInsertAction( token ).execute( engine );
 

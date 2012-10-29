@@ -169,13 +169,19 @@ public interface GraphFactory
    * Generates a new {@link ArcToken} for the given {@link GraphProcess}, pointing
    * to the given {@link Arc}.
    *
-   * @param process The {@link GraphProcess} which the new ArcToken will belong to
-   * @param arc     The {@link Arc} the new ArcToken is being placed on
-   * @param executionType The {@link ExecutionType} represented by this arc token.
-   * @param parent  The {@link NodeToken} which preceded this {@link ArcToken}.
+   * @param process          The {@link GraphProcess} which the new ArcToken will belong to
+   * @param arc              The {@link Arc} the new ArcToken is being placed on
+   * @param executionType    The {@link ExecutionType} represented by this arc token.
+   * @param parent           The {@link NodeToken} which preceded this {@link ArcToken}.
+   * @param isTokenSetMember Flag indicating if the token is a member of a token set
+   *
    * @return A new {@link ArcToken}
    */
-  ArcToken newArcToken (GraphProcess process, Arc arc, ExecutionType executionType, NodeToken parent);
+  ArcToken newArcToken (GraphProcess process,
+                        Arc arc,
+                        ExecutionType executionType,
+                        NodeToken parent,
+                        boolean isTokenSetMember);
 
   /**
    * Creates a new token set.

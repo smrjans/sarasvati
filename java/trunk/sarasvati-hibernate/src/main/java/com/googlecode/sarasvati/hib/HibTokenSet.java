@@ -43,7 +43,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ArcTokenSetMember;
@@ -73,10 +72,6 @@ public class HibTokenSet implements TokenSet
 
   @Column(name="max_member_index", nullable=false)
   protected int maxMemberIndex;
-
-  @Type (type="yes_no")
-  @Column( name="complete", nullable=false)
-  protected boolean complete;
 
   @OneToMany (fetch=FetchType.LAZY,
               mappedBy="tokenSet",
@@ -259,29 +254,6 @@ public class HibTokenSet implements TokenSet
       activeNodeTokens = new HashSet<NodeToken>( ((HibEngine)engine).getActiveNodeTokens( this ) );
     }
     return activeNodeTokens;
-  }
-
-  @Override
-  public boolean isComplete ()
-  {
-    return complete;
-  }
-
-  public void setComplete (final boolean complete)
-  {
-    this.complete = complete;
-  }
-
-  @Override
-  public void markComplete (final Engine engine)
-  {
-    complete = true;
-  }
-
-  @Override
-  public void reactivateForBacktrack (final Engine engine)
-  {
-    complete = false;
   }
 
   @Override

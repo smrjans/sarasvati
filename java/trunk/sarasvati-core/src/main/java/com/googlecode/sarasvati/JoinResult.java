@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati;
 
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -35,7 +36,7 @@ public interface JoinResult
    *
    * @return the action that the join strategy wants to take.
    */
-  JoinAction getJoinAction ();
+  JoinAction getJoinAction();
 
   /**
    * Returns the ArcTokens which were required to complete this join. In the case
@@ -49,7 +50,7 @@ public interface JoinResult
    *
    * @throws IllegalStateException If this is invoked for an action of {@link JoinAction#Nothing}.
    */
-  Collection<ArcToken> getArcTokensCompletingJoin ();
+  Collection<ArcToken> getArcTokensCompletingJoin();
 
   /**
    * If the join action is {@link JoinAction#Merge}, then the arc token in question will
@@ -58,5 +59,10 @@ public interface JoinResult
    * @return The node token into whose history the arc token will be merged into.
    * @throws IllegalStateException If this is invoked for a non-merge join action
    */
-  NodeToken getMergeTarget ();
+  NodeToken getMergeTarget();
+
+  /**
+   * @return The list of tokens which should not be propagated from this point
+   */
+  List<String> getTerminatingTokenSets();
 }

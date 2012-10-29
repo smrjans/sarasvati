@@ -155,11 +155,12 @@ public class HibGraphFactory extends AbstractGraphFactory
   public HibArcToken newArcToken (final GraphProcess process,
                                   final Arc arc,
                                   final ExecutionType executionType,
-                                  final NodeToken previousToken)
+                                  final NodeToken previousToken,
+                                  final boolean tokenSetMember)
   {
     HibGraphProcess hibProcess = (HibGraphProcess)process;
     Hibernate.initialize( hibProcess.getExecutionQueue() );
-    HibArcToken token = new HibArcToken( hibProcess, (HibArc)arc, executionType, (HibNodeToken)previousToken );
+    HibArcToken token = new HibArcToken( hibProcess, (HibArc)arc, executionType, (HibNodeToken)previousToken, tokenSetMember );
     session.save( token );
     return token;
   }
