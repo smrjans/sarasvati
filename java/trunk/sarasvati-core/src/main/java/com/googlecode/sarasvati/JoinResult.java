@@ -64,5 +64,5 @@ public interface JoinResult
   /**
    * @return The list of tokens which should not be propagated from this point
    */
-  List<String> getTerminatingTokenSets();
+  List<TokenSet> getTerminatingTokenSets();
 }

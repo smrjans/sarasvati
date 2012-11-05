@@ -38,9 +38,9 @@ public class HibTokenSetMemberEnv extends AbstractTokenSetMemberEnv
   {
     super( tokenSet.getMaxMemberIndex() );
     this.tokenSet = tokenSet;
-    this.attrs = new Map[ tokenSet.getMaxMemberIndex() ];
+    this.attrs = new Map[ tokenSet.getMaxMemberIndex() + 1];
 
-    for ( int i = 0; i< tokenSet.getMaxMemberIndex(); i++ )
+    for ( int i = 0; i <= tokenSet.getMaxMemberIndex(); i++ )
     {
       attrs[i] = new HashMap<String, HibTokenSetMemberAttribute>();
     }

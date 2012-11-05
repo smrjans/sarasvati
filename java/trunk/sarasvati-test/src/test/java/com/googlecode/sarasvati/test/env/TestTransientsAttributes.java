@@ -35,7 +35,7 @@ public class TestTransientsAttributes extends ExecutionTest
   @Test
   public void testSetGetTokenEnv () throws Exception
   {
-    ensureLoaded( "two-node" );
+    reloadDefinition( "two-node" );
     GraphProcess p = startProcess(  "two-node" );
 
     NodeToken t = getActiveToken( p, "nodeA");
@@ -59,7 +59,7 @@ public class TestTransientsAttributes extends ExecutionTest
   @Test
   public void testSetGetTokenFullEnv () throws Exception
   {
-    Graph graph = ensureLoaded( "two-node" );
+    Graph graph = reloadDefinition( "two-node" );
     GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");
@@ -82,7 +82,7 @@ public class TestTransientsAttributes extends ExecutionTest
   @Test
   public void testSetGetProcessEnv () throws Exception
   {
-    Graph graph = ensureLoaded( "two-node" );
+    Graph graph = reloadDefinition( "two-node" );
     GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");
@@ -109,7 +109,7 @@ public class TestTransientsAttributes extends ExecutionTest
   public void testSetGetTokenEnvBetweenTokens () throws Exception
   {
     TestEnv.setExecutionMode(ExecutionMode.OneSession);
-    Graph graph = ensureLoaded( "two-node" );
+    Graph graph = reloadDefinition( "two-node" );
     GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");
@@ -130,7 +130,7 @@ public class TestTransientsAttributes extends ExecutionTest
   {
     TestEnv.setExecutionMode(ExecutionMode.OneSession);
 
-    Graph graph = ensureLoaded( "two-node" );
+    Graph graph = reloadDefinition( "two-node" );
     GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");
@@ -151,7 +151,7 @@ public class TestTransientsAttributes extends ExecutionTest
   {
     TestEnv.setExecutionMode(ExecutionMode.OneSession);
 
-    Graph graph = ensureLoaded( "two-node" );
+    Graph graph = reloadDefinition( "two-node" );
     GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");

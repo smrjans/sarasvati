@@ -110,7 +110,7 @@ public class NestedProcessesTest extends ExecutionTest
     processCount.set(0);
     TestEnv.getEngine().addGlobalCustomNodeType("nestedTest", NestedTestNode.class);
     TestEnv.getEngine().addExecutionListener(NestedProcessListener.class);
-    ensureLoaded( "nested" );
+    reloadDefinition( "nested" );
 
     MapEnv initialEnv = new MapEnv();
     initialEnv.setAttribute("count", processCount.get());
@@ -431,7 +431,7 @@ public class NestedProcessesTest extends ExecutionTest
     processCount.set(0);
     TestEnv.getEngine().addGlobalCustomNodeType("nestedTest", NestedTestNode.class);
     TestEnv.getEngine().addExecutionListener(NestedProcessListener.class);
-    ensureLoaded( "nested" );
+    reloadDefinition( "nested" );
 
     MapEnv initialEnv = new MapEnv();
     initialEnv.setAttribute("count", processCount.get());

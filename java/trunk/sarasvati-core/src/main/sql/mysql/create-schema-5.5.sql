@@ -224,6 +224,7 @@ create table wf_arc_token (
     arc_id          int             not null references wf_arc,
     parent_token_id int             not null references wf_node_token,
     pending         char(1)         not null,
+    token_set_member char(1)        not null,
     execution_type  int             not null references wf_execution_type,
     create_date     timestamp       not null default current_timestamp,
     complete_date   timestamp       null
@@ -257,7 +258,7 @@ create table wf_token_set (
     process_id      int             not null references wf_process,
     name            varchar(255)    not null,
     max_member_index int            not null,
-    complete        char(1)         not null
+    level           int             not null
 );
 
 create table wf_token_set_attr (

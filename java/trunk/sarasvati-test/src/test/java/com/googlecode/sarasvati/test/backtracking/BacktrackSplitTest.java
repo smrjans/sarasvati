@@ -31,7 +31,7 @@ public class BacktrackSplitTest extends ExecutionTest
 {
   @Test public void testSplit() throws Exception
   {
-    Graph g = ensureLoaded( "backtrack-split" );
+    Graph g = reloadDefinition( "backtrack-split" );
     GraphProcess p = startProcess( g );
 
     NodeToken tokenA = getActiveToken( p, "nodeA" );
@@ -125,7 +125,7 @@ public class BacktrackSplitTest extends ExecutionTest
 
   @Test public void testSplitDeadEnd() throws Exception
   {
-    Graph g = ensureLoaded( "backtrack-split" );
+    Graph g = reloadDefinition( "backtrack-split" );
     GraphProcess p = startProcess( g );
 
     NodeToken tokenA = getActiveToken( p, "nodeA" );

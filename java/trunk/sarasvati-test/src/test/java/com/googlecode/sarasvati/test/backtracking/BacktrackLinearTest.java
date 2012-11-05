@@ -30,7 +30,7 @@ public class BacktrackLinearTest extends ExecutionTest
 {
   @Test public void testLinear () throws Exception
   {
-    Graph g = ensureLoaded( "backtrack-linear" );
+    Graph g = reloadDefinition( "backtrack-linear" );
     GraphProcess p = startProcess( g );
 
     NodeToken tokenA = getActiveToken(p, "nodeA");
@@ -86,7 +86,7 @@ public class BacktrackLinearTest extends ExecutionTest
 
   @Test public void testLinearTwice () throws Exception
   {
-    Graph g = ensureLoaded( "backtrack-twice-linear" );
+    Graph g = reloadDefinition( "backtrack-twice-linear" );
     GraphProcess p = startProcess( g );
 
     String state = "[1 nodeA I F]";

@@ -383,7 +383,7 @@ create table wf_token_set
   process_id       number(20)    NOT NULL REFERENCES wf_process,
   name             varchar2(255) NOT NULL,
   max_member_index int           NOT NULL,
-  complete         char(1)       NOT NULL
+  level            int           NOT NULL
 );
 
 create table wf_token_set_attr

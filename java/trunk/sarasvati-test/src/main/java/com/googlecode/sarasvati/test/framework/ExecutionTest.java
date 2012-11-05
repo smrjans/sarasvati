@@ -111,16 +111,14 @@ public class ExecutionTest
     TestEnv.commit();
   }
 
-  protected Graph ensureLoaded (final String name) throws Exception
+  protected Graph reloadDefinition (final String name) throws Exception
   {
     final File basePath = new File( "src/test/process-definition/" );
     assert basePath.exists();
     final GraphLoader<? extends Graph> loader = TestEnv.getEngine().getLoader();
 
-    //if ( !loader.isLoaded( name ) )
-    {
-      loader.loadDefinition( new XmlLoader(), new File( basePath, name + ".wf.xml" ) );
-    }
+    loader.loadDefinition( new XmlLoader(), new File( basePath, name + ".wf.xml" ) );
+
     TestEnv.commit();
     return TestEnv.getEngine().getRepository().getLatestGraph( name );
   }
@@ -233,6 +231,15 @@ public class ExecutionTest
     }
   }
 
+  public void completeQueuedArcTokens(final GraphProcess p)
+  {
+    TestEnv.getEngine().executeQueuedArcTokens(TestEnv.refreshProcess(p));
+    if (TestEnv.getMode().doCommits())
+    {
+      TestEnv.commit();
+    }
+  }
+
   public GraphProcess completeToken (final GraphProcess p, final String nodeName, final String arcName)
   {
     final NodeToken token = getActiveToken(p, new TokenOnNodePredicate(nodeName));
@@ -274,14 +281,14 @@ public class ExecutionTest
 
   public GraphProcess startProcess(final String graphName) throws Exception
   {
-    ensureLoaded(graphName);
+    reloadDefinition(graphName);
     final GraphProcess p = TestEnv.getEngine().startProcess(graphName);
     return p;
   }
 
   public GraphProcess startProcess(final String graphName, final Env env) throws Exception
   {
-    ensureLoaded(graphName);
+    reloadDefinition(graphName);
     final GraphProcess p = TestEnv.getEngine().startProcess(graphName, env);
     return p;
   }

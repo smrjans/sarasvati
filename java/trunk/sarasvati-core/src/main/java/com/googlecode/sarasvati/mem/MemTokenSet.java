@@ -33,22 +33,26 @@ import com.googlecode.sarasvati.impl.MapEnv;
 
 public class MemTokenSet implements TokenSet
 {
-  protected final GraphProcess process;
-  protected final String name;
-  protected final int maxMemberIndex;
-  protected boolean complete = false;
+  private final GraphProcess process;
+  private final String name;
+  private final int maxMemberIndex;
+  private final int level;
 
-  protected Set<ArcToken> activeArcTokens = new HashSet<ArcToken>();
-  protected Set<NodeToken> activeNodeTokens = new HashSet<NodeToken>();
+  private Set<ArcToken> activeArcTokens = new HashSet<ArcToken>();
+  private Set<NodeToken> activeNodeTokens = new HashSet<NodeToken>();
 
-  protected Env env = new MapEnv();
-  protected TokenSetMemberEnv memberEnv;
+  private Env env = new MapEnv();
+  private TokenSetMemberEnv memberEnv;
 
-  public MemTokenSet (final GraphProcess process, final String name, final int maxMemberIndex)
+  public MemTokenSet (final GraphProcess process,
+                      final String name,
+                      final int maxMemberIndex,
+                      final int level)
   {
     this.process = process;
     this.name = name;
     this.maxMemberIndex = maxMemberIndex;
+    this.level = level;
   }
 
   @Override
@@ -79,6 +83,15 @@ public class MemTokenSet implements TokenSet
   public int getMaxMemberIndex()
   {
     return maxMemberIndex;
+  }
+
+  /**
+   * @return the level
+   */
+  @Override
+  public int getLevel()
+  {
+    return level;
   }
 
   @Override

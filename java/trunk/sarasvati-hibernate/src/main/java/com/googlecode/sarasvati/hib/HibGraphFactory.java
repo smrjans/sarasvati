@@ -276,9 +276,10 @@ public class HibGraphFactory extends AbstractGraphFactory
   @Override
   public TokenSet newTokenSet (final GraphProcess process,
                                final String name,
-                               final int maxMemberIndex)
+                               final int maxMemberIndex,
+                               final int level)
   {
-    HibTokenSet tokenSet = new HibTokenSet( (HibGraphProcess)process, name, maxMemberIndex );
+    HibTokenSet tokenSet = new HibTokenSet( (HibGraphProcess)process, name, maxMemberIndex, level );
     session.save( tokenSet );
     return tokenSet;
   }

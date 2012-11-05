@@ -31,7 +31,7 @@ public class BacktrackUnevenTreesTest extends ExecutionTest
 {
   @Test public void testReject() throws Exception
   {
-    Graph g = ensureLoaded( "backtrack-uneven-trees" );
+    Graph g = reloadDefinition( "backtrack-uneven-trees" );
     GraphProcess p = startProcess( g );
 
     NodeToken tokenA = getActiveToken( p, "nodeA" );

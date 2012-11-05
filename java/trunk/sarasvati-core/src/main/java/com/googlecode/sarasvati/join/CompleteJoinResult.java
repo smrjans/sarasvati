@@ -26,6 +26,7 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.JoinAction;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.TokenSet;
 
 /**
  * Represents a complete join result, encapsulating the arc tokens
@@ -36,7 +37,7 @@ import com.googlecode.sarasvati.NodeToken;
 public final class CompleteJoinResult implements JoinResult
 {
   private final Collection<ArcToken> tokens;
-  private final List<String> terminatingTokenSets;
+  private final List<TokenSet> terminatingTokenSets;
 
   public CompleteJoinResult (final ArcToken token)
   {
@@ -48,19 +49,19 @@ public final class CompleteJoinResult implements JoinResult
     this(tokens, emptyList());
   }
 
-  public CompleteJoinResult (final Collection<ArcToken> tokens, final String terminatingTokenSet)
+  public CompleteJoinResult (final Collection<ArcToken> tokens, final TokenSet terminatingTokenSet)
   {
     this(tokens, Collections.singletonList(terminatingTokenSet));
   }
 
-  public CompleteJoinResult (final Collection<ArcToken> tokens, final List<String> terminatingTokenSets)
+  public CompleteJoinResult (final Collection<ArcToken> tokens, final List<TokenSet> terminatingTokenSets)
   {
     this.tokens = tokens;
     this.terminatingTokenSets = terminatingTokenSets;
   }
 
   // Java type inference isn't good enough for this to be in-line, yet
-  private static List<String> emptyList()
+  private static List<TokenSet> emptyList()
   {
     return Collections.emptyList();
   }
@@ -95,7 +96,7 @@ public final class CompleteJoinResult implements JoinResult
    * @see com.googlecode.sarasvati.JoinResult#getTerminatingTokenSets()
    */
   @Override
-  public List<String> getTerminatingTokenSets()
+  public List<TokenSet> getTerminatingTokenSets()
   {
     return terminatingTokenSets;
   }

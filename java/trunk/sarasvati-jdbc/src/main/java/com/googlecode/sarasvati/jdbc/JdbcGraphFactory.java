@@ -270,7 +270,8 @@ public class JdbcGraphFactory extends AbstractGraphFactory
   @Override
   public TokenSet newTokenSet (final GraphProcess process,
                                final String name,
-                               final int maxMemberIndex)
+                               final int maxMemberIndex,
+                               final int level)
   {
     // TODO Auto-generated method stub
     return null;

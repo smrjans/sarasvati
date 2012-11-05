@@ -73,6 +73,9 @@ public class HibTokenSet implements TokenSet
   @Column(name="max_member_index", nullable=false)
   protected int maxMemberIndex;
 
+  @Column(name="level", nullable=false)
+  protected int level;
+
   @OneToMany (fetch=FetchType.LAZY,
               mappedBy="tokenSet",
               orphanRemoval=true,
@@ -121,11 +124,13 @@ public class HibTokenSet implements TokenSet
 
   public HibTokenSet (final HibGraphProcess process,
                       final String name,
-                      final int maxMemberIndex)
+                      final int maxMemberIndex,
+                      final int level)
   {
     this.process = process;
     this.name = name;
     this.maxMemberIndex = maxMemberIndex;
+    this.level = level;
     this.attrMap = new HashMap<String, String>();
     this.memberAttributes = new HashSet<HibTokenSetMemberAttribute>();
     this.activeArcTokens = new HashSet<ArcToken>();
@@ -175,6 +180,23 @@ public class HibTokenSet implements TokenSet
     this.maxMemberIndex = maxMemberIndex;
   }
 
+  /**
+   * @return the level
+   */
+  @Override
+  public int getLevel()
+  {
+    return level;
+  }
+
+  /**
+   * @param level the level to set
+   */
+  public void setLevel(final int level)
+  {
+    this.level = level;
+  }
+
   public Map<String, String> getAttrMap ()
   {
     return attrMap;
@@ -184,7 +206,6 @@ public class HibTokenSet implements TokenSet
   {
     this.attrMap = attrMap;
   }
-
 
   public Set<ArcTokenSetMember> getArcTokenSetMembers ()
   {

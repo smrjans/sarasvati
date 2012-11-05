@@ -142,7 +142,7 @@ public class MemArcToken implements ArcToken
   @Override
   public boolean isTokenSetMember()
   {
-    return tokenSetMemberships.isEmpty();
+    return !tokenSetMemberships.isEmpty();
   }
 
   @Override

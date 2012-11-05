@@ -189,10 +189,11 @@ public interface GraphFactory
    * @param process The process that the token set belongs to
    * @param name The name given to the token set
    * @param maxMemberIndex The maximum member index (which should equals the number of initial members in the set)
+   * @param level The token set level
    *
    * @return The newly created token set
    */
-  TokenSet newTokenSet (GraphProcess process, String name, int maxMemberIndex);
+  TokenSet newTokenSet (GraphProcess process, String name, int maxMemberIndex, int level);
 
   /**
    * Creates a new membership of a token in a token set.

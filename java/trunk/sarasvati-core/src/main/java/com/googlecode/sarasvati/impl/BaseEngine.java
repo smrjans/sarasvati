@@ -45,6 +45,7 @@ import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.SarasvatiException;
 import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.TokenSetMember;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.env.TokenSetMemberEnv;
 import com.googlecode.sarasvati.event.ArcTokenEvent;
@@ -295,7 +296,7 @@ public abstract class BaseEngine implements Engine
   private void completeExecuteArc (final GraphProcess process,
                                    final Node targetNode,
                                    final Collection<ArcToken> tokens,
-                                   final List<String> terminatingTokenSets)
+                                   final List<TokenSet> terminatingTokenSets)
   {
     final NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, new ArrayList<ArcToken>( tokens ) );
     process.addNodeToken( nodeToken );
@@ -308,7 +309,7 @@ public abstract class BaseEngine implements Engine
       for ( final ArcTokenSetMember setMember : token.getTokenSetMemberships() )
       {
         final TokenSet tokenSet = setMember.getTokenSet();
-        if ( terminatingTokenSets.contains(tokenSet.getName()) && !tokenSets.contains( tokenSet ) )
+        if ( !terminatingTokenSets.contains(tokenSet) && !tokenSets.contains( tokenSet ) )
         {
           tokenSets.add( tokenSet );
           final NodeTokenSetMember newSetMember = getFactory().newNodeTokenSetMember( tokenSet, nodeToken, setMember.getMemberIndex() );
@@ -433,10 +434,15 @@ public abstract class BaseEngine implements Engine
 
     completeNodeToken( process, token, outArcs, arcName );
 
-
     if ( !outArcs.isEmpty() )
     {
-      final TokenSet tokenSet = getFactory().newTokenSet( process, tokenSetName, numberOfTokens );
+      int level = 0;
+
+      for (final TokenSetMember tokenSetMember : token.getTokenSetMemberships())
+      {
+       level = Math.max(level, tokenSetMember.getTokenSet().getLevel());
+      }
+      final TokenSet tokenSet = getFactory().newTokenSet( process, tokenSetName, numberOfTokens - 1, level + 1 );
 
       if ( initialEnv != null )
       {

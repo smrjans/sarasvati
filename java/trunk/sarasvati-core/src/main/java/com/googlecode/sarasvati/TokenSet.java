@@ -88,6 +88,16 @@ public interface TokenSet
   int getMaxMemberIndex ();
 
   /**
+   * Returns the level of the token set. A token set in isolation will
+   * have a level of 1. A token set created inside another token set
+   * (or sets) will have level of 1 greater than maximum level of the
+   * containing token sets.
+   *
+   * @return The token set level.
+   */
+  int getLevel();
+
+  /**
    * A token set provides an environment into which attributes can be stored.
    * This environment is shared across all tokens which are members of the
    * environment.

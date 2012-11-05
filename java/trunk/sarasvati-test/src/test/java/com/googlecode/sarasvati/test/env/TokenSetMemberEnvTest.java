@@ -17,7 +17,7 @@ public class TokenSetMemberEnvTest
   @Test
   public void testHibTokenSetMemberEnv()
   {
-    final HibTokenSet tokenSet = new HibTokenSet(null, "testTokenSet", 3);
+    final HibTokenSet tokenSet = new HibTokenSet(null, "testTokenSet", 3, 1);
     final HibTokenSetMemberEnv env = new HibTokenSetMemberEnv(tokenSet);
     testEnv(env);
   }
@@ -25,7 +25,7 @@ public class TokenSetMemberEnvTest
   @Test
   public void testMemTokenSetMemberEnv()
   {
-    final MemTokenSet tokenSet = new MemTokenSet(null, "testTokenSet", 3);
+    final MemTokenSet tokenSet = new MemTokenSet(null, "testTokenSet", 3, 1);
     final MemTokenSetMemberEnv env = new MemTokenSetMemberEnv(tokenSet);
     testEnv(env);
   }

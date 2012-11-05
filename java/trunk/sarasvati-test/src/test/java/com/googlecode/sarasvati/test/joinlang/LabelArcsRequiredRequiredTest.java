@@ -38,7 +38,7 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
     rep.registerPredicate( "DefaultRequired", UnitTestPredicates.ALWAYS_TRUE );
     rep.registerPredicate( "FooRequired", UnitTestPredicates.ALWAYS_FALSE );
 
-    Graph g = ensureLoaded( TEST_GRAPH_NAME );
+    Graph g = reloadDefinition( TEST_GRAPH_NAME );
     GraphProcess p = startProcess( g );
 
     String state =
@@ -120,7 +120,7 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
     rep.registerPredicate( "DefaultRequired", UnitTestPredicates.ALWAYS_TRUE );
     rep.registerPredicate( "FooRequired", UnitTestPredicates.ALWAYS_TRUE );
 
-    Graph g = ensureLoaded( TEST_GRAPH_NAME );
+    Graph g = reloadDefinition( TEST_GRAPH_NAME );
     GraphProcess p = startProcess( g );
 
     String state =
@@ -200,7 +200,7 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
     rep.registerPredicate( "DefaultRequired", UnitTestPredicates.ALWAYS_TRUE );
     rep.registerPredicate( "FooRequired", UnitTestPredicates.ALWAYS_FALSE );
 
-    Graph g = ensureLoaded( TEST_GRAPH_NAME );
+    Graph g = reloadDefinition( TEST_GRAPH_NAME );
     GraphProcess p = startProcess( g );
 
     String state =
@@ -280,7 +280,7 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
     rep.registerPredicate( "DefaultRequired", UnitTestPredicates.ALWAYS_TRUE );
     rep.registerPredicate( "FooRequired", UnitTestPredicates.ALWAYS_FALSE );
 
-    Graph g = ensureLoaded( TEST_GRAPH_NAME );
+    Graph g = reloadDefinition( TEST_GRAPH_NAME );
     GraphProcess p = startProcess( g );
 
     String state =

@@ -36,7 +36,7 @@ public class TokenSetRequiredTest extends ExecutionTest
 
   @Test public void testOne() throws Exception
   {
-    Graph g = ensureLoaded( TEST_GRAPH1_NAME );
+    Graph g = reloadDefinition( TEST_GRAPH1_NAME );
     GraphProcess p = startProcess( g );
 
     String state =
@@ -175,7 +175,7 @@ public class TokenSetRequiredTest extends ExecutionTest
 
   @Test public void testTwo() throws Exception
   {
-    Graph g = ensureLoaded( TEST_GRAPH2_NAME );
+    Graph g = reloadDefinition( TEST_GRAPH2_NAME );
     GraphProcess p = startProcess( g );
 
     String state =

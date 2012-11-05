@@ -27,6 +27,7 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.JoinAction;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.TokenSet;
 
 public final class MergeJoinResult implements JoinResult
 {
@@ -80,7 +81,7 @@ public final class MergeJoinResult implements JoinResult
    * @see com.googlecode.sarasvati.JoinResult#getTerminatingTokenSets()
    */
   @Override
-  public List<String> getTerminatingTokenSets()
+  public List<TokenSet> getTerminatingTokenSets()
   {
     throw new IllegalStateException( "getTerminatingTokenSets should never be called for a JoinResult with an action of Merge" );
   }

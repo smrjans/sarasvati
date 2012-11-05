@@ -466,7 +466,7 @@ IF NOT EXISTS (SELECT name FROM sysobjects WHERE name='wf_token_set')
         process_id       bigint           NOT NULL REFERENCES wf_process,
         name             varchar(255)     NOT NULL,
         max_member_index int              NOT NULL,
-        complete         char(1)          NOT NULL
+        level            int              NOT NULL
       ) with identity_gap = 100
     ")
   END

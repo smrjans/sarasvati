@@ -141,7 +141,7 @@ public class TraversalTest extends ExecutionTest
   
   public NodeToken executeTraversal () throws Exception
   {
-    Graph g = ensureLoaded( "traversal" );
+    Graph g = reloadDefinition( "traversal" );
     GraphProcess p = startProcess( g );
 
     NodeToken tokenA = null;

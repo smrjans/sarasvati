@@ -25,15 +25,11 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.JoinAction;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.TokenSet;
 
-public final class IncompleteJoinResult implements JoinResult
+public enum IncompleteJoinResult implements JoinResult
 {
-  public static final JoinResult INSTANCE = new IncompleteJoinResult();
-
-  private IncompleteJoinResult ()
-  {
-    /* Don't allow this class to be used other than via the INSTANCE */
-  }
+  INSTANCE;
 
   /**
    * Always returns {@link JoinAction#Nothing}
@@ -73,7 +69,7 @@ public final class IncompleteJoinResult implements JoinResult
    * @see com.googlecode.sarasvati.JoinResult#getTerminatingTokenSets()
    */
   @Override
-  public List<String> getTerminatingTokenSets()
+  public List<TokenSet> getTerminatingTokenSets()
   {
     throw new IllegalStateException( "getTerminatingTokenSets should never be called for a JoinResult with an action of Nothing" );
   }

@@ -199,9 +199,10 @@ public class MemGraphFactory extends AbstractGraphFactory
   @Override
   public MemTokenSet newTokenSet (final GraphProcess process,
                                   final String name,
-                                  final int maxMemberIndex)
+                                  final int maxMemberIndex,
+                                  final int level)
   {
-    return new MemTokenSet( process, name, maxMemberIndex );
+    return new MemTokenSet( process, name, maxMemberIndex, level );
   }
 
   @Override

@@ -33,7 +33,7 @@ public class BacktrackJoinTest extends ExecutionTest
 {
   @Test public void testJoin() throws Exception
   {
-    Graph g = ensureLoaded( "backtrack-join" );
+    Graph g = reloadDefinition( "backtrack-join" );
     GraphProcess p = startProcess( g );
 
     Iterator<NodeToken> iter = p.getActiveNodeTokens().iterator();
@@ -100,7 +100,7 @@ public class BacktrackJoinTest extends ExecutionTest
 
   @Test public void testJoin2() throws Exception
   {
-    Graph g = ensureLoaded( "backtrack-join" );
+    Graph g = reloadDefinition( "backtrack-join" );
     GraphProcess p = startProcess( g );
 
     Iterator<NodeToken> iter = p.getActiveNodeTokens().iterator();

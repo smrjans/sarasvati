@@ -36,7 +36,7 @@ public class ExecutionErrorsTest extends ExecutionTest
   @Test(expected=SarasvatiException.class)
   public void testStartWithGraphWithNoStartNode() throws Exception
   {
-    final Graph graph = ensureLoaded("no-start-nodes");
+    final Graph graph = reloadDefinition("no-start-nodes");
     TestEnv.getEngine().startProcess(graph);
   }
 }

@@ -38,7 +38,7 @@ public class ProcessPrinter
 
   public static String toString(final ArcToken token)
   {
-    return "[" + SvUtil.getShortClassName(token.getClass()) +
+    return "[" + SvUtil.getShortClassName(token) +
            " execType=" + token.getExecutionType() +
            " pending=" + token.isPending() +
            " complete=" + token.isComplete() +

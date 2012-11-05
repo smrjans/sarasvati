@@ -306,11 +306,11 @@ ALTER TABLE wf_token_attr
 
 create table wf_token_set
 (
-  id               int  NOT NULL PRIMARY KEY,
+  id               int     NOT NULL PRIMARY KEY,
   process_id       int     NOT NULL REFERENCES wf_process,
   name             text    NOT NULL,
   max_member_index int     NOT NULL,
-  complete         char(1) NOT NULL
+  level            int     NOT NULL
 );
 
 create table wf_token_set_attr
@@ -325,7 +325,7 @@ ALTER TABLE wf_token_set_attr
 
 create table wf_token_set_arcmem
 (
-  id            int  NOT NULL PRIMARY KEY,
+  id            int     NOT NULL PRIMARY KEY,
   token_set_id  int     NOT NULL REFERENCES wf_token_set,
   token_id      int     NOT NULL REFERENCES wf_arc_token,
   member_index  int     NOT NULL
@@ -336,7 +336,7 @@ create index wf_token_set_arcmem_ts_idx on wf_token_set_arcmem(token_set_id);
 
 create table wf_token_set_nodemem
 (
-  id            int  NOT NULL PRIMARY KEY,
+  id            int     NOT NULL PRIMARY KEY,
   token_set_id  int     NOT NULL REFERENCES wf_token_set,
   token_id      int     NOT NULL REFERENCES wf_node_token,
   member_index  int     NOT NULL
@@ -347,7 +347,7 @@ create index wf_token_set_nodemem_ts_idx on wf_token_set_nodemem(token_set_id);
 
 create table wf_token_set_member_attr
 (
-  id            int NOT NULL PRIMARY KEY,
+  id            int    NOT NULL PRIMARY KEY,
   token_set_id  int    NOT NULL REFERENCES wf_token_set,
   member_index  int    NOT NULL,
   name          text   NOT NULL,

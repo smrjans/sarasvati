@@ -28,8 +28,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.SarasvatiException;
 import com.googlecode.sarasvati.Token;
 import com.googlecode.sarasvati.TokenSet;
@@ -106,26 +104,6 @@ public class SvUtil
     return buf.toString();
   }
 
-  public static TokenSet getTokenSet (final ArcToken token)
-  {
-    String tokenSetName = token.getArc().getEndNode().getJoinParam();
-
-    // If a token set name is specified, wait for that token set
-    if ( !SvUtil.isBlankOrNull( tokenSetName ) )
-    {
-      return SvUtil.getTokenSet( token, tokenSetName );
-    }
-
-    // Otherwise, wait on the first token set that the token is a member of
-    for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
-    {
-      final TokenSet tokenSet = setMember.getTokenSet();
-      return tokenSet;
-    }
-
-    return null;
-  }
-
   public static TokenSet getTokenSet (final Token token, final String name)
   {
     for ( TokenSetMember setMember : token.getTokenSetMemberships() )
@@ -143,6 +121,18 @@ public class SvUtil
     for ( TokenSetMember setMember : token.getTokenSetMemberships() )
     {
       if ( SvUtil.equals( name, setMember.getTokenSet().getName() ) )
+      {
+        return setMember;
+      }
+    }
+    return null;
+  }
+
+  public static TokenSetMember getTokenSetMember (final Token token, final TokenSet tokenSet)
+  {
+    for ( TokenSetMember setMember : token.getTokenSetMemberships() )
+    {
+      if ( SvUtil.equals( tokenSet, setMember.getTokenSet() ) )
       {
         return setMember;
       }

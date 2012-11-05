@@ -31,7 +31,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
 {
   @Test public void testSplitJoin() throws Exception
   {
-    Graph g = ensureLoaded( "backtrack-split-join" );
+    Graph g = reloadDefinition( "backtrack-split-join" );
     GraphProcess p = startProcess( g );
 
     NodeToken tokenA = getActiveToken(p, "nodeA");
@@ -246,7 +246,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
 
   @Test public void testDiamond() throws Exception
   {
-    Graph g = ensureLoaded( "backtrack-diamond" );
+    Graph g = reloadDefinition( "backtrack-diamond" );
     GraphProcess p = startProcess( g );
 
     NodeToken tokenA = getActiveToken( p, "nodeA" );
@@ -348,7 +348,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
 
   @Test public void testDiamondExtended() throws Exception
   {
-    Graph g = ensureLoaded( "backtrack-diamond" );
+    Graph g = reloadDefinition( "backtrack-diamond" );
     GraphProcess p = startProcess( g );
 
     NodeToken tokenA = getActiveToken( p, "nodeA" );
@@ -560,7 +560,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
 
   @Test public void testDiamond2() throws Exception
   {
-    Graph g = ensureLoaded( "backtrack-diamond2" );
+    Graph g = reloadDefinition( "backtrack-diamond2" );
     GraphProcess p = startProcess( g );
 
     NodeToken tokenA = getActiveToken( p, "nodeA" );

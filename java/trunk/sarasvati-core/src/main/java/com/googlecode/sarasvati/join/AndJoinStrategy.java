@@ -19,7 +19,6 @@
 package com.googlecode.sarasvati.join;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
@@ -28,8 +27,8 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
-import com.googlecode.sarasvati.TokenSet;
-import com.googlecode.sarasvati.util.SvUtil;
+import com.googlecode.sarasvati.SarasvatiException;
+import com.googlecode.sarasvati.TokenSetMember;
 
 /**
  * Implements a join strategy in which nodes will wait for arc tokens to be
@@ -45,63 +44,56 @@ public class AndJoinStrategy implements JoinStrategy
   }
 
   /**
-   * Returns the set of tokens to consider when joining
+   * Returns the filter to use when joining
    *
    * @param engine Engine may be used by subclass to return different set of nodes
    * @param arcToken The arc token being joined
    *
-   * @return The set of tokens to consider when joining
+   * @return The filter to use when joining
    */
-  protected Collection<ArcToken> getActiveTokens(final Engine engine, final ArcToken arcToken)
+  protected ArcTokenFilter getTokenFilter(final Engine engine, final ArcToken arcToken)
   {
     if (!arcToken.isTokenSetMember())
     {
-      return arcToken.getProcess().getActiveArcTokens();
+      return NoTokenMembershipsFilter.INSTANCE;
     }
 
-    final TokenSet ts = SvUtil.getTokenSet(arcToken);
-    if (ts != null)
+    TokenSetMember tokenSetMember = null;
+    for (final TokenSetMember next : arcToken.getTokenSetMemberships())
     {
-      int index = SvUtil.getTokenSetMember(arcToken, ts.getName()).getMemberIndex();
-      Collection<ArcToken> tokens = ts.getActiveArcTokens(engine);
-      List<ArcToken> result = new ArrayList<ArcToken>(tokens.size());
-      for (final ArcToken t : tokens)
+      if (tokenSetMember == null || tokenSetMember.getTokenSet().getLevel() < next.getTokenSet().getLevel())
       {
-        if (SvUtil.getTokenSetMember(t, ts.getName()).getMemberIndex() == index)
-        {
-          result.add(t);
-        }
+        tokenSetMember = next;
       }
-      return result;
     }
 
-    final Collection<ArcToken> tokens = arcToken.getProcess().getActiveArcTokens();
-    final List<ArcToken> result = new ArrayList<ArcToken>(tokens.size());
-    for (final ArcToken t : tokens)
+    if (tokenSetMember == null)
     {
-      if (t.getTokenSetMemberships().isEmpty())
-      {
-        result.add(t);
-      }
+      throw new SarasvatiException("Arc Token " + arcToken + " was marking as having token set memberships, but didn't.");
     }
-    return result;
+
+    return new TokenSetGroupFilter(tokenSetMember.getTokenSet(), tokenSetMember.getMemberIndex());
   }
 
   @Override
   public JoinResult performJoin(final Engine engine, final ArcToken token)
   {
-    final GraphProcess process = token.getProcess();
-    final List<Arc> joinArcs = getJoiningArcs(process, token);
+    final ArcTokenFilter filter = getTokenFilter(engine, token);
+    return performJoin(token, filter);
+  }
+
+  public JoinResult performJoin(final ArcToken initiatingToken,
+                                final ArcTokenFilter filter)
+  {
+    final List<Arc> joinArcs = getJoiningArcs(initiatingToken.getProcess(), initiatingToken);
 
     final ArrayList<ArcToken> tokens = new ArrayList<ArcToken>(joinArcs.size());
 
-    final Collection<ArcToken> activeTokens = getActiveTokens(engine, token);
-
     for (final Arc arc : joinArcs)
     {
-      for (final ArcToken arcToken : activeTokens)
+      for (final ArcToken arcToken : initiatingToken.getProcess().getActiveArcTokens())
       {
-        if (arcToken.getArc().equals(arc))
+        if (arcToken.getArc().equals(arc) && filter.isValidForJoin(arcToken))
         {
           tokens.add(arcToken);
           break;

@@ -40,9 +40,9 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   public AbstractTokenSetMemberEnv (final int maxMemberIndex)
   {
     this.maxMemberIndex = maxMemberIndex;
-    this.transientAttrs = new Map[ maxMemberIndex ];
+    this.transientAttrs = new Map[ maxMemberIndex + 1 ];
 
-    for ( int i = 0; i< maxMemberIndex; i++ )
+    for ( int i = 0; i <= maxMemberIndex; i++ )
     {
       transientAttrs[i] = new HashMap<String, Object>();
     }
@@ -80,7 +80,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   {
     int idx = 0;
     Iterator<?> iter = values.iterator();
-    while ( iter.hasNext() && idx < maxMemberIndex )
+    while ( iter.hasNext() && idx <= maxMemberIndex )
     {
       setAttribute( idx, name, iter.next() );
       idx++;
@@ -93,7 +93,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   @Override
   public void removeAttribute (final String name)
   {
-    for ( int index = 0; index < maxMemberIndex; index++ )
+    for ( int index = 0; index <= maxMemberIndex; index++ )
     {
       removeAttribute( index, name );
     }
@@ -165,7 +165,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   @Override
   public void removeTransientAttribute (final String name)
   {
-    for ( int index = 0; index < maxMemberIndex; index++ )
+    for ( int index = 0; index <= maxMemberIndex; index++ )
     {
       transientAttrs[index].remove( name );
     }

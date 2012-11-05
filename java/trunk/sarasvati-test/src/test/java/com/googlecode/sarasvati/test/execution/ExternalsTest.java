@@ -133,8 +133,8 @@ public class ExternalsTest extends ExecutionTest
     processCount.set(0);
     TestEnv.getEngine().addGlobalCustomNodeType("externalTest", ExternalTestNode.class);
 
-    ensureLoaded( "external" );
-    Graph g = ensureLoaded( "external-user" );
+    reloadDefinition( "external" );
+    Graph g = reloadDefinition( "external-user" );
 
     MapEnv initialEnv = new MapEnv();
     initialEnv.setAttribute("count", processCount.get());

@@ -19,14 +19,15 @@
 package com.googlecode.sarasvati.join;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.JoinAction;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
-import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.util.SvUtil;
 
@@ -47,9 +48,51 @@ import com.googlecode.sarasvati.util.SvUtil;
  */
 public class TokenSetJoinStrategy implements JoinStrategy
 {
-  public TokenSet getTokenSet (final ArcToken token)
+  public List<TokenSet> getTokenSet (final ArcToken token)
   {
-    return SvUtil.getTokenSet(token);
+    final List<TokenSet> sets = new ArrayList<TokenSet>();
+    String tokenSetName = token.getArc().getEndNode().getJoinParam();
+
+    TokenSet ts = null;
+
+    // If a token set name is specified, wait for that token set
+    if ( !SvUtil.isBlankOrNull( tokenSetName ) )
+    {
+      ts = SvUtil.getTokenSet( token, tokenSetName );
+    }
+
+    if (ts != null)
+    {
+      sets.add(ts);
+
+      for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
+      {
+        final TokenSet tokenSet = setMember.getTokenSet();
+        if (ts.getLevel() < tokenSet.getLevel())
+        {
+          sets.add(tokenSet);
+        }
+      }
+    }
+    else
+    {
+      // Otherwise, wait on the lowest token set that the token is a member of
+      for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
+      {
+        final TokenSet tokenSet = setMember.getTokenSet();
+        if (ts == null)
+        {
+          ts = tokenSet;
+        }
+        else if (ts.getLevel() < tokenSet.getLevel())
+        {
+          ts = tokenSet;
+        }
+      }
+      sets.add(ts);
+    }
+
+    return sets;
   }
 
   /**
@@ -72,26 +115,27 @@ public class TokenSetJoinStrategy implements JoinStrategy
   @Override
   public JoinResult performJoin (final Engine engine, final ArcToken token)
   {
-    TokenSet tokenSet = getTokenSet( token );
+    final List<TokenSet> tokenSets = getTokenSet( token );
+    final List<ArcToken> resultTokens = new ArrayList<ArcToken>();
 
-    if ( tokenSet == null )
+    final AndJoinStrategy strategy = new AndJoinStrategy();
+
+    for (final TokenSet tokenSet : tokenSets)
     {
-      return performFallbackJoin( engine, token.getProcess(), token );
-    }
-
-    Node targetNode = token.getArc().getEndNode();
-
-    Collection<ArcToken> activeMembers = tokenSet.getActiveArcTokens( engine );
-
-    for ( ArcToken setMember : activeMembers )
-    {
-      if ( !setMember.getArc().getEndNode().equals( targetNode ) )
+      for (int idx=0; idx <= tokenSet.getMaxMemberIndex(); idx++)
       {
-        return IncompleteJoinResult.INSTANCE;
+        JoinResult result = strategy.performJoin(token, new TokenSetGroupFilter(tokenSet, idx));
+        if (result.getJoinAction() == JoinAction.Complete)
+        {
+          resultTokens.addAll(result.getArcTokensCompletingJoin());
+        }
+        else
+        {
+          return IncompleteJoinResult.INSTANCE;
+        }
       }
     }
 
-    ArrayList<ArcToken> result = new ArrayList<ArcToken>( activeMembers );
-    return new CompleteJoinResult( result, tokenSet.getName() );
+    return new CompleteJoinResult( resultTokens, tokenSets );
   }
 }
