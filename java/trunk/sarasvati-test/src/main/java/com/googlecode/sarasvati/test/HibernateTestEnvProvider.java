@@ -36,6 +36,7 @@ public class HibernateTestEnvProvider implements TestEnvProvider
     config.setProperty( "hibernate.connection.password", password );
     config.setProperty( "hibernate.connection.driver_class", driver );
     config.setProperty( "hibernate.connection.url", url );
+    config.setProperty( "hibernate.show_sql", "true" );
 
     final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
     doc.appendChild(doc.createElement("hibernate-configuration"));

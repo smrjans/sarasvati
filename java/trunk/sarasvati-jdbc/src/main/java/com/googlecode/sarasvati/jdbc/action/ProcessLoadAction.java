@@ -44,13 +44,13 @@ public class ProcessLoadAction extends AbstractLoadAction<JdbcGraphProcess>
                             final long processId,
                             final JdbcEngine engine)
   {
-    super( sql, false );
+    super( sql, true );
     this.processId = processId;
     this.engine = engine;
   }
 
   @Override
-  protected JdbcGraphProcess loadObject (ResultSet row) throws SQLException
+  protected JdbcGraphProcess loadObject (final ResultSet row) throws SQLException
   {
     JdbcGraph graph    = engine.getRepository().getGraph( row.getLong( 1 ) );
 
@@ -63,7 +63,7 @@ public class ProcessLoadAction extends AbstractLoadAction<JdbcGraphProcess>
   }
 
   @Override
-  protected void setParameters (PreparedStatement stmt) throws SQLException
+  protected void setParameters (final PreparedStatement stmt) throws SQLException
   {
     stmt.setLong( 1, processId );
   }

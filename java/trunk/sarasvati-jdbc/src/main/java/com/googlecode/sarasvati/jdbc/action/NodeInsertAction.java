@@ -32,7 +32,7 @@ public class NodeInsertAction extends AbstractInsertAction<JdbcNode>
   }
 
   @Override
-  protected void setParameters (PreparedStatement stmt) throws SQLException
+  protected void setParameters (final PreparedStatement stmt) throws SQLException
   {
     stmt.setLong( 1, value.getGraph().getId() );
     stmt.setString( 2, value.getName() );
@@ -40,5 +40,6 @@ public class NodeInsertAction extends AbstractInsertAction<JdbcNode>
     stmt.setString( 4, value.getGuard() );
     stmt.setString( 5, value.isStart() ? "Y" : "N" );
     stmt.setInt( 6, value.getJoinType().ordinal() );
+    stmt.setString( 7, value.getJoinParam() );
   }
 }
