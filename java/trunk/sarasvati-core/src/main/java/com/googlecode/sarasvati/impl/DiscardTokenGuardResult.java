@@ -6,14 +6,9 @@ package com.googlecode.sarasvati.impl;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.GuardResult;
 
-public final class DiscardTokenGuardResult implements GuardResult
+public enum DiscardTokenGuardResult implements GuardResult
 {
-  public static final GuardResult INSTANCE = new DiscardTokenGuardResult();
-
-  private DiscardTokenGuardResult ()
-  {
-    /* Don't allow this class to be used other than via the INSTANCE */
-  }
+  INSTANCE;
 
   @Override
   public String getExitArcForSkip()

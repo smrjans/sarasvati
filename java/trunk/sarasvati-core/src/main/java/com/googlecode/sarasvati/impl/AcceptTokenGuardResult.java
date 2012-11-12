@@ -21,14 +21,9 @@ package com.googlecode.sarasvati.impl;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.GuardResult;
 
-public final class AcceptTokenGuardResult implements GuardResult
+public enum AcceptTokenGuardResult implements GuardResult
 {
-  public static final GuardResult INSTANCE = new AcceptTokenGuardResult();
-
-  private AcceptTokenGuardResult ()
-  {
-    /* Don't allow this class to be used other than via the INSTANCE */
-  }
+  INSTANCE;
 
   @Override
   public String getExitArcForSkip()
