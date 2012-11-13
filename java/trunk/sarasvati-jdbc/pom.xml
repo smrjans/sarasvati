@@ -9,6 +9,19 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>sarasvati-jdbc</artifactId>
 	<name>sarasvati-jdbc</name>
+  
+   <build>
+     <plugins>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-deploy-plugin</artifactId>
+         <configuration>
+           <skip>true</skip>
+         </configuration>
+       </plugin>
+     </plugins>
+   </build>
+	
   <dependencies>
 
     <dependency>
@@ -17,6 +30,6 @@
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
-
+    
   </dependencies>  
 </project>

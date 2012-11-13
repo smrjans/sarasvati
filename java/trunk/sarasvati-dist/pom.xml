@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sarasvati-dist</artifactId>
   <name>sarasvati-dist</name>
-    
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -84,6 +84,14 @@
           <descriptors>          
             <descriptor>src/main/assemble/assembly.xml</descriptor>
           </descriptors>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
         </configuration>
       </plugin>
       

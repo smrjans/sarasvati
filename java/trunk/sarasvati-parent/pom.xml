@@ -29,7 +29,7 @@
   </developers>
   <scm>    
     <connection>scm:svn:http://sarasvati.googlecode.com/svn/java/trunk/</connection>
-    <developerConnection>scm:svn:https://sarasvati.googlecode.com/svn/trunk/</developerConnection>
+    <developerConnection>scm:svn:https://sarasvati.googlecode.com/svn/java/trunk/</developerConnection>
     <url>http://sarasvati.googlecode.com/svn/trunk/</url>
   </scm>
     
