@@ -157,6 +157,15 @@
         </plugin>   
       </plugins>      
     </pluginManagement>         
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <autoVersionSubModules>true</autoVersionSubModules>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
   
   <modules>
