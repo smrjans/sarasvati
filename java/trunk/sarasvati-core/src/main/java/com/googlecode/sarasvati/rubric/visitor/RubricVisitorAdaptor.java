@@ -19,6 +19,7 @@
 
 package com.googlecode.sarasvati.rubric.visitor;
 
+import com.googlecode.sarasvati.rubric.lang.RubricDelayUntilStmt;
 import com.googlecode.sarasvati.rubric.lang.RubricExprAnd;
 import com.googlecode.sarasvati.rubric.lang.RubricExprNot;
 import com.googlecode.sarasvati.rubric.lang.RubricExprOr;
@@ -81,6 +82,15 @@ public class RubricVisitorAdaptor implements RubricVisitor
 
   @Override
   public void visit (final RubricExprSymbol symbolExpr)
+  {
+    // does nothing by default
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.rubric.visitor.RubricVisitor#visit(com.googlecode.sarasvati.rubric.lang.RubricDelayUntilStmt)
+   */
+  @Override
+  public void visit(final RubricDelayUntilStmt delayUntilStmt)
   {
     // does nothing by default
   }

@@ -19,6 +19,7 @@
 
 package com.googlecode.sarasvati.rubric.visitor;
 
+import com.googlecode.sarasvati.rubric.lang.RubricDelayUntilStmt;
 import com.googlecode.sarasvati.rubric.lang.RubricExprAnd;
 import com.googlecode.sarasvati.rubric.lang.RubricExprNot;
 import com.googlecode.sarasvati.rubric.lang.RubricExprOr;
@@ -48,4 +49,6 @@ public interface RubricVisitor
   void visit (RubricExprOr orExpr);
 
   void visit (RubricExprSymbol symbolExpr);
+
+  void visit (RubricDelayUntilStmt delayUntilStmt);
 }

@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008, 2012 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.rubric.lang;
@@ -24,7 +24,7 @@ import java.util.Date;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
-public class RubricStmtDateSymbol extends AbstractRubricStmt
+public class RubricStmtDateSymbol extends AbstractRubricStmt implements RubricDateStmt
 {
   protected String symbol;
 

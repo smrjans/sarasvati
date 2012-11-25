@@ -1,0 +1,6 @@
+gpg -ab library-name-version.pom
+gpg -ab library-name-version.jar
+gpg -ab library-name-version-sources.jar
+gpg -ab library-name-version-javadoc.jar
+
+jar cvf bundle.jar library-name-version*

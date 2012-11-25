@@ -52,6 +52,8 @@ public class MemNodeToken implements NodeToken
   protected Date createDate;
   protected Date completeDate;
   protected ExecutionType executionType;
+  protected Date delayUntilTime;
+  protected int delayCount;
 
   protected Set<NodeTokenSetMember> tokenSetMemberships = null;
 
@@ -206,6 +208,34 @@ public class MemNodeToken implements NodeToken
   public void setNestedProcess(final MemGraphProcess nestedProcess)
   {
     this.nestedProcess = nestedProcess;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.NodeToken#getDelayUntilTime()
+   */
+  @Override
+  public Date getDelayUntilTime()
+  {
+    return delayUntilTime;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.NodeToken#getDelayCount()
+   */
+  @Override
+  public int getDelayCount()
+  {
+    return delayCount;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.NodeToken#markDelayed(java.util.Date)
+   */
+  @Override
+  public void markDelayed(final Date newDelayUntilTime)
+  {
+    this.delayUntilTime = newDelayUntilTime;
+    this.delayCount++;
   }
 
   @Override

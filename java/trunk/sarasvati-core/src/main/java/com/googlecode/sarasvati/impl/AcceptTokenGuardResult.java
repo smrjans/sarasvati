@@ -18,6 +18,8 @@
 */
 package com.googlecode.sarasvati.impl;
 
+import java.util.Date;
+
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.GuardResult;
 
@@ -28,8 +30,16 @@ public enum AcceptTokenGuardResult implements GuardResult
   @Override
   public String getExitArcForSkip()
   {
-    throw new UnsupportedOperationException(
-      "getExitArcsForSkip should never be called on a GuardResult with action of AcceptToken" );
+    throw new UnsupportedOperationException( "getExitArcsForSkip should never be called on a GuardResult with action of AcceptToken" );
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.GuardResult#getDelayTillTime()
+   */
+  @Override
+  public Date getDelayTillTime()
+  {
+    throw new UnsupportedOperationException( "getDelayUntilDate should never be called on a GuardResult with action of AcceptToken" );
   }
 
   @Override

@@ -59,6 +59,9 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
   protected GuardAction guardAction;
   protected ExecutionType executionType;
 
+  protected int delayCount;
+  protected Date delayUntilTime;
+
   protected Map<String,Object> transientAttributes = new HashMap<String, Object>();
 
   protected Env env = null;
@@ -176,6 +179,34 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
   public void markBacktracked ()
   {
     executionType = executionType.getCorrespondingBacktracked( isComplete() );
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.NodeToken#getDelayUntilTime()
+   */
+  @Override
+  public Date getDelayUntilTime()
+  {
+    return delayUntilTime;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.NodeToken#getDelayCount()
+   */
+  @Override
+  public int getDelayCount()
+  {
+    return delayCount;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.NodeToken#markDelayed(java.util.Date)
+   */
+  @Override
+  public void markDelayed(final Date newDelayUntilTime)
+  {
+    this.delayCount++;
+    this.delayUntilTime = newDelayUntilTime;
   }
 
   @Override

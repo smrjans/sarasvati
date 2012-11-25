@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008, 2012 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.rubric.lang;
@@ -28,12 +28,16 @@ import java.util.Map.Entry;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
-public class RubricStmtRelativeDate extends AbstractRubricStmt
+public class RubricStmtRelativeDate extends AbstractRubricStmt implements RubricDateStmt
 {
   private static Map<String, Integer> unitMapping = new HashMap<String, Integer>();
 
   static
   {
+    unitMapping.put( "second", Calendar.SECOND );
+    unitMapping.put( "seconds", Calendar.SECOND );
+    unitMapping.put( "minute", Calendar.MINUTE );
+    unitMapping.put( "minutes", Calendar.MINUTE );
     unitMapping.put( "hour", Calendar.HOUR );
     unitMapping.put( "hours", Calendar.HOUR );
     unitMapping.put( "day", Calendar.DATE );
@@ -56,7 +60,7 @@ public class RubricStmtRelativeDate extends AbstractRubricStmt
       this.offset = -offset;
     }
 
-    this.unit = unitMapping.get( unitName );
+    this.unit = unitMapping.get( unitName.toLowerCase() );
     this.business = business;
     this.dateSymbolExpr = new RubricStmtDateSymbol( symbol );
   }

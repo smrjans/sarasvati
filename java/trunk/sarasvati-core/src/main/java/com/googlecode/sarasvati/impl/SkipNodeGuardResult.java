@@ -18,6 +18,8 @@
 */
 package com.googlecode.sarasvati.impl;
 
+import java.util.Date;
+
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardAction;
@@ -70,6 +72,15 @@ public class SkipNodeGuardResult implements GuardResult
   public String getExitArcForSkip()
   {
     return exitArcForSkip;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.GuardResult#getDelayTillTime()
+   */
+  @Override
+  public Date getDelayTillTime()
+  {
+    throw new UnsupportedOperationException( "getDelayUntilDate should never be called on a GuardResult with action of SkipNode" );
   }
 
   @Override

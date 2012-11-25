@@ -221,13 +221,13 @@ public class ExecutionTest
 
     if (mode == ExecutionMode.Async)
     {
-      TestEnv.getEngine().completeAsynchronous(token, arcNames);
+      TestEnv.getEngine().completeManyAsynchronous(token, arcNames);
       TestEnv.commit();
       TestEnv.getEngine().executeQueuedArcTokens(TestEnv.refreshProcess(token.getProcess()));
     }
     else
     {
-      TestEnv.getEngine().complete(token, arcNames);
+      TestEnv.getEngine().completeMany(token, arcNames);
     }
   }
 

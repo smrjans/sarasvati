@@ -18,6 +18,8 @@
 */
 package com.googlecode.sarasvati;
 
+import java.util.Date;
+
 
 /**
  * A GuardResult is returned from {@link Node#guard(Engine, NodeToken)} to indicate
@@ -47,4 +49,12 @@ public interface GuardResult
    * @return The name of the arc or arcs on which to exit this node.
    */
   String getExitArcForSkip ();
+
+  /**
+   * If {@value GuardAction#DelayUntil} is returned from {@link Node#guard(Engine, NodeToken)},
+   * it must indicate when to reevaluate the guard.
+   *
+   * @return The date at which a delayed node guard should be reevaluated
+   */
+  Date getDelayTillTime();
 }

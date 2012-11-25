@@ -21,6 +21,8 @@ package com.googlecode.sarasvati.rubric.visitor;
 
 import java.util.Date;
 
+import com.googlecode.sarasvati.impl.DelayUntilGuardResult;
+import com.googlecode.sarasvati.rubric.lang.RubricDelayUntilStmt;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtDateSymbol;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtRelativeDate;
@@ -70,6 +72,18 @@ public class ResultTypeValidator extends RubricVisitorAdaptor
   public void visit (final RubricStmtRelativeDate relativeDateStmt)
   {
     if ( !type.isAssignableFrom( Date.class ) )
+    {
+      allMatch = false;
+    }
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.rubric.visitor.RubricVisitorAdaptor#visit(com.googlecode.sarasvati.rubric.lang.RubricDelayUntilStmt)
+   */
+  @Override
+  public void visit(final RubricDelayUntilStmt delayUntilStmt)
+  {
+    if ( !type.isAssignableFrom( DelayUntilGuardResult.class ) )
     {
       allMatch = false;
     }

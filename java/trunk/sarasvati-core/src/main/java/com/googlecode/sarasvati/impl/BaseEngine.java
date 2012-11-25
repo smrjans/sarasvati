@@ -36,6 +36,7 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.JoinAction;
 import com.googlecode.sarasvati.JoinResult;
@@ -341,6 +342,20 @@ public abstract class BaseEngine implements Engine
     ArcTokenEvent.fireCompletedEvent( this, token );
   }
 
+  @Override
+  public void reevaluateDelayedToken(final NodeToken token)
+  {
+    if (token.isComplete())
+    {
+      throw new SarasvatiException("Cannot reevaluate a token which has already been completed.");
+    }
+    if (token.getGuardAction() != GuardAction.DelayUntil)
+    {
+      throw new SarasvatiException("Cannot reevaluate a token which has not been delayed.");
+    }
+    executeNode(token.getProcess(), token);
+  }
+
   protected void executeNode (final GraphProcess process, final NodeToken token)
   {
     final GuardResult response = token.getNode().guard( this, token );
@@ -373,6 +388,13 @@ public abstract class BaseEngine implements Engine
         NodeTokenEvent.fireSkippedEvent( this, token, response.getExitArcForSkip() );
         complete( token, response.getExitArcForSkip() );
         break;
+
+      case DelayUntil :
+        process.addActiveNodeToken( token );
+        token.markDelayed( response.getDelayTillTime() );
+        NodeTokenEvent.fireDelayedEvent( this,  token );
+        getDelayedTokenScheduler().scheduleDelayedToken(token);
+        break;
     }
   }
 
@@ -390,7 +412,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void complete(final NodeToken token, final String...arcNames)
+  public void completeMany(final NodeToken token, final String...arcNames)
   {
     final GraphProcess process = token.getProcess();
 
@@ -409,7 +431,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void completeAsynchronous (final NodeToken token, final String...arcNames)
+  public void completeManyAsynchronous (final NodeToken token, final String...arcNames)
   {
     completeNodeExecution(token, true, arcNames);
   }

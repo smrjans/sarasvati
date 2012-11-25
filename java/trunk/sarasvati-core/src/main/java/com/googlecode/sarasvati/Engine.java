@@ -28,6 +28,7 @@ import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.impl.AcceptTokenGuardResult;
+import com.googlecode.sarasvati.impl.DelayUntilGuardResult;
 import com.googlecode.sarasvati.join.lang.JoinLangEnv;
 import com.googlecode.sarasvati.load.GraphFactory;
 import com.googlecode.sarasvati.load.GraphLoader;
@@ -218,7 +219,7 @@ public interface Engine
    *                 have the same name, this will execute on all arcs that match the given
    *                 set of names.
    */
-  void complete (NodeToken token, String...arcNames);
+  void completeMany (NodeToken token, String...arcNames);
 
   /**
    * Marks the given node token completed and generates the next set of arc tokens.
@@ -241,7 +242,7 @@ public interface Engine
    *                 have the same name, this will execute on all arcs that match the given
    *                 set of names.
    */
-  void completeAsynchronous (NodeToken token, String...arcNames);
+  void completeManyAsynchronous (NodeToken token, String...arcNames);
 
   /**
    * Marks the given node token, creates new token set and generates the next set
@@ -264,6 +265,14 @@ public interface Engine
                                 boolean asynchronous,
                                 Env initialEnv,
                                 Map<String, List<?>> initialMemberEnv );
+
+  /**
+   * Reevaluates a node token which was previously delayed by a guard result of
+   * {@link DelayUntilGuardResult}.
+   *
+   * @param token The token to reevaluated.
+   */
+  void reevaluateDelayedToken(final NodeToken token);
 
   /**
    * If this process has any {@link ArcToken}s queued for execution, this method
@@ -489,4 +498,11 @@ public interface Engine
    * @param token The destination token to backtrack to.
    */
   void backtrack (NodeToken token);
+
+  /**
+   * Returns the service used to scheudle re-evaluation of delayed tokens.
+   *
+   * @return the service used to scheudle re-evaluation of delayed tokens.
+   */
+  DelayedTokenScheduler getDelayedTokenScheduler();
 }

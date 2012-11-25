@@ -19,6 +19,10 @@
 
 package com.googlecode.sarasvati.mem;
 
+import com.googlecode.sarasvati.DelayedTokenScheduler;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.EngineFactory;
+import com.googlecode.sarasvati.SimpleDelayedTokenScheduler;
 import com.googlecode.sarasvati.impl.BaseEngine;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.GraphLoaderImpl;
@@ -136,4 +140,32 @@ public class MemEngine extends BaseEngine
   {
     return new MemEngine(applicationContext, repository);
   }
+
+  /**
+   * Returns a DelayedTokenScheduler which uses the same engine in use
+   *
+   * @see com.googlecode.sarasvati.Engine#getDelayedTokenScheduler()
+   */
+  @Override
+  public DelayedTokenScheduler getDelayedTokenScheduler()
+  {
+    return delayedTokenScheduler;
+  }
+
+  private DelayedTokenScheduler delayedTokenScheduler =
+      new SimpleDelayedTokenScheduler(
+        new EngineFactory() {
+
+          @Override
+          public Engine getEngine()
+          {
+            return MemEngine.this;
+          }
+
+          @Override
+          public void dispose(final Engine engine, final boolean success)
+          {
+            // Does nothing by default
+          }
+        });
 }

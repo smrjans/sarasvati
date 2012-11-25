@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008, 2012 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.rubric.lang;
@@ -22,6 +22,11 @@ package com.googlecode.sarasvati.rubric.lang;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
+/**
+ * Base type for all Rubric statements
+ *
+ * @author Paul Lorenz
+ */
 public interface RubricStmt
 {
   Object eval (RubricEnv env);
@@ -40,6 +45,8 @@ public interface RubricStmt
 
   boolean isStringSymbol ();
 
+  boolean isDelayUntil();
+
   RubricStmtDateSymbol asDateSymbol ();
 
   RubricStmtIf asIf ();
@@ -49,4 +56,6 @@ public interface RubricStmt
   RubricStmtResult asResult ();
 
   RubricStmtStringSymbol asStringSymbol ();
+
+  RubricDelayUntilStmt asDelayUntilStmt();
 }

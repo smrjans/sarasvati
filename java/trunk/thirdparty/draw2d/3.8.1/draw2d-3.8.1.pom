@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    
+    <groupId>com.googlecode.sarasvati.thirdparty.eclipse</groupId>
+    <artifactId>draw2d</artifactId>
+    <version>3.8.1</version>
+    
+    <packaging>jar</packaging>
+    
+    <name>draw2d</name>
+    <description>Eclipse GEF Draw2D Library</description>
+    <url>http://www.eclipse.org/</url>
+    <inceptionYear>2012</inceptionYear>
+    
+    <licenses>
+        <license>
+            <name>EPL 1.0</name>
+            <url>http://www.eclipse.org/legal/epl-v10.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <scm>
+        <connection>scm:git:http://git.eclipse.org/c/gef/org.eclipse.gef.git/</connection>
+        <developerConnection>scm:git:http://git.eclipse.org/c/gef/org.eclipse.gef.git/</developerConnection>
+        <url>http://git.eclipse.org/c/gef/org.eclipse.gef.git/</url>
+    </scm>
+ 
+    <developers>
+        <developer>
+            <name>Eclipse</name>
+        </developer>
+    </developers>
+    
+</project>

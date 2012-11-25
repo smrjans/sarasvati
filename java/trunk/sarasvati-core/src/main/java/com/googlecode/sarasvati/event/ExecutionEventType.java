@@ -40,6 +40,7 @@ public enum ExecutionEventType
   NODE_TOKEN_SKIPPED       ( 1 << 10 ),
   NODE_TOKEN_COMPLETED     ( 1 << 11 ),
   NODE_TOKEN_BACKTRACKED   ( 1 << 12 ),
+  NODE_TOKEN_DELAYED       ( 1 << 18 ),
 
   ARC_TOKEN_CREATED        ( 1 << 13 ),
   ARC_TOKEN_PROCESSED      ( 1 << 14 ),
@@ -80,7 +81,9 @@ public enum ExecutionEventType
            this == NODE_TOKEN_COMPLETED   ||
            this == NODE_TOKEN_DISCARDED   ||
            this == NODE_TOKEN_SKIPPED     ||
-           this == NODE_TOKEN_BACKTRACKED;
+           this == NODE_TOKEN_BACKTRACKED ||
+           this == NODE_TOKEN_DELAYED
+           ;
   }
 
   public boolean isArcTokenEvent ()

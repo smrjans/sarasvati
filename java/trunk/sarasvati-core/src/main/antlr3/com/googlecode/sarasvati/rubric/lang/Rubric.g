@@ -81,7 +81,7 @@ program returns [RubricStmt value]
          ;
 
 stmt returns [RubricStmt value]
-         :  ('if'|'IF')^ e=orExpr ('then'|'THEN')! ifStmt=stmt ('else'|'ELSE')! elseStmt=stmt
+         :  IF^ e=orExpr THEN! ifStmt=stmt ELSE! elseStmt=stmt
             {$value = new RubricStmtIf( $e.value, $ifStmt.value, $elseStmt.value ); }
          |  result { $value = $result.value; }
          ;
@@ -110,9 +110,11 @@ result returns [RubricStmt value]
          |  STRING       { $value = new RubricStmtResult( SvUtil.normalizeQuotedString( $STRING.text ) ); }
          |  dateResult   { $value = $dateResult.value; }
          |  stringResult { $value = $stringResult.value; }
+         |  DELAY UNTIL dateSpec 
+                         { $value= new RubricDelayUntilStmt( $dateSpec.value ); }         
          ;
 
-dateResult returns [RubricStmt value]
+dateResult returns [RubricDateStmt value]
          :  '('! dateSpec ')'! { $value = $dateSpec.value; }
          ;
 
@@ -120,12 +122,12 @@ stringResult returns [RubricStmt value]
          : '@' ID { $value = new RubricStmtStringSymbol( $ID.text ); }
          ;
 
-dateSpec returns [RubricStmt value]
+dateSpec returns [RubricDateStmt value]
 @init {
   boolean business = false;
 }
          :  ID { $value = new RubricStmtDateSymbol( $ID.text ); }
-         |  NUMBER ( BUSINESS { business = true; } )? unit=(HOUR|HOURS|DAY|DAYS|WEEK|WEEKS) type=(BEFORE|AFTER) ID
+         |  NUMBER ( BUSINESS { business = true; } )? unit=(SECONDS|MINUTES|HOUR|HOURS|DAY|DAYS|WEEK|WEEKS) type=(BEFORE|AFTER) ID
             { $value = new RubricStmtRelativeDate( Integer.parseInt( $NUMBER.text ), business, $unit.text, $type.text, $ID.text ); }
          ;
 
@@ -142,6 +144,22 @@ guardResult returns [GuardResult value]
 // ===========================================================================
 
 STRING   :  '"' ( '\\\"' | ~( '"' ) )* '"'
+         ;
+         
+IF       : I F;
+
+THEN     : T H E N;
+
+ELSE     : E L S E;
+         
+DELAY    : D E L A Y;
+
+UNTIL    : U N T I L;
+
+SECONDS  : S E C O N D S?
+         ;
+
+MINUTES  : M I N U T E S?
          ;
 
 ID       :  LETTER ( LETTER | DIGIT | '.' | '_' )*
@@ -165,6 +183,27 @@ fragment UPPER
 fragment DIGIT
          : '0'..'9'
          ;
+
+fragment A : 'a' | 'A';
+fragment B : 'b' | 'B';
+fragment C : 'c' | 'C';
+fragment D : 'd' | 'D';
+fragment E : 'e' | 'E';
+fragment F : 'f' | 'F';
+fragment G : 'g' | 'G';
+fragment H : 'h' | 'H';
+fragment I : 'i' | 'I';
+fragment J : 'j' | 'J';
+fragment K : 'k' | 'K';
+fragment L : 'l' | 'L';
+fragment M : 'm' | 'M';
+fragment N : 'n' | 'N';
+fragment O : 'o' | 'O';
+fragment P : 'p' | 'P';
+fragment U : 'u' | 'U';
+fragment S : 's' | 'S';
+fragment T : 't' | 'T';
+fragment Y : 'y' | 'Y';
 
 NEWLINE  :   ('\r'? '\n')+ { $channel=HIDDEN; }
          ;

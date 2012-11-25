@@ -114,6 +114,13 @@ public class HibNodeToken implements NodeToken
   @Column (name="execution_type")
   protected ExecutionType executionType;
 
+  @Column (name="delay_count")
+  protected int delayCount;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column (name="delay_until_time")
+  protected Date delayUntilTime;
+
   @Transient
   protected Map<String,Object> transientAttributes = new HashMap<String, Object>();
 
@@ -281,6 +288,34 @@ public class HibNodeToken implements NodeToken
   public void markBacktracked ()
   {
     executionType = executionType.getCorrespondingBacktracked( isComplete() );
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.NodeToken#getDelayUntilTime()
+   */
+  @Override
+  public Date getDelayUntilTime()
+  {
+    return delayUntilTime;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.NodeToken#getDelayCount()
+   */
+  @Override
+  public int getDelayCount()
+  {
+    return delayCount;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.NodeToken#markDelayed(java.util.Date)
+   */
+  @Override
+  public void markDelayed(final Date newDelayUntilTime)
+  {
+    this.delayCount++;
+    this.delayUntilTime = newDelayUntilTime;
   }
 
   @Override

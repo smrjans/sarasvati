@@ -26,6 +26,7 @@ import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.DelayedTokenScheduler;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
@@ -256,6 +257,15 @@ public class HibEngine extends BaseEngine
                        "where token.completeDate is null and setMember.tokenSet = :tokenSet";
     final Query query = session.createQuery( hql ).setEntity( "tokenSet", tokenSet );
     return query.list();
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.Engine#getDelayedTokenScheduler()
+   */
+  @Override
+  public DelayedTokenScheduler getDelayedTokenScheduler()
+  {
+    throw new UnsupportedOperationException("Hibernate Engine does not yet support delaying tokens");
   }
 
   public static void addToConfiguration (final Configuration config, final boolean enableCaching)

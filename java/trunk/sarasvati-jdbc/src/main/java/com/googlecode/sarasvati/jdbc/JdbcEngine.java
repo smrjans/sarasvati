@@ -20,6 +20,7 @@ package com.googlecode.sarasvati.jdbc;
 
 import java.sql.Connection;
 
+import com.googlecode.sarasvati.DelayedTokenScheduler;
 import com.googlecode.sarasvati.impl.BaseEngine;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 import com.googlecode.sarasvati.load.GraphLoader;
@@ -103,5 +104,14 @@ public class JdbcEngine extends BaseEngine
   public Connection getConnection ()
   {
     return connection;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.Engine#getDelayedTokenScheduler()
+   */
+  @Override
+  public DelayedTokenScheduler getDelayedTokenScheduler()
+  {
+    throw new UnsupportedOperationException("JDBC Engine does not yet support delaying tokens");
   }
 }

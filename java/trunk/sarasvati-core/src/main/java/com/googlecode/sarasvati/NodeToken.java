@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.googlecode.sarasvati.env.Env;
+import com.googlecode.sarasvati.impl.DelayUntilGuardResult;
 
 /**
  * Node tokens point to nodes in the graph. Unlike arc tokens,
@@ -167,4 +168,29 @@ public interface NodeToken extends Token
    */
   @Override
   Set<NodeTokenSetMember> getTokenSetMemberships ();
+
+  /**
+   * If the guard for related node was evaluated and returned {@link DelayUntilGuardResult}, this
+   * method will return the time at which the guard should be re-evaluated, otherwise it will
+   * return null.
+   *
+   * @return The time the node guard should be re-evaluated after a {@link DelayUntilGuardResult}
+   *         result, or null if the token has never been delayed.
+   */
+  Date getDelayUntilTime();
+
+  /**
+   * The number of times the guard for the related node has evaluated to {@link DelayUntilGuardResult}.
+   *
+   * @return The number of times the guard for the related node has evaluated to {@link DelayUntilGuardResult}.
+   */
+  int getDelayCount();
+
+  /**
+   * Marks the token as being delayed until a specific time, at which point the guard for the related node
+   * will be re-evaluated.
+   *
+   * @param delayUntilTime The time until which the node should be delayed.
+   */
+  void markDelayed(final Date delayUntilTime);
 }

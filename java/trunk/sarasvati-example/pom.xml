@@ -11,6 +11,15 @@
   <name>sarasvati-example</name>
 
    <build>
+    <resources>
+      <resource>
+        <directory>src/main/process-definition/</directory>
+        <includes>
+          <include>**/*.wf.xml</include>
+        </includes>
+      </resource>
+    </resources>
+       
      <plugins>
        <plugin>
          <groupId>org.apache.maven.plugins</groupId>

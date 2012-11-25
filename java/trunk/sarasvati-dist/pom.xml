@@ -40,7 +40,7 @@
       <artifactId>junit</artifactId>
     </dependency>
     <dependency>
-      <groupId>uk.gov.nationalarchives.thirdparty.netbeans</groupId>
+      <groupId>com.googlecode.sarasvati.thirdparty.netbeans</groupId>
       <artifactId>org-openide-util</artifactId>
     </dependency>
     <dependency>

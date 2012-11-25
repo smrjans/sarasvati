@@ -11,34 +11,28 @@
   
   <dependencies>
       
-      <dependency>
-        <groupId>uk.gov.nationalarchives.thirdparty.netbeans</groupId>
-        <artifactId>org-openide-util</artifactId>
-      </dependency>  
+    <dependency>
+      <groupId>${project.groupId}.thirdparty.netbeans</groupId>
+      <artifactId>org-openide-util</artifactId>
+    </dependency>  
 
-      <dependency>
-        <groupId>org.eclipse</groupId>
-        <artifactId>draw2d</artifactId>
-        <version>${org.eclipse.draw2d.version}</version>
-        <scope>system</scope>
-        <systemPath>${basedir}/../lib/eclipse-draw2d-3.5.0.jar</systemPath>
-      </dependency>
-
-      <dependency>
-        <groupId>org.netbeans.api</groupId>
-        <artifactId>visual</artifactId>
-        <version>${org.netbeans.api.visual.version}</version>
-        <type>jar</type>
-        <scope>system</scope>
-        <systemPath>${basedir}/../lib/org-netbeans-api-visual.jar</systemPath>
-      </dependency>
+    <dependency>
+      <groupId>${project.groupId}.thirdparty.netbeans</groupId>
+      <artifactId>visual</artifactId>
+    </dependency>
       
-  	<dependency>
-  		<groupId>${project.groupId}</groupId>
-  		<artifactId>sarasvati-core</artifactId>
-  		<version>${project.version}</version>
-  		<scope>compile</scope>
+    <dependency>
+      <groupId>${project.groupId}.thirdparty.eclipse</groupId>
+      <artifactId>draw2d</artifactId>
+    </dependency>
+      
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>sarasvati-core</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
   	</dependency>
+
   </dependencies>
 
 </project>

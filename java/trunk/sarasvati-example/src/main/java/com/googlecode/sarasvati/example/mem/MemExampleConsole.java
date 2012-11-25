@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
@@ -43,6 +44,7 @@ import com.googlecode.sarasvati.load.ProcessDefinitionResolver;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
+import com.googlecode.sarasvati.rubric.env.RubricDateFunction;
 import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
@@ -94,6 +96,24 @@ public class MemExampleConsole
       }
     });
 
+    repository.registerPredicate( "isFirstGuardEvaluation", new RubricPredicate()
+    {
+      @Override
+      public boolean eval( final Engine engine, final NodeToken token )
+      {
+        return token.getDelayCount() == 0;
+      }
+    });
+
+    repository.registerDateFunction("now", new RubricDateFunction()
+    {
+      @Override
+      public Date eval(final Engine engine, final NodeToken token)
+      {
+        return new Date();
+      }
+    });
+
     while ( true )
     {
       MemEngine engine = new MemEngine();
@@ -137,42 +157,39 @@ public class MemExampleConsole
 
       MemExampleTask t = null;
 
-      while ( t == null )
+      int count = 0;
+      for (MemExampleTask task : tasks )
       {
-        int count = 0;
-        for (MemExampleTask task : tasks )
+        System.out.println( (++count) + ": " + task.getName() + " - " + task.getState() +
+                            (task.getNodeToken().getExecutionType().isBacktracked() ? " (backtracked)" : "" ));
+      }
+
+      System.out.print( "> " );
+      String input = readLine();
+
+      try
+      {
+        if ( "p".equalsIgnoreCase( input ) )
         {
-          System.out.println( (++count) + ": " + task.getName() + " - " + task.getState() +
-                              (task.getNodeToken().getExecutionType().isBacktracked() ? " (backtracked)" : "" ));
+          System.out.println( "Processing asynchronous tokens" );
+          engine.executeQueuedArcTokens( process );
+          break;
         }
 
-        System.out.print( "> " );
-        String input = readLine();
-
-        try
+        int line = Integer.parseInt( input );
+        if ( line > 0 && line <= tasks.size() )
         {
-          if ( "p".equalsIgnoreCase( input ) )
-          {
-            System.out.println( "Processing asynchronous tokens" );
-            engine.executeQueuedArcTokens( process );
-            break;
-          }
-
-          int line = Integer.parseInt( input );
-          if ( line > 0 && line <= tasks.size() )
-          {
-            t = tasks.get( line - 1);
-            processTask( t, engine );
-          }
-          else
-          {
-            System.out.println( "Please enter a valid number" );
-          }
+          t = tasks.get( line - 1);
+          processTask( t, engine );
         }
-        catch( NumberFormatException nfe )
+        else
         {
           System.out.println( "Please enter a valid number" );
         }
+      }
+      catch( NumberFormatException nfe )
+      {
+        System.out.println( "Please enter a valid number" );
       }
     }
   }
@@ -315,7 +332,8 @@ public class MemExampleConsole
 
     GraphLoader<MemGraph> wfLoader = engine.getLoader();
 
-    File basePath = new File( "common/test-wf/" );
+    final File basePath = new File(MemExampleConsole.class.getClassLoader().getResource("custom-node.wf.xml").toURI()).getParentFile();
+
     ProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, basePath );
 
     FilenameFilter filter = new FilenameFilter()

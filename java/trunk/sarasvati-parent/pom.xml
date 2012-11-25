@@ -217,9 +217,21 @@
       </dependency>
 
       <dependency>
-        <groupId>uk.gov.nationalarchives.thirdparty.netbeans</groupId>
+        <groupId>${project.groupId}.thirdparty.netbeans</groupId>
         <artifactId>org-openide-util</artifactId>
-        <version>7.2</version>
+        <version>7.3</version>
+      </dependency>  
+
+      <dependency>
+        <groupId>${project.groupId}.thirdparty.eclipse</groupId>
+        <artifactId>draw2d</artifactId>
+        <version>3.8.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>${project.groupId}.thirdparty.netbeans</groupId>
+        <artifactId>visual</artifactId>
+        <version>7.3</version>
       </dependency>
 
       <dependency>
@@ -250,9 +262,9 @@
       </dependency>
 
       <dependency>
-	<groupId>ojdbc</groupId>
-	<artifactId>ojdbc</artifactId>
-	<version>14</version>
+        <groupId>ojdbc</groupId>
+        <artifactId>ojdbc</artifactId>
+        <version>14</version>
       </dependency>
             
     </dependencies>

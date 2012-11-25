@@ -51,6 +51,15 @@ public abstract class AbstractRubricStmt implements RubricStmt
     return null;
   }
 
+  /**
+   * @see com.googlecode.sarasvati.rubric.lang.RubricStmt#asDelayUntilStmt()
+   */
+  @Override
+  public RubricDelayUntilStmt asDelayUntilStmt()
+  {
+    return null;
+  }
+
   @Override
   public boolean isStringSymbol ()
   {
@@ -77,6 +86,15 @@ public abstract class AbstractRubricStmt implements RubricStmt
 
   @Override
   public boolean isResult ()
+  {
+    return false;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.rubric.lang.RubricStmt#isDelayUntil()
+   */
+  @Override
+  public boolean isDelayUntil()
   {
     return false;
   }

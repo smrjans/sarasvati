@@ -27,7 +27,10 @@ import com.googlecode.sarasvati.impl.DiscardTokenGuardResult;
 import com.googlecode.sarasvati.impl.SkipNodeGuardResult;
 import com.googlecode.sarasvati.rubric.RubricCompilationException;
 import com.googlecode.sarasvati.rubric.RubricCompiler;
+import com.googlecode.sarasvati.rubric.lang.RubricDateStmt;
+import com.googlecode.sarasvati.rubric.lang.RubricDelayUntilStmt;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
+import com.googlecode.sarasvati.rubric.lang.RubricStmtDateSymbol;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtRelativeDate;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtResult;
 
@@ -99,6 +102,30 @@ public class RubricCompilerTest
     Assert.assertTrue( expected.isEqualTo( result ) );
   }
 
+  @Test public void testDelayUntilWithDateSymbol ()
+  {
+    RubricDateStmt dateStmt = new RubricStmtDateSymbol("DueDate");
+    RubricStmt expected = new RubricDelayUntilStmt(dateStmt);
+
+    String script = "delay until DueDate";
+    System.out.println( "SCRIPT: " + script );
+
+    RubricStmt result = RubricCompiler.compile( script );
+    Assert.assertTrue( expected.isEqualTo( result ) );
+  }
+
+  @Test public void testDelayUntilWithRelativeDateSymbol ()
+  {
+    RubricDateStmt dateStmt = new RubricStmtRelativeDate( 1, false, "day", "before", "DueDate" );
+    RubricStmt expected = new RubricDelayUntilStmt(dateStmt);
+
+    String script = "delay until 1 day before DueDate";
+    System.out.println( "SCRIPT: " + script );
+
+    RubricStmt result = RubricCompiler.compile( script );
+    Assert.assertTrue( expected.isEqualTo( result ) );
+  }
+
   @Test(expected=RubricCompilationException.class)
   public void testDateMissingOffset ()
   {
@@ -122,5 +149,4 @@ public class RubricCompilerTest
     System.out.println( "SCRIPT: " + script );
     RubricCompiler.compile( script );
   }
-
 }

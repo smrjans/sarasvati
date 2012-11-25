@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<process-definition name="delay-test" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="start" type="script" isStart="true">
+    <arc to="next"/>
+
+    <custom>
+      <execute type="js">
+        <![CDATA[
+          java.lang.System.out.println( "Hello" );
+          java.lang.System.out.println( "token: " + token );
+        ]]>
+      </execute>
+    </custom>
+  </node>
+
+  <node name="next" type="script" joinType="labelAnd">
+    <guard>if isFirstGuardEvaluation then delay until 5 seconds after now else Accept</guard>
+    <custom>
+      <execute type="js">
+        <![CDATA[
+          java.lang.System.out.println( "Hello from node: " + token.node.name );
+          java.lang.System.out.println( "token: " + token );          
+        ]]>
+      </execute>
+    </custom>
+  </node>
+
+
+</process-definition>

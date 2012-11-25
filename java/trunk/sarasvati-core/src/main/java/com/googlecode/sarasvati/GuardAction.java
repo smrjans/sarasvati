@@ -48,5 +48,12 @@ public enum GuardAction
    *
    * @see GuardResult#getExitArcForSkip()
    */
-  SkipNode;
+  SkipNode,
+
+  /**
+   * Indicates that evaluation of this guard should be delayed until later.
+   *
+   * @see GuardResult#getDelayTillDate()
+   */
+  DelayUntil;
 }

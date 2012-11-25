@@ -89,6 +89,11 @@ public class NodeTokenEvent extends ExecutionEvent
     return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_BACKTRACKED, nodeToken) );
   }
 
+  public static final EventActions fireDelayedEvent (final Engine engine, final NodeToken nodeToken)
+  {
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_DELAYED, nodeToken) );
+  }
+
   private NodeTokenEvent (final Engine engine,
                           final ExecutionEventType eventType,
                           final NodeToken nodeToken,
