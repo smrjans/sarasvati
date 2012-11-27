@@ -19,16 +19,24 @@ mvn javadoc:jar
 popd
 
 function deployFile {
-  echo "mvn gpg:sign-and-deploy-file -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=sonatype-nexus-staging -DpomFile=$1/pom.xml -Dfile=$1/target/$2 -Dgpg.passphrase=$3 $4"
-  mvn gpg:sign-and-deploy-file -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=sonatype-nexus-staging -DpomFile=$1/pom.xml -Dfile=$1/target/$2 -Dgpg.passphrase=$3 $4
+  if [ -f $1/target/$2 ]  
+  then
+    echo "mvn gpg:sign-and-deploy-file -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=sonatype-nexus-staging -DpomFile=$1/pom.xml -Dfile=$1/target/$2 -Dgpg.passphrase=$3 $4"
+    mvn gpg:sign-and-deploy-file -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=sonatype-nexus-staging -DpomFile=$1/pom.xml -Dfile=$1/target/$2 -Dgpg.passphrase=$3 $4
+  fi
 }
 
 function deployModule {
+
+  echo mvn gpg:sign-and-deploy-file -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=sonatype-nexus-staging -DpomFile=$1/pom.xml -Dfile=$1/pom.xml -Dgpg.passphrase=$3 
+  mvn gpg:sign-and-deploy-file -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=sonatype-nexus-staging -DpomFile=$1/pom.xml -Dfile=$1/pom.xml -Dgpg.passphrase=$3 
+
   deployFile $1 $1-$2.jar $3
   deployFile $1 $1-$2-sources.jar $3 -Dclassifier=sources
   deployFile $1 $1-$2-javadoc.jar $3 -Dclassifier=javadoc
 }
 
+deployModule sarasvati-parent $version $passphrase
 deployModule sarasvati-core $version $passphrase
 deployModule sarasvati-hibernate $version $passphrase
 deployModule sarasvati-visual $version $passphrase
