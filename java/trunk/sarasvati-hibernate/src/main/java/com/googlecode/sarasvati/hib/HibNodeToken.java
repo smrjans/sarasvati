@@ -114,11 +114,11 @@ public class HibNodeToken implements NodeToken
   @Column (name="execution_type")
   protected ExecutionType executionType;
 
-  @Column (name="delay_count")
+  @Column (name="delay_count", nullable=false)
   protected int delayCount;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column (name="delay_until_time")
+  @Column (name="delay_until_time", nullable=true)
   protected Date delayUntilTime;
 
   @Transient

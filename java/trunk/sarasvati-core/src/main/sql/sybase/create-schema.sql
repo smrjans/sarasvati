@@ -351,14 +351,16 @@ IF NOT EXISTS (SELECT name FROM sysobjects WHERE name='wf_node_token')
 
       create table wf_node_token
       (
-        id             bigint    IDENTITY NOT NULL PRIMARY KEY,
-        process_id     bigint             NOT NULL REFERENCES wf_process,
-        node_ref_id    bigint             NOT NULL REFERENCES wf_node_ref,
-        attr_set_id    bigint             NULL     REFERENCES wf_node_token,
-        create_date    datetime           DEFAULT getDate() NOT NULL,
-        guard_action   int                NULL     REFERENCES wf_guard_action,
-        execution_type int                NOT NULL REFERENCES wf_execution_type,
-        complete_date  datetime           NULL
+        id               bigint    IDENTITY NOT NULL PRIMARY KEY,
+        process_id       bigint             NOT NULL REFERENCES wf_process,
+        node_ref_id      bigint             NOT NULL REFERENCES wf_node_ref,
+        attr_set_id      bigint             NULL     REFERENCES wf_node_token,
+        create_date      datetime           DEFAULT getDate() NOT NULL,
+        guard_action     int                NULL     REFERENCES wf_guard_action,
+        execution_type   int                NOT NULL REFERENCES wf_execution_type,
+        complete_date    datetime           NULL,
+        delay_count      int                NOT NULL default 0,
+        delay_until_time datetime           NULL        
       ) with identity_gap = 100
 
       print 'Creating index on wf_node_token(process_id, complete_date)'
@@ -632,6 +634,7 @@ IF NOT EXISTS (SELECT id FROM wf_guard_action)
     insert into wf_guard_action values ( 0, 'Accept Token' )
     insert into wf_guard_action values ( 1, 'Discard Token' )
     insert into wf_guard_action values ( 2, 'Skip Node' )
+    insert into wf_guard_action values ( 3, 'Delay Until' )
   END
 ELSE
   BEGIN

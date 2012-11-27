@@ -32,6 +32,7 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.impl.BaseEngine;
+import com.googlecode.sarasvati.impl.TimerBasedDelayedTokenScheduler;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.GraphLoaderImpl;
 import com.googlecode.sarasvati.load.GraphValidator;
@@ -265,7 +266,27 @@ public class HibEngine extends BaseEngine
   @Override
   public DelayedTokenScheduler getDelayedTokenScheduler()
   {
-    throw new UnsupportedOperationException("Hibernate Engine does not yet support delaying tokens");
+    return TimerBasedDelayedTokenScheduler.newDelayedTokenScheduler(new HibEngineFactory(session.getSessionFactory(), getApplicationContext()));
+  }
+
+  /**
+   * Ensures that the given node token is the latest from the current session
+   *
+   * @see com.googlecode.sarasvati.impl.BaseEngine#reevaluateDelayedToken(com.googlecode.sarasvati.NodeToken)
+   */
+  @Override
+  public void reevaluateDelayedToken(final NodeToken token)
+  {
+    if (token instanceof HibNodeToken)
+    {
+      HibNodeToken hibNodeToken = (HibNodeToken) token;
+      hibNodeToken = getRepository().findNodeToken(hibNodeToken.getId());
+      super.reevaluateDelayedToken(hibNodeToken);
+    }
+    else
+    {
+      super.reevaluateDelayedToken(token);
+    }
   }
 
   public static void addToConfiguration (final Configuration config, final boolean enableCaching)

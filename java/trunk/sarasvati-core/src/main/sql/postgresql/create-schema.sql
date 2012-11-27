@@ -234,6 +234,7 @@ create table wf_guard_action
 insert into wf_guard_action values ( 0, 'Accept Token' );
 insert into wf_guard_action values ( 1, 'Discard Token' );
 insert into wf_guard_action values ( 2, 'Skip Node' );
+insert into wf_guard_action values ( 3, 'Delay Until' );
 
 create table wf_execution_type
 (
@@ -249,14 +250,16 @@ insert into wf_execution_type values ( 4, 'U-Turn/Backtracked' );
 
 create table wf_node_token
 (
-  id              int       NOT NULL PRIMARY KEY,
-  process_id      int       NOT NULL REFERENCES wf_process,
-  node_ref_id     int       NOT NULL REFERENCES wf_node_ref,
-  attr_set_id     int       NULL     REFERENCES wf_node_token,
-  create_date     timestamp NOT NULL DEFAULT current_timestamp,
-  guard_action    int       NULL     REFERENCES wf_guard_action,
-  execution_type  int       NOT NULL REFERENCES wf_execution_type,
-  complete_date   timestamp NULL
+  id               int        NOT NULL PRIMARY KEY,
+  process_id       int        NOT NULL REFERENCES wf_process,
+  node_ref_id      int        NOT NULL REFERENCES wf_node_ref,
+  attr_set_id      int        NULL     REFERENCES wf_node_token,
+  create_date      timestamp  NOT NULL DEFAULT current_timestamp,
+  guard_action     int        NULL     REFERENCES wf_guard_action,
+  execution_type   int        NOT NULL REFERENCES wf_execution_type,
+  complete_date    timestamp  NULL,
+  delay_count      int        NOT NULL default 0,
+  delay_until_time timestamp  NULL
 );
 
 create index wf_node_token_idx on wf_node_token(process_id, complete_date);

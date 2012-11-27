@@ -18,6 +18,12 @@
           <include>**/*.wf.xml</include>
         </includes>
       </resource>
+      <resource>
+        <directory>src/main/resources/</directory>
+        <includes>
+          <include>**/*.cfg.xml</include>
+        </includes>
+      </resource>      
     </resources>
        
      <plugins>

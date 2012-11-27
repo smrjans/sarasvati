@@ -16,37 +16,48 @@
 
     Copyright 2012 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.impl;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class SimpleDelayedTokenScheduler implements DelayedTokenScheduler
+import com.googlecode.sarasvati.DelayedTokenScheduler;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.EngineFactory;
+import com.googlecode.sarasvati.NodeToken;
+
+public enum TimerBasedDelayedTokenScheduler
 {
-  final EngineFactory engineFactory;
+  INSTANCE;
 
   // Make sure this isn't initialized until first use
   private static enum TimerContainer
   {
-    INSTANCE;
+    TIMER_SINGLETON;
 
     public final Timer timer = new Timer(getClass().getName() + "TimerThread", true);
   }
 
   private static Timer getTimer()
   {
-    return TimerContainer.INSTANCE.timer;
+    return TimerContainer.TIMER_SINGLETON.timer;
   }
 
-  public SimpleDelayedTokenScheduler(final EngineFactory engineFactory)
+  public static <T extends Engine> DelayedTokenScheduler newDelayedTokenScheduler(final EngineFactory<T> engineFactory)
   {
-    this.engineFactory = engineFactory;
+    return new DelayedTokenScheduler()
+    {
+      @Override
+      public void scheduleDelayedToken(final NodeToken token)
+      {
+        TimerBasedDelayedTokenScheduler.INSTANCE.scheduleDelayedToken(token, engineFactory);
+      }
+    };
   }
 
-  @Override
-  public void scheduleDelayedToken(final NodeToken token)
+  public <T extends Engine> void scheduleDelayedToken(final NodeToken token, final EngineFactory<T> engineFactory)
   {
-    getTimer().schedule(new TokenReevaluateTimerTask(token), token.getDelayUntilTime());
+    getTimer().schedule(new TokenReevaluateTimerTask<T>(engineFactory, token), token.getDelayUntilTime());
   }
 
   public static void shutdown()
@@ -54,12 +65,14 @@ public class SimpleDelayedTokenScheduler implements DelayedTokenScheduler
     getTimer().cancel();
   }
 
-  private class TokenReevaluateTimerTask extends TimerTask
+  private class TokenReevaluateTimerTask<T extends Engine> extends TimerTask
   {
+    private final EngineFactory<T> engineFactory;
     private final NodeToken token;
 
-    public TokenReevaluateTimerTask (final NodeToken token)
+    public TokenReevaluateTimerTask (final EngineFactory<T> engineFactory, final NodeToken token)
     {
+      this.engineFactory = engineFactory;
       this.token = token;
     }
 
@@ -69,15 +82,15 @@ public class SimpleDelayedTokenScheduler implements DelayedTokenScheduler
     @Override
     public void run()
     {
-      final Engine engine = engineFactory.getEngine();
+      final T engine = engineFactory.getEngine();
       try
       {
         engine.reevaluateDelayedToken(token);
-        engineFactory.dispose(engine, true);
+        engineFactory.dispose(engine);
       }
-      catch(final Exception e)
+      catch(final Throwable t)
       {
-        engineFactory.dispose(engine, false);
+        engineFactory.dispose(engine, t);
       }
     }
   }

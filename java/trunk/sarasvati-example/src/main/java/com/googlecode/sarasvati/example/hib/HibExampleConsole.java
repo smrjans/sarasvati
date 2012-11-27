@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -43,6 +44,7 @@ import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.hib.HibGraphProcess;
 import com.googlecode.sarasvati.load.DefaultNodeFactory;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
+import com.googlecode.sarasvati.rubric.env.RubricDateFunction;
 import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 
 public class HibExampleConsole
@@ -86,6 +88,24 @@ public class HibExampleConsole
       public boolean eval( final Engine engine, final NodeToken token )
       {
         return true;
+      }
+    });
+
+    repository.registerPredicate( "isFirstGuardEvaluation", new RubricPredicate()
+    {
+      @Override
+      public boolean eval( final Engine engine, final NodeToken token )
+      {
+        return token.getDelayCount() == 0;
+      }
+    });
+
+    repository.registerDateFunction("now", new RubricDateFunction()
+    {
+      @Override
+      public Date eval(final Engine engine, final NodeToken token)
+      {
+        return new Date();
       }
     });
 

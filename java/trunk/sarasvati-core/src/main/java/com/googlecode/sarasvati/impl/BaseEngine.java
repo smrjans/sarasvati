@@ -708,6 +708,11 @@ public abstract class BaseEngine implements Engine
     return parentEngine;
   }
 
+  public String getApplicationContext()
+  {
+    return applicationContext;
+  }
+
   /**
    * Creates a new engine base on the same parameters as this. For
    * example, if the engine is database backed, it should share

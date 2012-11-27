@@ -30,6 +30,7 @@ import com.googlecode.sarasvati.example.ApprovalNode;
 import com.googlecode.sarasvati.example.ApprovalSetupNode;
 import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.example.MessageNode;
+import com.googlecode.sarasvati.example.mem.MemExampleConsole;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.hib.HibNode;
@@ -67,7 +68,8 @@ public class TestHibLoad
 
     GraphLoader<HibGraph> wfLoader = engine.getLoader();
 
-    File baseDir = new File( "common/test-wf/" );
+    final File baseDir = new File(MemExampleConsole.class.getClassLoader().getResource("custom-node.wf.xml").toURI()).getParentFile();
+
     assert baseDir.exists() : "Workflow process def dir not found.";
 
     FilenameFilter filter = new FilenameFilter()

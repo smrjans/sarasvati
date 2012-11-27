@@ -19,22 +19,29 @@
 package com.googlecode.sarasvati;
 
 
-public interface EngineFactory
+
+public interface EngineFactory<T extends Engine>
 {
   /**
    * Returns an Engine which can be used for running processes.
    *
    * @return an Engine which can be used for running processes.
    */
-  Engine getEngine();
+  T getEngine();
 
   /**
-   * Handles cleaning up after an engine has been used. The success
-   * flags allows the EngineFactory to potentially commit or rollback
-   * if a database or other persistence mechanism is being used.
+   * Handles cleaning up after an engine has been used.
    *
    * @param engine The engine to be disposed of
-   * @param success Indicator of whether the operation was a success
    */
-  void dispose(Engine engine, boolean success);
+  void dispose(T engine);
+
+  /**
+   * Handles cleaning up after an engine has been used and an exception
+   * has been thrown during use.
+   *
+   * @param engine The engine to be disposed of
+   * @param throwable The throwable which was generated during use
+   */
+  void dispose(T engine, Throwable t);
 }
