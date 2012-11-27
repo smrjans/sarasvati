@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    
+    <groupId>com.googlecode.sarasvati.thirdparty.netbeans</groupId>
+    <artifactId>visual</artifactId>
+    <version>7.3</version>
+    
+    <packaging>jar</packaging>
+    
+    <name>util</name>
+    <description>NetBeans Visual API</description>
+    <url>http://www.netbeans.com/</url>
+    <inceptionYear>2012</inceptionYear>
+    
+    <licenses>
+        <license>
+            <name>CDDL and GPLv2 w/Classpath Exception license</name>
+            <url>http://netbeans.org/cddl-gplv2.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <scm>
+        <connection>scm:hg:http://hg.netbeans.org/main</connection>
+        <developerConnection>scm:hg:http://hg.netbeans.org/main</developerConnection>
+        <url>http://http://hg.netbeans.org/main/file/</url>
+    </scm>
+ 
+    <developers>
+        <developer>
+            <name>NetBeans</name>
+        </developer>
+    </developers>
+    
+    <properties>
+        <project.build.source>1.6</project.build.source>
+        <project.build.target>1.6</project.build.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
+</project>

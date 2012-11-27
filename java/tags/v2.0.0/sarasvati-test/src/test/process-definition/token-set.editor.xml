@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<editor-properties xmlns="http://sarasvati.googlecode.com/Editor">
+    <node name="N1" x="54" y="77"/>
+    <node name="N2" x="231" y="77"/>
+    <node name="N3" x="231" y="216"/>
+    <node name="N4" x="400" y="77"/>
+    <node name="N5" x="400" y="216"/>
+    <node name="N6" x="572" y="77"/>
+</editor-properties>

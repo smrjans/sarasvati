@@ -1,0 +1,79 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Examples</title><link rel="stylesheet" href="../docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"><link rel="home" href="index.html" title="Sarasvati - Simple, Capable and Transparent Workflow"><link rel="up" href="ch01.html" title="Chapter 1. What is workflow"><link rel="prev" href="ch01s02.html" title="Why workflow?"><link rel="next" href="ch02.html" title="Chapter 2. Why graph based workflow?"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Examples </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01s02.html">Prev</a> </td><th width="60%" align="center">Chapter 1. What is workflow</th><td width="20%" align="right"> <a accesskey="n" href="ch02.html">Next</a></td></tr></table><hr></div><div class="section" title="Examples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="what-is-workflow-examples"></a>Examples </h2></div></div></div><div class="section" title="Example 1: Order Fulfillment"><div class="titlepage"><div><div><h3 class="title"><a name="what-is-workflow-example-one"></a>Example 1: Order Fulfillment</h3></div></div></div><p>
+        The scenario here is of a small company which sells beach
+        balls. They have a process for servicing an order.
+    </p><div class="section" title="Actors"><div class="titlepage"><div><div><h4 class="title"><a name="what-is-workflow-example-one-actors"></a>Actors </h4></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+              Sales (person)
+            </p></li><li class="listitem"><p>
+              Billing (program)
+            </p></li><li class="listitem"><p>
+              Warehouse (person)
+            </p></li><li class="listitem"><p>
+              Marketing (program)
+            </p></li></ul></div></div><div class="section" title="The process"><div class="titlepage"><div><div><h4 class="title"><a name="what-is-workflow-example-one-process"></a>The process </h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+              The sales person receives an order and enters it into the system.
+            </p><div class="orderedlist"><ol class="orderedlist" type="a"><li class="listitem"><p>
+                  This includes the type number of products ordered and the payment information.
+                </p></li></ol></div></li><li class="listitem"><p>
+              Once this is complete, the order will go to both billing and
+              the warehouse.
+            </p></li><li class="listitem"><p>
+              While the warehouse people package and ship the order, the
+              billing system will perform whatever credit card transactions are
+              necessary.
+            </p></li><li class="listitem"><p>
+              Once the product is both shipped and billed, a marketing
+              system will determine what promotional material and/or
+              special offers to send to the customer, in order to elicit future
+              business.
+            </p></li></ol></div><p>
+          Graphically, the process could be represented as follows:
+        </p><div class="informalfigure"><div><img src="../images/example1.jpg"></div></div></div></div><div class="section" title="Example 2: Document conversion"><div class="titlepage"><div><div><h3 class="title"><a name="what-is-workflow-example-two"></a>Example 2: Document conversion</h3></div></div></div><p>
+        This scenario concerns a news aggregation company called NewsCO
+        which takes in news from various sources and republishes it in a variety of
+        formats. Here we will look at a simplified workflow which handles
+        two input formats.
+        </p><div class="section" title="Actors"><div class="titlepage"><div><div><h4 class="title"><a name="what-is-workflow-example-two-actors"></a>Actors </h4></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+              RSS -&gt; NewsCO XML format Converter (program)
+            </p></li><li class="listitem"><p>
+              Plain text -&gt; NewsCO XML format converter (program)
+            </p></li><li class="listitem"><p>
+              Editor (person)
+            </p></li><li class="listitem"><p>
+              NewsCO XML web publisher (program)
+            </p></li><li class="listitem"><p>
+              NewsCO XML Analyzer (program)
+            </p></li><li class="listitem"><p>
+              NewsCO XML RSS publisher (program)
+            </p></li></ul></div></div><div class="section" title="The process"><div class="titlepage"><div><div><h4 class="title"><a name="what-is-workflow-example-two-process"></a>The process </h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+              The process begins when an article arrives, either from an RSS feed
+              or via a file drop in plain text format.
+            </p></li><li class="listitem"><p>
+              Conversion:
+            </p><div class="orderedlist"><ol class="orderedlist" type="a"><li class="listitem"><p>
+                  If the article is in RSS format, the RSS XML will be converted to
+                  a proprietary XML format (the NewsCO XML format)
+                </p></li><li class="listitem"><p>
+                  If the article is in plain text, it will be parsed and converted
+                  to the NewsCO XML format.
+                </p></li><li class="listitem"><p>
+                  If there is an error in the conversion process, the article will
+                  be handed to a human editor who will manually do the conversion
+            </p></li></ol></div></li><li class="listitem"><p>
+              Publishing
+             </p><div class="orderedlist"><ol class="orderedlist" type="a"><li class="listitem"><p>
+                  The NewCO XML will be converted to a webpage and posted on a web
+                  site for consumption by the public. The web publisher is an
+                  asynchronous program which accepts XML and later provides
+                  notification when the publishing is complete. This could be a
+                  separate workflow.
+                </p></li><li class="listitem"><p>
+                  NewsCO customers receive RSS feeds of articles based on keywords. The
+                  article will be scanned for keywords. A database entry will be
+                  created.
+               </p></li><li class="listitem"><p>
+                  Each customer who has expressed interest in a keyword found in the
+                  article will have their RSS feed updated with a link to the
+                  published web article.
+                </p></li></ol></div></li></ol></div><p>
+          Graphically, the process could be represented as follows:
+        </p><div class="informalfigure"><div><img src="../images/example2.jpg"></div></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch01.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Why workflow? </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. Why graph based workflow?</td></tr></table></div></body></html>

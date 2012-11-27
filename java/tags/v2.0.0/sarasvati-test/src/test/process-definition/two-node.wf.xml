@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<process-definition name="two-node"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node type="wait" name="nodeA" isStart="true">
+    <arc to="nodeB"/>
+  </node>
+
+  <node type="wait" name="nodeB"/>
+
+</process-definition>

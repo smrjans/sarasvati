@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<process-definition name="joinlang-at-least-label-arcs-required" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="nodeA" type="wait" isStart="true">
+    <arc to="joinNode"/>
+  </node>
+
+  <node name="nodeB" type="wait" isStart="true">
+    <arc to="joinNode"/>
+  </node>
+
+  <node name="nodeC" type="wait" isStart="true">
+    <arc to="joinNode"/>
+  </node>
+
+  <node name="nodeD" type="wait" isStart="true">
+    <arc to="joinNode" name="foo"/>
+  </node>
+
+  <node name="nodeE" type="wait" isStart="true">
+    <arc to="joinNode" name="foo"/>
+  </node>
+
+  <node name="joinNode" type="wait" joinType="joinlang">
+    <join>
+      require at least 2 arcs labelled default when first
+      require at least 1 arcs labelled "foo" when first
+    </join>
+  </node>
+
+</process-definition>

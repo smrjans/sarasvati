@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<process-definition name="traversal"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="nodeA" isStart="true">
+    <arc to="nodeB"/>
+    <arc to="nodeC"/>
+  </node>
+
+  <node name="nodeB">
+    <arc to="nodeD"/>
+    <arc to="nodeE"/>
+    <arc to="nodeF"/>
+  </node>
+
+  <node name="nodeC">
+    <arc to="nodeG"/>
+    <arc to="nodeH"/>
+    <arc to="nodeI"/>
+  </node>
+
+  <node name="nodeD">
+    <arc to="nodeJ"/>
+  </node>
+
+  <node name="nodeE">
+    <arc to="nodeJ"/>
+  </node>
+
+  <node name="nodeF">
+    <arc to="nodeJ"/>
+  </node>
+
+  <node name="nodeG">
+    <arc to="nodeJ"/>
+  </node>
+
+  <node name="nodeH">
+    <arc to="nodeJ"/>
+  </node>
+
+  <node name="nodeI">
+    <arc to="nodeJ"/>
+  </node>
+
+  <node name="nodeJ" joinType="and"/>
+
+</process-definition>

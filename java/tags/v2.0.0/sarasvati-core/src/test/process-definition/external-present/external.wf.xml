@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<process-definition name="external"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node type="wait" name="nodeA"/>
+
+</process-definition>

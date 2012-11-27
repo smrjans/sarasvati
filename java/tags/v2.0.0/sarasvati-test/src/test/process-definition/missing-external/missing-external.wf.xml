@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<process-definition name="missing-external"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node type="wait" name="nodeA" isStart="true">
+    <arc external="ext1" to="nodeA"/>
+  </node>
+
+  <external name="ext1" processDefinition="ext1"/>
+
+</process-definition>

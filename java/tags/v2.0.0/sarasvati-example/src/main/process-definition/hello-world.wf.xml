@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<process-definition name="hello-world"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="hello" isStart="true" type="script">
+    <arc to="world"/>
+    <custom>
+      <execute type="js">
+        <![CDATA[ java.lang.System.out.print( "Hello" ); ]]>
+      </execute>
+    </custom>
+  </node>
+
+  <node name="world" type="script">
+    <custom>
+      <execute type="js">
+        <![CDATA[ java.lang.System.out.println( ", World!" ); ]]>
+      </execute>
+    </custom>
+  </node>
+
+</process-definition>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<process-definition xmlns="http://sarasvati.googlecode.com/ProcessDefinition" name="editor-generated">
+    <node type="task" joinType="labelAnd" name="Marketing">
+        <custom>
+            <taskName>Marketing</taskName>
+            <taskDesc>Send special offers to customer</taskDesc>
+        </custom>
+    </node>
+    <node isStart="true" type="task" joinType="or" name="Check Order">
+        <arc to="Bill Customer"/>
+        <arc to="Fulfill Order"/>
+        <custom>
+            <taskName>Check Order</taskName>
+            <taskDesc>Check the order for accuracy</taskDesc>
+        </custom>
+    </node>
+    <node type="task" joinType="or" name="Bill Customer">
+        <arc to="Marketing"/>
+        <custom>
+            <taskName>Bill Customer</taskName>
+            <taskDesc>Bill the customer for the order</taskDesc>
+        </custom>
+    </node>
+    <node type="task" joinType="or" name="Fulfill Order">
+        <arc to="Marketing"/>
+        <custom>
+            <taskName>Fulfill Order</taskName>
+            <taskDesc>Pack order items in warehouse and ship them</taskDesc>
+        </custom>
+    </node>
+</process-definition>
