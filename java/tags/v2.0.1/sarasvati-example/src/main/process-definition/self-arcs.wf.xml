@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<process-definition name="self-arcs"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="start" isStart="true">
+    <arc to="1"/>
+    <arc to="2"/>
+  </node>
+
+  <node type="task" name="1">
+    <arc to="3"/>
+    <arc to="1" name="reject"/>
+
+    <custom>
+      <taskName>Hello</taskName>
+      <taskDesc>
+        Here is where one would say hello
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="2">
+    <arc to="3"/>
+    <arc to="2" name="reject"/>
+
+    <custom>
+      <taskName>Shake</taskName>
+      <taskDesc>
+        Here is where you shake hands
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="3" joinType="labelAnd">
+    <arc to="4"/>
+    <arc to="3" name="reject"/>
+
+    <custom>
+      <taskName>Introduce</taskName>
+      <taskDesc>
+        Here is where you give your name
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="4">
+    <arc to="5"/>
+    <arc to="4" name="reject"/>
+
+    <custom>
+      <taskName>Pleasantry</taskName>
+      <taskDesc>
+        Here is where you say something like, 'Nice to meet you'
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="5">
+    <arc to="5" name="reject"/>
+    <custom>
+      <taskName>Converse</taskName>
+      <taskDesc>
+        Start a conversation
+      </taskDesc>
+    </custom>
+  </node>
+
+</process-definition>

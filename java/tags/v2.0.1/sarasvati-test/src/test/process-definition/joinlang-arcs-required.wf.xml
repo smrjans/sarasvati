@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<process-definition name="joinlang-arcs-required" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="nodeA" type="wait" isStart="true">
+    <arc to="nodeD"/>
+  </node>
+
+  <node name="nodeB" type="wait" isStart="true">
+    <arc to="nodeD"/>
+  </node>
+
+  <node name="nodeC" type="wait" isStart="true">
+    <arc to="nodeD"/>
+  </node>
+
+  <node name="nodeD" type="wait" joinType="joinlang">
+    <join>
+      require all arcs
+    </join>
+  </node>
+
+</process-definition>

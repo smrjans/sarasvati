@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<process-definition name="order" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="enter-order" type="task" isStart="true">
+    <arc to="billing"/>
+    <arc to="fulfillment"/>
+    <custom><task job="Enter Order" user="Alice"/></custom>
+  </node>
+
+  <node name="billing" type="task">
+    <arc to="marketing"/>
+    <custom><task job="Billing" user="Bob"/></custom>
+  </node>
+
+  <node name="fulfillment" type="task">
+    <arc to="marketing"/>
+    <custom><task job="Fulfill Order" user="Carol"/></custom>
+  </node>
+
+  <node name="marketing" type="task" joinType="labelAnd">
+    <custom><task job="Marketing" user="Dave"/></custom>
+  </node>
+
+</process-definition>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<!--
+  The unit test will tests the case where the trees are unbalanced:
+    A
+   B  C
+   B
+   B
+
+   We need to ensure that when C goes back to A, it waits for the B line
+   to get back to A as well.
+ -->
+<process-definition name="backtrack-uneven-trees" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="nodeA" type="wait" isStart="true">
+    <arc to="nodeB"/>
+    <arc to="nodeC"/>
+  </node>
+
+  <node name="nodeB" type="wait">
+    <arc to="nodeB" name="reject"/>
+  </node>
+
+  <node name="nodeC" type="wait">
+  </node>
+
+
+</process-definition>

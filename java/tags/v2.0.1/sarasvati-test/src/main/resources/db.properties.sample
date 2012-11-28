@@ -1,0 +1,11 @@
+postgresql.username=test
+postgresql.password=integtests
+postgresql.url=jdbc:postgresql://localhost:5432/test
+
+mysql.username=test
+mysql.password=integtests
+mysql.url=jdbc:mysql://localhost:3306/test
+
+oracle.username=test
+oracle.password=integtests
+oracle.url=jdbc:oracle:thin:@localhost:1521:test

@@ -1,0 +1,362 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+
+<chapter id="what-is-workflow">
+  <title>What is workflow</title>
+
+  <para>
+    To help understand what workflow is, we start with definitions of
+    the main components of a workflow system.
+  </para>
+
+  <section id="what-is-workflow-definitions">
+    <title>Definitions </title>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Actor</emphasis>
+          - A person or program which performs some
+          <emphasis>action</emphasis>
+          .
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis>Action</emphasis>
+          - Something to be performed by an
+          <emphasis>actor</emphasis>
+          . Once an
+          <emphasis>actor</emphasis>
+          is notified that a given
+          <emphasis>action</emphasis>
+          is to be completed, they may perform it synchronously or
+          asynchronously. It may take hours or days to complete the
+          <emphasis>action</emphasis>
+          .
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis>Process Definition</emphasis>
+          - A set of actions which need to be performed. The actions have a
+          defined order in which they must be performed. Some actions may be
+          performed concurrently with others.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis>Process</emphasis>
+          - An instantiation of a
+          <emphasis>process definition</emphasis>
+          . Each
+          <emphasis>process definition</emphasis>
+          may have many processes running at once. A
+          <emphasis>process definition</emphasis>
+          can be compared to the on disk image of a program, where the
+          <emphasis>process</emphasis>
+          is comparable to an executing program (possibly with multiple
+          threads of execution). Or from an OO perspective, a
+          <emphasis>process definition</emphasis>
+          is analogous to a class definition and a
+          <emphasis>process</emphasis>
+          is like an instantiated object of that class.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis>Workflow Engine</emphasis>
+          - A program, library or API which can load
+          <emphasis>process definitions</emphasis>
+          and from them, generate and execute a
+          <emphasis>processes</emphasis>
+          .
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis>Workflow</emphasis>
+          - A label for systems which enable the building of
+      process definitions and the execution of processes.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+  </section>
+  <section id="what-is-workflow-why-workflow">
+    <title>Why workflow?</title>
+
+    <para>
+      So what is so special about workflow? After all, dependencies
+      can be handled programatically. If action A is followed by action B,
+      then action A can just invoke action B when it is complete.
+      Concurrency can be handed by threads.
+    </para>
+
+    <para>
+      What workflow generally provides over a manual implementation is
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          Ease of implementation
+  </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              If there are complicated dependencies, these are tracked by
+              the workflow engine. Each action doesn't need to worry about what
+              comes before or after it. This also allows actions to be more
+              easily abstracted and reused.
+             </para>
+          </listitem>
+          <listitem>
+            <para>
+              The workflow engine also ideally handles persistence.
+              Processes can be long running, taking weeks or months to complete.
+              The workflow engine will handle persisting the state of the
+              workflow, so if the containing program dies, needs to be update or
+              restarted, the process will not be lost.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+
+        <para>
+          Ease of definition
+        </para>
+
+        <itemizedlist>
+          <listitem>
+            <para>
+              Workflow system generally provide an easier way of designing
+              and/or specifying process definitions than by doing it manually in
+              code.
+          </para>
+          </listitem>
+          <listitem>
+            <para>
+              Generally workflow systems can read in process definitions in
+              a human readable file format.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Many workflow systems also provide visual editors.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+  </section>
+  <section id="what-is-workflow-examples">
+    <title>Examples </title>
+
+    <section id="what-is-workflow-example-one">
+      <title>Example 1: Order Fulfillment</title>
+
+      <para>
+        The scenario here is of a small company which sells beach
+        balls. They have a process for servicing an order.
+    </para>
+
+      <section id="what-is-workflow-example-one-actors">
+        <title>Actors </title>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Sales (person)
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Billing (program)
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Warehouse (person)
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Marketing (program)
+            </para>
+          </listitem>
+        </itemizedlist>
+
+      </section>
+      <section id="what-is-workflow-example-one-process">
+        <title>The process </title>
+        <orderedlist>
+          <listitem>
+            <para>
+              The sales person receives an order and enters it into the system.
+            </para>
+            <orderedlist>
+              <listitem>
+                <para>
+                  This includes the type number of products ordered and the payment information.
+                </para>
+              </listitem>
+            </orderedlist>
+          </listitem>
+          <listitem>
+            <para>
+              Once this is complete, the order will go to both billing and
+              the warehouse.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              While the warehouse people package and ship the order, the
+              billing system will perform whatever credit card transactions are
+              necessary.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Once the product is both shipped and billed, a marketing
+              system will determine what promotional material and/or
+              special offers to send to the customer, in order to elicit future
+              business.
+            </para>
+          </listitem>
+        </orderedlist>
+
+        <para>
+          Graphically, the process could be represented as follows:
+        </para>
+
+        <informalfigure>
+          <graphic fileref="../images/example1.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+
+      </section>
+    </section>
+    <section id="what-is-workflow-example-two">
+      <title>Example 2: Document conversion</title>
+
+      <para>
+        This scenario concerns a news aggregation company called NewsCO
+        which takes in news from various sources and republishes it in a variety of
+        formats. Here we will look at a simplified workflow which handles
+        two input formats.
+        </para>
+
+      <section id="what-is-workflow-example-two-actors">
+        <title>Actors </title>
+        <itemizedlist>
+          <listitem>
+            <para>
+              RSS -> NewsCO XML format Converter (program)
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Plain text -> NewsCO XML format converter (program)
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Editor (person)
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              NewsCO XML web publisher (program)
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              NewsCO XML Analyzer (program)
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              NewsCO XML RSS publisher (program)
+            </para>
+          </listitem>
+        </itemizedlist>
+
+      </section>
+      <section id="what-is-workflow-example-two-process">
+        <title>The process </title>
+        <orderedlist>
+          <listitem>
+            <para>
+              The process begins when an article arrives, either from an RSS feed
+              or via a file drop in plain text format.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Conversion:
+            </para>
+            <orderedlist>
+              <listitem>
+                <para>
+                  If the article is in RSS format, the RSS XML will be converted to
+                  a proprietary XML format (the NewsCO XML format)
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  If the article is in plain text, it will be parsed and converted
+                  to the NewsCO XML format.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  If there is an error in the conversion process, the article will
+                  be handed to a human editor who will manually do the conversion
+            </para>
+              </listitem>
+            </orderedlist>
+          </listitem>
+          <listitem>
+            <para>
+              Publishing
+             </para>
+            <orderedlist>
+              <listitem>
+                <para>
+                  The NewCO XML will be converted to a webpage and posted on a web
+                  site for consumption by the public. The web publisher is an
+                  asynchronous program which accepts XML and later provides
+                  notification when the publishing is complete. This could be a
+                  separate workflow.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  NewsCO customers receive RSS feeds of articles based on keywords. The
+                  article will be scanned for keywords. A database entry will be
+                  created.
+               </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Each customer who has expressed interest in a keyword found in the
+                  article will have their RSS feed updated with a link to the
+                  published web article.
+                </para>
+              </listitem>
+            </orderedlist>
+          </listitem>
+        </orderedlist>
+
+        <para>
+          Graphically, the process could be represented as follows:
+        </para>
+        <informalfigure>
+          <graphic fileref="../images/example2.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+
+      </section>
+    </section>
+  </section>
+</chapter>

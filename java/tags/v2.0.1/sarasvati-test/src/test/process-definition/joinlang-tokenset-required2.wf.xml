@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<process-definition name="joinlang-tokenset-required2"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="nodeA" type="script" isStart="true">
+    <arc to="nodeC"/>
+
+    <custom>
+      <execute type="js">
+        <![CDATA[
+          engine.completeWithNewTokenSet( token, null, "ts1", 2, false, null, null );
+        ]]>
+      </execute>
+    </custom>
+  </node>
+
+  <node name="nodeB" type="script" isStart="true">
+    <arc to="nodeD"/>
+
+    <custom>
+      <execute type="js">
+        <![CDATA[
+          engine.completeWithNewTokenSet( token, null, "ts2", 2, false, null, null );
+        ]]>
+      </execute>
+    </custom>
+  </node>
+
+  <node name="nodeC" type="wait" >
+    <arc to="nodeE"/>
+  </node>
+
+
+  <node name="nodeD" type="wait" >
+    <arc to="nodeE"/>
+  </node>
+
+  <node name="nodeE" type="wait" joinType="joinlang">
+    <join>
+      require tokenset "ts1" when first
+      or
+      require tokenset "ts2" when first
+    </join>
+  </node>
+
+</process-definition>

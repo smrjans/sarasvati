@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<!--
+  The unit test should progress from A to B to C.
+  It should then try to backtrack from C to B and
+  then from B to A.
+-->
+<process-definition name="backtrack-twice-linear" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="nodeA" type="wait" isStart="true">
+    <arc to="nodeB"/>
+  </node>
+
+  <node name="nodeB" type="wait">
+    <arc to ="nodeC"/>
+  </node>
+
+  <node name="nodeC" type="wait">
+  </node>
+
+</process-definition>

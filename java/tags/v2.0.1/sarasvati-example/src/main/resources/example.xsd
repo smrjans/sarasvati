@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:s="http://sarasvati.googlecode.com/example/"
+        targetNamespace="http://sarasvati.googlecode.com/example/">
+
+    <element name="task-def" type="s:TaskDef"></element>
+
+    <complexType name="TaskDef">
+      <annotation>
+        <documentation></documentation>
+      </annotation>
+      <sequence>
+        <element name="task-name" type="string" minOccurs="1" maxOccurs="1" >
+          <annotation>
+            <documentation>
+              The task name
+            </documentation>
+          </annotation></element>
+        <element name="task-name" type="string" minOccurs="1" maxOccurs="1" >
+          <annotation>
+            <documentation>
+              The task name
+            </documentation>
+          </annotation></element>
+
+      </sequence>
+    </complexType>
+
+</schema>
