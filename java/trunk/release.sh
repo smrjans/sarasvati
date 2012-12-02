@@ -16,6 +16,7 @@ mvn clean
 mvn install 
 mvn source:jar
 mvn javadoc:jar
+mvn javadoc:aggregate
 popd
 
 function deployFile {

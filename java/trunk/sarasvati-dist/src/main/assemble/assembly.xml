@@ -47,6 +47,10 @@
       </excludes>
       <outputDirectory>lib</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>../sarasvati-parent/target/site/</directory>
+      <outputDirectory>doc</outputDirectory>
+    </fileSet>
   </fileSets>
 
   <files>
