@@ -6,7 +6,8 @@
     <format>tar.gz</format>
     <format>zip</format>
   </formats>
-  <includeBaseDirectory>false</includeBaseDirectory>
+  <includeBaseDirectory>true</includeBaseDirectory>
+  <baseDirectory>sarasvati-${project.version}</baseDirectory>
   <moduleSets>
     <moduleSet>    
       <useAllReactorProjects>true</useAllReactorProjects>
@@ -16,12 +17,17 @@
         <include>com.googlecode.sarasvati:sarasvati-hibernate</include>
         <include>com.googlecode.sarasvati:sarasvati-visual</include>
         <include>com.googlecode.sarasvati:sarasvati-example</include>
+        <include>com.googlecode.sarasvati:sarasvati-editor</include>
+        <include>com.googlecode.sarasvati:sarasvati-test</include>
+        <include>com.googlecode.sarasvati:sarasvati-dist</include>
       </includes>
       
       <sources>
         <fileSets>
           <fileSet>
-            <directory>src</directory>
+            <excludes>
+              <exclude>target/**</exclude>
+            </excludes>
           </fileSet>
         </fileSets>      
       </sources>
@@ -42,4 +48,27 @@
       <outputDirectory>lib</outputDirectory>
     </fileSet>
   </fileSets>
+
+  <files>
+   <file>
+     <source>README</source>
+     <outputDirectory>/</outputDirectory>
+     <filtered>false</filtered>
+   </file>
+   <file>
+     <source>GPLv3.license</source>
+     <outputDirectory>/</outputDirectory>
+     <filtered>false</filtered>
+   </file>
+   <file>
+     <source>LGPLv3.license</source>
+     <outputDirectory>/</outputDirectory>
+     <filtered>false</filtered>
+   </file>
+   <file>
+     <source>../sarasvati-parent/pom.xml</source>
+     <outputDirectory>/sarasvati-parent</outputDirectory>
+     <filtered>false</filtered>
+   </file>
+  </files>
 </assembly>

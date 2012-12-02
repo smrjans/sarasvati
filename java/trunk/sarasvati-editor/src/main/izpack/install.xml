@@ -21,7 +21,7 @@
   </locale>
 
   <resources>
-    <res id="InfoPanel.info"        src="../../README"/>
+    <res id="InfoPanel.info"        src="../../sarasvati-dist/README"/>
     <res id="LicencePanel.licence"  src="../LICENSE.txt"/>
     <res id="shortcutSpec.xml"      src="shortcutSpec.xml"/>
     <res id="Unix_shortcutSpec.xml" src="Unix_shortcutSpec.xml"/>
