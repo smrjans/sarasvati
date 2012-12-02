@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<editor-properties xmlns="http://sarasvati.googlecode.com/Editor">
+    <node y="193" x="45" name="Write Document"/>
+    <node y="33" x="261" name="Reviewer One"/>
+    <node y="193" x="261" name="Reviewer Two"/>
+    <node y="367" x="261" name="Node_4"/>
+    <node y="193" x="483" name="Send to printer"/>
+</editor-properties>

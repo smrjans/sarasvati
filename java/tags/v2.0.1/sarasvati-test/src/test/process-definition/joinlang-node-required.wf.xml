@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<process-definition name="joinlang-node-required" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="A" type="wait" isStart="true">
+    <arc to="D"/>
+  </node>
+
+  <node name="B" type="wait" isStart="true">
+    <arc to="D"/>
+  </node>
+
+  <node name="C" type="wait" isStart="true">
+    <arc to="D"/>
+  </node>
+
+  <node name="D" type="wait" joinType="joinlang">
+    <join>
+      require node "A"
+      require node "B" when B.isNeeded
+      require node "C" when C.isNeeded
+    </join>
+  </node>
+
+</process-definition>

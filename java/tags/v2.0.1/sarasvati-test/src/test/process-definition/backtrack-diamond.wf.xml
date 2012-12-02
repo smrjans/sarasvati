@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<!--
+  The unit test should progress from A to B,C,D then try to backtrack to A
+ -->
+<process-definition name="backtrack-diamond" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="nodeA" type="wait" isStart="true">
+    <arc to="nodeB"/>
+    <arc to="nodeC"/>
+  </node>
+
+  <node name="nodeB" type="wait">
+    <arc to="nodeD"/>
+  </node>
+
+  <node name="nodeC" type="wait">
+    <arc to="nodeD"/>
+  </node>
+
+  <node name="nodeD" type="wait" joinType="and">
+  </node>
+
+</process-definition>

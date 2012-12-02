@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<editor-properties xmlns="http://sarasvati.googlecode.com/Editor">
+    <node y="170" x="547" name="Marketing"/>
+    <node y="170" x="88" name="Check Order"/>
+    <node y="66" x="322" name="Bill Customer"/>
+    <node y="294" x="322" name="Fulfill Order"/>
+</editor-properties>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<!--
+  The unit test should progress from A to B,C,D then try to backtrack to A
+ -->
+<process-definition name="backtrack-split-join" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="nodeA" type="wait" isStart="true">
+    <arc to="nodeC"/>
+  </node>
+
+  <node name="nodeB" type="wait" isStart="true">
+    <arc to="nodeD"/>
+  </node>
+
+  <node name="nodeC" type="wait">
+    <arc to="nodeE"/>
+  </node>
+
+  <node name="nodeD" type="wait">
+    <arc to="nodeE"/>
+  </node>
+
+  <node name="nodeE" type="wait" joinType="and">
+    <arc to="nodeF"/>
+    <arc to="nodeG"/>
+  </node>
+
+  <node name="nodeF" type="wait">
+  </node>
+
+  <node name="nodeG" type="wait">
+  </node>
+
+</process-definition>

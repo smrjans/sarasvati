@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<process-definition name="one-node" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="start" isStart="true">
+    <arc to="one-node.1"/>
+  </node>
+
+  <node name="one-node.1" joinType="labelAnd"/>
+
+</process-definition>

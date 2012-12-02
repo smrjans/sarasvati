@@ -1,0 +1,37 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The Sarasvati Engine</title><link rel="stylesheet" href="../docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"><link rel="home" href="index.html" title="Sarasvati - Simple, Capable and Transparent Workflow"><link rel="up" href="ch04.html" title="Chapter 4. Using Sarasvati"><link rel="prev" href="ch04s02.html" title="Sarasvati File Format"><link rel="next" href="ch04s04.html" title="Loading Process Definitions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">The Sarasvati Engine</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Using Sarasvati</th><td width="20%" align="right"> <a accesskey="n" href="ch04s04.html">Next</a></td></tr></table><hr></div><div class="section" title="The Sarasvati Engine"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-api-engine"></a>The Sarasvati Engine</h2></div></div></div><p>
+      Almost all interaction with the Sarasvati will involve an instance of an
+      <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/Engine.html" target="_top">Engine</a>
+      in some way.
+    </p><p>
+      An engine instance does the work of executing process definintions as well as
+      providing access to other APIs, such as the loader.
+    </p><p>
+      Sarasvati supports multiple backends, and is packaged with two. Each backend
+      will provide its own <code class="literal">Engine</code> impementation.
+
+      </p><div class="table"><a name="id539646"></a><p class="title"><b>Table 4.10. Engine Implementations</b></p><div class="table-contents"><table summary="Engine Implementations" border="1"><colgroup><col><col></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>MemEngine</td><td>
+                This engine runs only in memory. Workflows must be loaded everytime the
+                JVM starts up. Processes will only survive as long as the JVM is running.
+                Since no database accesses are done, this implementation should provide
+                the best performance.
+              </td></tr><tr><td>HibEngine</td><td>
+                This engine stores process definitions and the state of processes in
+                a database. Communication with the database is handled using Hibernate.
+              </td></tr></tbody></table></div></div><p><br class="table-break">
+
+      Creating a new <code class="literal">MemEngine</code> is straightforward.
+      </p><pre class="programlisting">
+  MemEngine engine = new MemEngine();
+      </pre><p>
+
+      Creating a new <code class="literal">HibEngine</code> is only slightly more complicated.
+      It requires a Hibernate <code class="literal">Session</code> in order to function.
+      </p><pre class="programlisting">
+  HibEngine engine = new HibEngine( session );
+
+  // alternately, the session can be set
+  // after construction
+  HibEngine engine = new HibEngine();
+  engine.setSession( session );
+      </pre><p>
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> Sarasvati File Format </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Loading Process Definitions</td></tr></table></div></body></html>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<process-definition name="custom-node" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="cust" type="customTest" isStart="true">
+    <custom>
+      <size>1</size>
+      <label>test - label</label>
+
+      <inner>
+        <value type="foo">bar</value>
+        <test>baz</test>
+      </inner>
+    </custom>
+  </node>
+
+</process-definition>
