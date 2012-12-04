@@ -6,11 +6,28 @@ Sarasvati includes a domain specific language (DSL) for defining guards. A Rubri
 
 {{{
  STMT = 'if' EXPR 'then' STMT 'else' STMT
-      | Accept | Discard | Skip | Skip ARCNAME
+      | Accept 
+      | Discard 
+      | Skip 
+      | Skip ARCNAME
+      | Delay until DATE
       | digit
       | "quoted string"
-      | '(' DATEFUNCTION ')'
-      | '(' NUMBER (hour|hours|day|days|week|weeks) (before|after) DATEFUNCTION ')'
+      | DATE
+
+ DATE= = '(' DATEFUNCTION ')'
+       | '(' NUMBER UNIT (before|after) DATEFUNCTION ')'
+
+ UNIT = second
+      | seconds
+      | minute
+      | minutes
+      | hour
+      | hours
+      | day
+      | days
+      | week
+      | weeks
 
  EXPR = PREDICATE
       | PREDICATE 'or' EXPR
