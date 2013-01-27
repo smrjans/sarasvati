@@ -41,7 +41,7 @@ public class HibNodeType
   private String      description;
 
   @OneToOne
-  @JoinColumn(name = "Behaviour")
+  @JoinColumn(name = "behaviour")
   private HibNodeType behaviour;
 
   protected HibNodeType ()
