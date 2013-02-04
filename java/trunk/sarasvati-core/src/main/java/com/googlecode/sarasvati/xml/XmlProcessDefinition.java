@@ -24,6 +24,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -37,6 +40,7 @@ import com.googlecode.sarasvati.load.SarasvatiLoadException;
 import com.googlecode.sarasvati.load.definition.ExternalDefinition;
 import com.googlecode.sarasvati.load.definition.NodeDefinition;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
+import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 import com.googlecode.sarasvati.util.SvUtil;
 
 @XmlRootElement(name = "process-definition")
@@ -51,6 +55,9 @@ public class XmlProcessDefinition implements ProcessDefinition
 
   @XmlElement(name = "external")
   protected List<XmlExternal> externals = new ArrayList<XmlExternal>();
+
+  @XmlElement(name="custom")
+  protected XmlCustom custom;
 
   @XmlTransient
   protected String messageDigest = null;
@@ -89,6 +96,23 @@ public class XmlProcessDefinition implements ProcessDefinition
   }
 
   @Override
+  public List<Object> getCustomProcessData()
+  {
+    return custom != null? custom.getCustom() : Collections.emptyList(); 
+  }
+  
+  @Override
+  public XmlCustom getCustom() 
+  {
+    return custom;
+  }
+
+  public void setCustom(XmlCustom custom) 
+  {
+    this.custom = custom;
+  }
+
+  @Override
   public String getMessageDigest () throws SarasvatiLoadException
   {
     if ( messageDigest == null )
@@ -101,6 +125,18 @@ public class XmlProcessDefinition implements ProcessDefinition
         MessageDigest digest = MessageDigest.getInstance( "SHA1" );
         digest.update( name.getBytes() );
 
+        Map<String, String> customProps = new TreeMap<String, String>();
+        DOMToObjectLoadHelper.loadCustomIntoMap( custom, customProps );
+
+        for ( Entry<String, String> entry : customProps.entrySet() )
+        {
+          digest.update( entry.getKey().getBytes() );
+          if ( !SvUtil.isBlankOrNull( entry.getValue() ) )
+          {
+            digest.update( entry.getValue().getBytes() );
+          }
+        }
+        
         for ( XmlNode node : nodes )
         {
           node.addToDigest( digest );
@@ -130,6 +166,11 @@ public class XmlProcessDefinition implements ProcessDefinition
     buf.append( getName() );
     buf.append( "\">\n" );
 
+    if (custom != null) {
+    	buf.append( custom );
+    	buf.append( "\n" );
+    }
+    
     for (NodeDefinition node : nodes)
     {
       buf.append( node );

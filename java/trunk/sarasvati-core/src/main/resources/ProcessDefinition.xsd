@@ -16,6 +16,14 @@
         </xs:annotation>
 
         <xs:sequence>
+          <xs:element name="custom" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+
           <xs:element name="node" type="Node" minOccurs="1" maxOccurs="unbounded" >
             <xs:annotation>
               <xs:documentation>
