@@ -468,6 +468,16 @@ public interface Engine
   GuardResult evaluateGuard (NodeToken token, String guard);
 
   /**
+   * Allows retrying an arc token, to see if the conditions have changed and 
+   * its execution can now be completed.
+   * 
+   * @param token The token to retry
+   * @return The resulting join action
+   */
+  JoinAction retryIncompleteArcToken (final ArcToken token);
+  
+
+  /**
    * Since an Engine can have state specific to the currently executing process,
    * there are times we want to create a new engine (such as when executing a
    * nested process). If this engine is being created to execute a nested process,

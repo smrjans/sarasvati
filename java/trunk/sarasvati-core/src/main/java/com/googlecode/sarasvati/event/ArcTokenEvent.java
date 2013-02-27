@@ -44,6 +44,11 @@ public class ArcTokenEvent extends ExecutionEvent
     return engine.fireEvent( new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_BACKTRACKED, arcToken ) );
   }
 
+  public static final EventActions fireIncompleteJoinEvent (final Engine engine, final ArcToken arcToken)
+  {
+    return engine.fireEvent( new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_INCOMPLETE_JOIN, arcToken ) );
+  }
+
   public static final EventActions fireMergedEvent (final Engine engine, final ArcToken arcToken)
   {
     return engine.fireEvent( new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_MERGED, arcToken ) );

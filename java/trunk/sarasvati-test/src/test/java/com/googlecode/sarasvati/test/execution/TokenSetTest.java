@@ -226,11 +226,10 @@ public class TokenSetTest extends ExecutionTest
         "[5 N3 C F ts 1]" +
         "  (C F 8)" +
         "[6 N4 C F ts 0]" +
-        "  (C F 9)" +
+        "  (I F N6)" +
         "[7 N4 C F ts 1]" +
-        "  (C F 9)" +
-        "[8 N5 C F ts 1]" +
-        "[9 N6 I F]";
+        "  (I F N6)" +
+        "[8 N5 C F ts 1]";
     TestProcess.validate( p, state );
 
     token = getActiveToken(p, "N3", "ts", 0);
@@ -243,21 +242,20 @@ public class TokenSetTest extends ExecutionTest
         "  (C F 5)" +
         "[2 N2 C F ts 0]" +
         "  (C F 6)" +
-        "  (C F 10)" +
+        "  (C F 9)" +
         "[3 N3 C F ts 0]" +
-        "  (C F 10)" +
+        "  (C F 9)" +
         "[4 N2 C F ts 1]" +
         "  (C F 7)" +
         "  (C F 8)" +
         "[5 N3 C F ts 1]" +
         "  (C F 8)" +
         "[6 N4 C F ts 0]" +
-        "  (C F 9)" +
+        "  (I F N6)" +
         "[7 N4 C F ts 1]" +
-        "  (C F 9)" +
+        "  (I F N6)" +
         "[8 N5 C F ts 1]" +
-        "[9 N6 I F]" +
-        "[10 N5 I F ts 0]";
+        "[9 N5 I F ts 0]";
     TestProcess.validate( p, state );
 
     token = getActiveToken(p, "N5", "ts", 0);
@@ -270,21 +268,21 @@ public class TokenSetTest extends ExecutionTest
         "  (C F 5)" +
         "[2 N2 C F ts 0]" +
         "  (C F 6)" +
-        "  (C F 10)" +
+        "  (C F 9)" +
         "[3 N3 C F ts 0]" +
-        "  (C F 10)" +
+        "  (C F 9)" +
         "[4 N2 C F ts 1]" +
         "  (C F 7)" +
         "  (C F 8)" +
         "[5 N3 C F ts 1]" +
         "  (C F 8)" +
         "[6 N4 C F ts 0]" +
-        "  (C F 9)" +
+        "  (C F 10)" +
         "[7 N4 C F ts 1]" +
-        "  (C F 9)" +
+        "  (C F 10)" +
         "[8 N5 C F ts 1]" +
-        "[9 N6 I F]" +
-        "[10 N5 C F ts 0]";
+        "[9 N5 C F ts 0]" +
+        "[10 N6 I F]";
     TestProcess.validate( p, state );
 
     token = getActiveToken(p, "N6");

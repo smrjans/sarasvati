@@ -109,6 +109,11 @@ public class HibGraphRepository implements GraphRepository<HibGraph>
     return (HibNodeToken)session.load( HibNodeToken.class, tokenId );
   }
 
+  public HibArcToken loadArcToken (final long tokenId)
+  {
+    return (HibArcToken)session.load( HibArcToken.class, tokenId );
+  }
+
   public HibNodeToken findNodeToken (final long tokenId)
   {
     return (HibNodeToken)session.get( HibNodeToken.class, tokenId );

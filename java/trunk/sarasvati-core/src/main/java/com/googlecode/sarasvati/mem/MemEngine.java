@@ -21,6 +21,8 @@ package com.googlecode.sarasvati.mem;
 
 import com.googlecode.sarasvati.DelayedTokenScheduler;
 import com.googlecode.sarasvati.EngineFactory;
+import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
+import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.impl.BaseEngine;
 import com.googlecode.sarasvati.impl.TimerBasedDelayedTokenScheduler;
 import com.googlecode.sarasvati.load.GraphLoader;
@@ -151,6 +153,25 @@ public class MemEngine extends BaseEngine
     return TimerBasedDelayedTokenScheduler.newDelayedTokenScheduler(newEngineFactory());
   }
 
+  /**
+   * Provides a subclass to override which execution event listeners are added to
+   * new global queues. By default this adds the listeners from {@link BaseEngine} 
+   * as well as the following listeners:
+   * <ul>
+   *  <li>{@link TokenSetDeadEndListener}</li>
+   * </ul>
+   *
+   * @param queue The new global queue
+   */
+  @Override
+  protected void contributeGlobalListeners (final DefaultExecutionEventQueue queue)
+  {
+    super.contributeGlobalListeners(queue);
+    queue.addListener( new TokenSetDeadEndListener(),
+                       ExecutionEventType.ARC_TOKEN_INCOMPLETE_JOIN,
+                       ExecutionEventType.NODE_TOKEN_COMPLETED );
+  }
+  
   private EngineFactory<MemEngine> newEngineFactory()
   {
     return new EngineFactory<MemEngine>()

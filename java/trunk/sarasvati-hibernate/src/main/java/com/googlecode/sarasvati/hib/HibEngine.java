@@ -29,6 +29,7 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.DelayedTokenScheduler;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.impl.BaseEngine;
@@ -333,5 +334,24 @@ public class HibEngine extends BaseEngine
       config.setCacheConcurrencyStrategy( HibNodeToken.class.getName(),"read-write" );
       config.setCacheConcurrencyStrategy( HibArcToken.class.getName(),"read-write" );
     }
+  }
+  
+  /**
+   * Provides a subclass to override which execution event listeners are added to
+   * new global queues. By default this adds the listeners from {@link BaseEngine} 
+   * as well as the following listeners:
+   * <ul>
+   *  <li>{@link TokenSetDeadEndListener}</li>
+   * </ul>
+   *
+   * @param queue The new global queue
+   */
+  @Override
+  protected void contributeGlobalListeners (final DefaultExecutionEventQueue queue)
+  {
+    super.contributeGlobalListeners(queue);
+    queue.addListener( new TokenSetDeadEndListener(),
+                       ExecutionEventType.ARC_TOKEN_INCOMPLETE_JOIN,
+                       ExecutionEventType.NODE_TOKEN_COMPLETED );
   }
 }

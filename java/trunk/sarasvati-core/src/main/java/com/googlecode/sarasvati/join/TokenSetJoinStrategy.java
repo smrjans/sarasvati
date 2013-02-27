@@ -19,13 +19,13 @@
 package com.googlecode.sarasvati.join;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.JoinAction;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.TokenSet;
@@ -118,22 +118,24 @@ public class TokenSetJoinStrategy implements JoinStrategy
     final List<TokenSet> tokenSets = getTokenSet( token );
     final List<ArcToken> resultTokens = new ArrayList<ArcToken>();
 
-    final AndJoinStrategy strategy = new AndJoinStrategy();
-
     for (final TokenSet tokenSet : tokenSets)
     {
-      for (int idx=0; idx <= tokenSet.getMaxMemberIndex(); idx++)
+      if (!tokenSet.getActiveNodeTokens(engine).isEmpty())
       {
-        JoinResult result = strategy.performJoin(token, new TokenSetGroupFilter(tokenSet, idx));
-        if (result.getJoinAction() == JoinAction.Complete)
-        {
-          resultTokens.addAll(result.getArcTokensCompletingJoin());
-        }
-        else
+        return IncompleteJoinResult.INSTANCE;
+      }
+      
+      final Collection<ArcToken> members = tokenSet.getActiveArcTokens(engine);
+       
+      for (final ArcToken member : members)
+      {
+        if (!member.getArc().getEndNode().equals(token.getArc().getEndNode()))
         {
           return IncompleteJoinResult.INSTANCE;
         }
       }
+      
+      resultTokens.addAll(members);
     }
 
     return new CompleteJoinResult( resultTokens, tokenSets );

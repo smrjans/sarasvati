@@ -26,27 +26,28 @@ public enum ExecutionEventType
    *       stable. If adding a new event type, it must be assigned the next
    *       highest power of 2.
    */
-  PROCESS_CREATED          ( 1 << 0 ),
-  PROCESS_STARTED          ( 1 << 1 ),
-  PROCESS_PENDING_COMPLETE ( 1 << 2 ),
-  PROCESS_COMPLETED        ( 1 << 3 ),
-  PROCESS_PENDING_CANCEL   ( 1 << 4 ),
-  PROCESS_CANCELED         ( 1 << 5 ),
+  PROCESS_CREATED           ( 1 << 0 ),
+  PROCESS_STARTED           ( 1 << 1 ),
+  PROCESS_PENDING_COMPLETE  ( 1 << 2 ),
+  PROCESS_COMPLETED         ( 1 << 3 ),
+  PROCESS_PENDING_CANCEL    ( 1 << 4 ),
+  PROCESS_CANCELED          ( 1 << 5 ),
 
-  NODE_TOKEN_CREATED       ( 1 << 6 ),
-  NODE_TOKEN_ACCEPTED      ( 1 << 7 ),
-  NODE_TOKEN_EXECUTED      ( 1 << 8 ),
-  NODE_TOKEN_DISCARDED     ( 1 << 9 ),
-  NODE_TOKEN_SKIPPED       ( 1 << 10 ),
-  NODE_TOKEN_COMPLETED     ( 1 << 11 ),
-  NODE_TOKEN_BACKTRACKED   ( 1 << 12 ),
-  NODE_TOKEN_DELAYED       ( 1 << 18 ),
+  NODE_TOKEN_CREATED        ( 1 << 6 ),
+  NODE_TOKEN_ACCEPTED       ( 1 << 7 ),
+  NODE_TOKEN_EXECUTED       ( 1 << 8 ),
+  NODE_TOKEN_DISCARDED      ( 1 << 9 ),
+  NODE_TOKEN_SKIPPED        ( 1 << 10 ),
+  NODE_TOKEN_COMPLETED      ( 1 << 11 ),
+  NODE_TOKEN_BACKTRACKED    ( 1 << 12 ),
+  NODE_TOKEN_DELAYED        ( 1 << 18 ),
 
-  ARC_TOKEN_CREATED        ( 1 << 13 ),
-  ARC_TOKEN_PROCESSED      ( 1 << 14 ),
-  ARC_TOKEN_COMPLETED      ( 1 << 15 ),
-  ARC_TOKEN_BACKTRACKED    ( 1 << 16 ),
-  ARC_TOKEN_MERGED         ( 1 << 17 );
+  ARC_TOKEN_CREATED         ( 1 << 13 ),
+  ARC_TOKEN_PROCESSED       ( 1 << 14 ),
+  ARC_TOKEN_COMPLETED       ( 1 << 15 ),
+  ARC_TOKEN_BACKTRACKED     ( 1 << 16 ),
+  ARC_TOKEN_MERGED          ( 1 << 17 ),
+  ARC_TOKEN_INCOMPLETE_JOIN ( 1 << 18 );
 
   private static final int INVERSE_MASK = 0xFFFFFFFF;
 
@@ -92,7 +93,8 @@ public enum ExecutionEventType
            this == ARC_TOKEN_PROCESSED   ||
            this == ARC_TOKEN_COMPLETED   ||
            this == ARC_TOKEN_MERGED      ||
-           this == ARC_TOKEN_BACKTRACKED;
+           this == ARC_TOKEN_BACKTRACKED ||
+           this == ARC_TOKEN_INCOMPLETE_JOIN;
   }
 
   public static int toMask (final ExecutionEventType...eventTypes)

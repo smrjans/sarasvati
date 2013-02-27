@@ -135,6 +135,7 @@ public abstract class BaseEngine implements Engine
   {
     queue.addListener( new TokenSetCompletionListener(),
                        ExecutionEventType.ARC_TOKEN_COMPLETED,
+                       ExecutionEventType.ARC_TOKEN_INCOMPLETE_JOIN,
                        ExecutionEventType.NODE_TOKEN_COMPLETED );
     queue.addListener( new GraphDefinedEventListenerInvoker() );
     queue.addListener( new ProcessDefinedEventListenerInvoker() );
@@ -265,8 +266,7 @@ public abstract class BaseEngine implements Engine
     ProcessEvent.fireCanceledEvent( this, process );
   }
 
-  private void executeArc (final GraphProcess process,
-                           final ArcToken token)
+  private void executeArc (final GraphProcess process, final ArcToken token)
   {
     if ( token.isPending() )
     {
@@ -275,6 +275,20 @@ public abstract class BaseEngine implements Engine
 
       process.addActiveArcToken( token );
 
+      final JoinAction joinAction = retryIncompleteArcToken(token); 
+      if ( JoinAction.Nothing == joinAction )
+      {
+        ArcTokenEvent.fireIncompleteJoinEvent( this, token );
+      }
+    }
+  }
+  
+  @Override
+  public JoinAction retryIncompleteArcToken (final ArcToken token)
+  {
+    if ( !token.isComplete() )
+    {
+      final GraphProcess process = token.getProcess();
       final Node targetNode = token.getArc().getEndNode();
       final JoinResult result = targetNode.getJoinStrategy( token.getArc() ).performJoin( this, token );
 
@@ -291,7 +305,9 @@ public abstract class BaseEngine implements Engine
           ArcTokenEvent.fireMergedEvent( this, arcToken );
         }
       }
+      return result.getJoinAction();
     }
+    return null;
   }
 
   private void completeExecuteArc (final GraphProcess process,
