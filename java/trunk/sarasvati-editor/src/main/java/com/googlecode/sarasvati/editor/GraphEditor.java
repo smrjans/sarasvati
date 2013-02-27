@@ -607,11 +607,17 @@ public class GraphEditor
   private File getEditorPropertiesFile (final File graphFile)
   {
     String name = graphFile.getName();
-    final int firstDot = name.indexOf( '.' );
-
-    if ( firstDot > 0 )
+    if ( name.endsWith( ".wf.xml" ) )
     {
-      name = name.substring( 0, firstDot );
+      name = name.substring( 0, name.length() - 7 );
+    }
+    else
+    {
+      final int firstDot = name.indexOf( '.' );
+      if ( firstDot > 0 )
+      {
+        name = name.substring( 0, firstDot );
+      }
     }
 
     return new File( graphFile.getParentFile(), name + ".editor.xml" );
@@ -636,11 +642,9 @@ public class GraphEditor
 
     String name = outputFile.getName();
 
-    final int firstDot = name.indexOf( '.' );
-
-    if ( firstDot > 0 )
+    if ( name.endsWith( ".wf.xml" ) )
     {
-      name = name.substring( 0, firstDot );
+      name = name.substring( 0, name.length() - 7 );
       saveFile = outputFile;
     }
     else
