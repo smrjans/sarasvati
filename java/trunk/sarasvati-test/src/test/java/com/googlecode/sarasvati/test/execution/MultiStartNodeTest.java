@@ -34,14 +34,14 @@ public class MultiStartNodeTest extends ExecutionTest
   @Test public void testLinear () throws Exception
   {
     final RubricPredicate predicate = new RubricPredicate()
-    {      
+    {
       @Override
       public boolean eval(final Engine engine, final NodeToken token)
       {
         return "bar".equals(token.getProcess().getEnv().getAttribute("foo"));
       }
     };
-    
+
     DefaultRubricFunctionRepository.getGlobalInstance().registerPredicate("isFooBar", predicate);
     MapEnv env = new MapEnv();
     env.setAttribute("foo", "bar");

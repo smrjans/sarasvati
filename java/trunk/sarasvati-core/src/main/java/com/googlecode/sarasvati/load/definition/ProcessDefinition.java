@@ -45,11 +45,11 @@ public interface ProcessDefinition
    */
   String getMessageDigest ();
 
-  /** 
+  /**
    * @return Any custom data for the process definition
    */
   CustomDefinition getCustom();
-  
+
   /**
    * @return A list of the nodes defined in the process definition
    */
@@ -59,7 +59,7 @@ public interface ProcessDefinition
    * @return A list of the externals defined in the process definition.
    */
   List<? extends ExternalDefinition> getExternals ();
-  
+
   /**
    * @return A list of custom xml elements of the process.
    */

@@ -61,7 +61,7 @@ public class AttributeConverters
 
     converters.put( Double.class, new DoubleAttributeConverter() );
     converters.put( Double.TYPE, new DoubleAttributeConverter() );
-    
+
     converters.put( long[].class, new LongArrayAttributeConverter() );
   }
 

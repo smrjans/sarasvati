@@ -155,7 +155,7 @@ public class MemEngine extends BaseEngine
 
   /**
    * Provides a subclass to override which execution event listeners are added to
-   * new global queues. By default this adds the listeners from {@link BaseEngine} 
+   * new global queues. By default this adds the listeners from {@link BaseEngine}
    * as well as the following listeners:
    * <ul>
    *  <li>{@link TokenSetDeadEndListener}</li>
@@ -171,7 +171,7 @@ public class MemEngine extends BaseEngine
                        ExecutionEventType.ARC_TOKEN_INCOMPLETE_JOIN,
                        ExecutionEventType.NODE_TOKEN_COMPLETED );
   }
-  
+
   private EngineFactory<MemEngine> newEngineFactory()
   {
     return new EngineFactory<MemEngine>()

@@ -10,7 +10,7 @@ public class ConverterExample
   public static void main(String[] args)
   {
     AttributeConverter longArrayConverter = new AttributeConverter()
-    {      
+    {
       @Override
       public Object stringToObject(String string, Class<?> type)
       {
@@ -18,29 +18,29 @@ public class ConverterExample
         {
           return null;
         }
-                
+
         if (!type.isArray() ||
             type.getComponentType() != Long.TYPE)
         {
           throw new IllegalArgumentException("This converter can only be used to convert string to long[]");
-        }        
-        
+        }
+
         if ("[]".equals(string))
         {
           return new long[0];
         }
-        
+
         final String[] elements = string.substring(1, string.length() - 1).split(",");
-        final long[] result = new long[elements.length]; 
-        
+        final long[] result = new long[elements.length];
+
         for (int i = 0; i < elements.length; i++)
         {
           result[i] = Long.parseLong(elements[i]);
         }
-        
-        return result; 
+
+        return result;
       }
-      
+
       @Override
       public String objectToString(Object object)
       {
@@ -48,15 +48,15 @@ public class ConverterExample
         {
           return null;
         }
-        
+
         if (!object.getClass().isArray() ||
             object.getClass().getComponentType() != Long.TYPE)
         {
           return null;
         }
-        
+
         final long[] array = (long[])object;
-                
+
         final StringBuilder buf = new StringBuilder(3 * array.length);
         buf.append("[");
         if (array.length > 0)
@@ -69,17 +69,17 @@ public class ConverterExample
           buf.append(array[i]);
         }
         buf.append("]");
-        
+
         return buf.toString();
       }
     };
-    
+
     @SuppressWarnings("unchecked")
     final Class<long[]> longArrayType = (Class<long[]>) new long[0].getClass();
-    
+
     AttributeConverters.setConverterForType(longArrayType, longArrayConverter);
-    
-    long[][] testArrays = 
+
+    long[][] testArrays =
         new long[][] { null,
                        {},
                        {1},

@@ -26,7 +26,7 @@ public class CompleteWithCheckSiblings
     }
     return result;
   }
-  
+
   public void complete(final Engine engine, final NodeToken token, final String arcName)
   {
     if ("back".equals(arcName))
@@ -39,6 +39,6 @@ public class CompleteWithCheckSiblings
         }
       }
     }
-    engine.complete(token, arcName);    
+    engine.complete(token, arcName);
   }
 }

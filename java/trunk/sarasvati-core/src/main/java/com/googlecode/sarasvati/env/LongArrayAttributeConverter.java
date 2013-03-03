@@ -34,19 +34,19 @@ public final class LongArrayAttributeConverter implements AttributeConverter
     {
       return null;
     }
-    
+
     final long[] array = (long[]) object;
-    
+
     final ByteBuffer byteBuffer = ByteBuffer.allocate(4 + (8 * array.length));
     byteBuffer.putInt(array.length);
     for (final long value : array)
     {
       byteBuffer.putLong(value);
     }
-    
+
     return Base64.encode(byteBuffer.array());
   }
-  
+
   /**
    * Converts the given string to an Integer
    *
@@ -59,18 +59,18 @@ public final class LongArrayAttributeConverter implements AttributeConverter
     {
       return null;
     }
-   
+
     final byte[] bytes = Base64.decode(string);
     final ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
     final int length = byteBuffer.getInt();
-    
+
     final long[] array = new long[length];
-    
+
     for (int i = 0; i < array.length; i++)
     {
       array[i] = byteBuffer.getLong();
     }
-    
+
     return array;
   }
 }

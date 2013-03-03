@@ -335,10 +335,10 @@ public class HibEngine extends BaseEngine
       config.setCacheConcurrencyStrategy( HibArcToken.class.getName(),"read-write" );
     }
   }
-  
+
   /**
    * Provides a subclass to override which execution event listeners are added to
-   * new global queues. By default this adds the listeners from {@link BaseEngine} 
+   * new global queues. By default this adds the listeners from {@link BaseEngine}
    * as well as the following listeners:
    * <ul>
    *  <li>{@link TokenSetDeadEndListener}</li>

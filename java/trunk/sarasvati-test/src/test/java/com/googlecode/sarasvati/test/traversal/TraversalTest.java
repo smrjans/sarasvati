@@ -57,10 +57,10 @@ public class TraversalTest extends ExecutionTest
           level = Math.min(level, parentLevel == null ? Integer.MAX_VALUE : parentLevel);
         }
       }
-      
+
       level++;
       levelMap.put(token, level);
-      
+
       if (level != currentNodeLevel)
       {
         if (level == currentNodeLevel + 1)
@@ -72,21 +72,21 @@ public class TraversalTest extends ExecutionTest
           throw new RuntimeException("Current level is " + currentNodeLevel + " hit node at level " + level);
         }
       }
-    }    
+    }
   }
-  
+
   public static class DepthFirstTestVisitor extends TokenVisitorAdaptor
   {
     final Set<Token> doneSet = new HashSet<Token>();
     final LinkedList<Token> stack = new LinkedList<Token>();
     final Map<Token, Integer> levelMap = new HashMap<Token, Integer>();
     int currentNodeLevel = 1;
-    
+
     @Override
     public void visit (final NodeToken token)
     {
       int level = 0;
-      
+
       if (!token.getParentTokens().isEmpty())
       {
         boolean parentFoundInStack = false;
@@ -95,19 +95,19 @@ public class TraversalTest extends ExecutionTest
         {
           Integer parentLevel = levelMap.get(parent.getParentToken());
           level = Math.min(level, parentLevel == null ? Integer.MAX_VALUE : parentLevel);
-          
+
           parentFoundInStack |= stack.contains(parent.getParentToken());
         }
-        
+
         if (!parentFoundInStack)
         {
           throw new RuntimeException("No parent found in stack. Not depth first!");
         }
       }
-      
+
       level++;
       levelMap.put(token, level);
-      
+
       if (level == currentNodeLevel)
       {
         if (!stack.isEmpty())
@@ -134,11 +134,11 @@ public class TraversalTest extends ExecutionTest
         }
         stack.add(token);
       }
-      
+
       currentNodeLevel = level;
-    }    
+    }
   }
-  
+
   public NodeToken executeTraversal () throws Exception
   {
     Graph g = reloadDefinition( "traversal" );
@@ -160,20 +160,20 @@ public class TraversalTest extends ExecutionTest
     return tokenA;
   }
 
-  @Test 
+  @Test
   public void testBreadthFirst () throws Exception
   {
     NodeToken tokenA = executeTraversal();
     TokenTraversals.traverseChildrenBreadthFirst( tokenA, new BreadthFirstTestVisitor() );
   }
 
-  @Test 
+  @Test
   public void testDepthFirst () throws Exception
   {
     NodeToken tokenA = executeTraversal();
     TokenTraversals.traverseChildrenDepthFirst( tokenA, new DepthFirstTestVisitor() );
   }
-  
+
   @Test(expected=RuntimeException.class)
   public void testBreadthFirstWithDepthFirstTester() throws Exception
   {
@@ -181,7 +181,7 @@ public class TraversalTest extends ExecutionTest
     TokenTraversals.traverseChildrenBreadthFirst( tokenA, new DepthFirstTestVisitor());
   }
 
-  @Test(expected=RuntimeException.class) 
+  @Test(expected=RuntimeException.class)
   public void testDepthFirstWithBreadthFirstTester() throws Exception
   {
     NodeToken tokenA = executeTraversal();

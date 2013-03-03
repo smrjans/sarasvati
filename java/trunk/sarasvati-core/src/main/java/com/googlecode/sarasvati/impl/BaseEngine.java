@@ -275,14 +275,14 @@ public abstract class BaseEngine implements Engine
 
       process.addActiveArcToken( token );
 
-      final JoinAction joinAction = retryIncompleteArcToken(token); 
+      final JoinAction joinAction = retryIncompleteArcToken(token);
       if ( JoinAction.Nothing == joinAction )
       {
         ArcTokenEvent.fireIncompleteJoinEvent( this, token );
       }
     }
   }
-  
+
   @Override
   public JoinAction retryIncompleteArcToken (final ArcToken token)
   {

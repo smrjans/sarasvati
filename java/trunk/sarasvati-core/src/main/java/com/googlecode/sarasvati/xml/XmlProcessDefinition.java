@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -98,16 +98,16 @@ public class XmlProcessDefinition implements ProcessDefinition
   @Override
   public List<Object> getCustomProcessData()
   {
-    return custom != null? custom.getCustom() : Collections.emptyList(); 
+    return custom != null? custom.getCustom() : Collections.emptyList();
   }
-  
+
   @Override
-  public XmlCustom getCustom() 
+  public XmlCustom getCustom()
   {
     return custom;
   }
 
-  public void setCustom(XmlCustom custom) 
+  public void setCustom(XmlCustom custom)
   {
     this.custom = custom;
   }
@@ -136,7 +136,7 @@ public class XmlProcessDefinition implements ProcessDefinition
             digest.update( entry.getValue().getBytes() );
           }
         }
-        
+
         for ( XmlNode node : nodes )
         {
           node.addToDigest( digest );
@@ -170,7 +170,7 @@ public class XmlProcessDefinition implements ProcessDefinition
     	buf.append( custom );
     	buf.append( "\n" );
     }
-    
+
     for (NodeDefinition node : nodes)
     {
       buf.append( node );

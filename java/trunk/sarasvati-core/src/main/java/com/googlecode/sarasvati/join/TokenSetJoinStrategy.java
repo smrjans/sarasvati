@@ -124,9 +124,9 @@ public class TokenSetJoinStrategy implements JoinStrategy
       {
         return IncompleteJoinResult.INSTANCE;
       }
-      
+
       final Collection<ArcToken> members = tokenSet.getActiveArcTokens(engine);
-       
+
       for (final ArcToken member : members)
       {
         if (!member.getArc().getEndNode().equals(token.getArc().getEndNode()))
@@ -134,7 +134,7 @@ public class TokenSetJoinStrategy implements JoinStrategy
           return IncompleteJoinResult.INSTANCE;
         }
       }
-      
+
       resultTokens.addAll(members);
     }
 

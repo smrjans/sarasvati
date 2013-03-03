@@ -40,7 +40,7 @@ public class LoaderTest
     Assert.assertNotNull( "Graph should be loaded", engine.getRepository().getLatestGraph( "external-present" ) );
     Assert.assertNotNull( "Graph should be loaded", engine.getRepository().getLatestGraph( "external" ) );
   }
-  
+
   @Test
   public void testCustomProcessData() throws Exception
   {
