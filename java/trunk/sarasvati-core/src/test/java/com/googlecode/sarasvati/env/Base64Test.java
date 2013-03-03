@@ -24,7 +24,7 @@ public class Base64Test
       Assert.assertTrue(Arrays.equals(array, decoded));
     }
 
-    for (int i = 1024; i < 1024 * 1024; i += rand.nextInt(1024))
+    for (int i = 1024; i < 100 * 1024; i += rand.nextInt(1024))
     {
       byte[] array = new byte[i];
       rand.nextBytes(array);
