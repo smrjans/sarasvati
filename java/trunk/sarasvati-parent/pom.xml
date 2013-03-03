@@ -11,7 +11,7 @@
   <artifactId>sarasvati-parent</artifactId>
   <packaging>pom</packaging>
   <name>sarasvati</name>
-  <version>2.0.2-SNAPSHOT</version>
+  <version>2.0.3-SNAPSHOT</version>
   <description>Sarasvati is a workflow/bpm engine based on graph execution. It has a simple core which allows for different implementations. For example one may change the persistence mechanism (or avoid it altogether), change token representation or build additional functionality on top. </description>
   <url>http://sarasvati.googlecode.com/</url>
   <licenses>
