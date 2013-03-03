@@ -51,7 +51,7 @@ public class HibernateTestEnvProvider implements TestEnvProvider
   {
     session = sessionFactory.openSession();
     session.beginTransaction();
-    engine = new HibEngine(session);
+    engine = new HibEngine("HibernateTestContext", session);
   }
 
   @Override

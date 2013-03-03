@@ -56,7 +56,7 @@ public class JdbcTestEnvProvider implements TestEnvProvider
         connection.rollback();
       }
 
-      engine = new JdbcEngine(connection, dialect);
+      engine = new JdbcEngine(connection, dialect, "JDBCTestContext");
     }
     catch(final Exception e)
     {

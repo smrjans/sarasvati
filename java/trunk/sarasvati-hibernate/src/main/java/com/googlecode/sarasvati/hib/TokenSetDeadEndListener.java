@@ -33,20 +33,20 @@ import com.googlecode.sarasvati.event.NodeTokenEvent;
 public class TokenSetDeadEndListener implements ExecutionListener
 {
   private static final String KEY = "com.googlecode.sarasvati.tokenset.tokens_waiting_for_tokenset";
-  
+
   @Override
   public EventActions notify (final ExecutionEvent event)
   {
     if ( event.getEventType() == ExecutionEventType.ARC_TOKEN_INCOMPLETE_JOIN &&
          event.getArcToken().getArc().getEndNode().getJoinType() == JoinType.TOKEN_SET )
-    { 
+    {
       for ( TokenSetMember setMember : event.getArcToken().getTokenSetMemberships() )
       {
         final Env tsEnv = setMember.getTokenSet().getEnv();
         long[] checkNodes = tsEnv.getAttribute(KEY, long[].class);
         if (checkNodes == null)
         {
-          checkNodes = new long[] { event.getArcToken().getId() }; 
+          checkNodes = new long[] { event.getArcToken().getId() };
         }
         else
         {
@@ -55,7 +55,7 @@ public class TokenSetDeadEndListener implements ExecutionListener
           newCheckNodes[checkNodes.length] = event.getArcToken().getId();
         }
         tsEnv.setAttribute(KEY, checkNodes);
-      }      
+      }
     }
     else if ( event.getEventType() == ExecutionEventType.NODE_TOKEN_COMPLETED )
     {
@@ -68,10 +68,13 @@ public class TokenSetDeadEndListener implements ExecutionListener
         {
           final Env tsEnv = setMember.getTokenSet().getEnv();
           long[] checkNodes = tsEnv.getAttribute(KEY, long[].class);
-          for (final long arcTokenId : checkNodes)
+          if (checkNodes != null)
           {
-            final ArcToken arcToken = hibEngine.getRepository().loadArcToken(arcTokenId);
-            event.getEngine().retryIncompleteArcToken(arcToken);
+            for (final long arcTokenId : checkNodes)
+            {
+              final ArcToken arcToken = hibEngine.getRepository().loadArcToken(arcTokenId);
+              event.getEngine().retryIncompleteArcToken(arcToken);
+            }
           }
         }
       }

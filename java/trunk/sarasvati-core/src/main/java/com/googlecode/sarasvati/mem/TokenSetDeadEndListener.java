@@ -36,13 +36,13 @@ import com.googlecode.sarasvati.event.NodeTokenEvent;
 public class TokenSetDeadEndListener implements ExecutionListener
 {
   private static final String KEY = "com.googlecode.sarasvati.tokenset.tokens_waiting_for_tokenset";
-  
+
   @Override
   public EventActions notify (final ExecutionEvent event)
   {
     if ( event.getEventType() == ExecutionEventType.ARC_TOKEN_INCOMPLETE_JOIN &&
          event.getArcToken().getArc().getEndNode().getJoinType() == JoinType.TOKEN_SET )
-    { 
+    {
       for ( TokenSetMember setMember : event.getArcToken().getTokenSetMemberships() )
       {
         final Env tsEnv = setMember.getTokenSet().getEnv();
@@ -54,7 +54,7 @@ public class TokenSetDeadEndListener implements ExecutionListener
           tsEnv.setTransientAttribute(KEY, checkNodes);
         }
         checkNodes.add(event.getArcToken());
-      }      
+      }
     }
     else if ( event.getEventType() == ExecutionEventType.NODE_TOKEN_COMPLETED )
     {

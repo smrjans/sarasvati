@@ -7,7 +7,7 @@ import com.googlecode.sarasvati.mem.MemEngine;
 
 public class MemTestEnvProvider implements TestEnvProvider
 {
-  private MemEngine engine = new MemEngine();
+  private MemEngine engine = new MemEngine("MemoryTestContext");
 
   @Override
   public Engine getEngine()
