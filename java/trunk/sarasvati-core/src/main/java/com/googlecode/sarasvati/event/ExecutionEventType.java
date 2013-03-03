@@ -47,7 +47,7 @@ public enum ExecutionEventType
   ARC_TOKEN_COMPLETED       ( 1 << 15 ),
   ARC_TOKEN_BACKTRACKED     ( 1 << 16 ),
   ARC_TOKEN_MERGED          ( 1 << 17 ),
-  ARC_TOKEN_INCOMPLETE_JOIN ( 1 << 18 );
+  ARC_TOKEN_INCOMPLETE_JOIN ( 1 << 19 );
 
   private static final int INVERSE_MASK = 0xFFFFFFFF;
 
