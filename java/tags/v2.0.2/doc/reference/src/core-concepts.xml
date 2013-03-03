@@ -1,0 +1,1714 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+
+<chapter id="core-concepts">
+  <title>Core Concepts</title>
+
+  <section id="concepts-intro">
+    <title>Introduction</title>
+    <para>
+      Graph based workflow/business process management engines are common. They
+      have areas of commonality, but they also vary greatly in concept
+      and implementation. For example, there are differences in how
+      concurrency and synchronization are modeled and in how modularity
+      and re-use are promoted.
+    </para>
+
+    <para>
+      We begin with the some definitions, move on to features likely to be
+      common across most engines, then explain Sarasvati specifics.
+    </para>
+
+  </section>
+  <section id="concepts-definitions">
+    <title>Definitions</title>
+
+    <para>
+      Graphs come with a set of common terms. To begin with, a graph is
+      made up of a set of things, hereafter referred to as
+      <emphasis>nodes</emphasis>
+      and a set of connections between
+      <emphasis>nodes</emphasis>
+      , know as
+      <emphasis>arcs</emphasis>
+      .
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Graph</emphasis>
+          - A set of nodes, with a set of arcs connecting the nodes.
+          While graphs have a wider applicability, graph here is
+          synonymous with process definition.
+        </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Also know as: Process Definition, Network, Workflow
+          </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Node</emphasis>
+          - An element of a graph. A node corresponds roughly to an
+          action as defined <link linkend="what-is-workflow-definitions">previously</link>. Nodes can be thought
+          of as pieces of code, waiting to be executed when their turn
+          comes.
+        </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Also known as: Vertex, Place
+          </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Arc</emphasis>
+          - A directed connection between two nodes.
+          <emphasis>Directed</emphasis>
+          means that arcs have a start node and an end node. In some
+          cases, an arc may have a label, or name.
+        </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Also know as: Edge, Transition
+          </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Predecessor</emphasis>
+          - If two nodes are connected by an arc then the node at the
+          beginning of the arc is the
+          <emphasis>predecessor</emphasis>
+          of the node at the end of the arc. How nodes are connected by
+          arcs defines the order of execution. Generally a node may not
+          execute until at least one, potentially many or all, of its
+          predecessors have executed. Nodes may have many arcs exiting
+          and entering them.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>
+      These definitions cover the parts of a process definition.
+      However, they don't cover how that process definition is actually
+      executed. When a process definition gets executed, the execution
+      is called a
+      <emphasis>process</emphasis>
+      . Somehow, a process must track which nodes are being executed.
+      This is generally accomplished by placing markers called
+      <emphasis>token</emphasis>
+      on the active nodes.
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Process</emphasis>
+          - An executing process definition. A process definition may
+          have have zero, one or many processes executing at any given
+          time.
+        </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Also known as: Case, Instance, Workflow
+          </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Token</emphasis>
+          - The set of active tokens marks the current process state.
+          Tokens generally point to a node which is currently executing.
+          Tokens sometimes have associated state, which is a way of
+          passing data from node to node.
+        </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Also know as: Execution
+          </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+
+  </section>
+  <section id="concepts-execution">
+    <title>Sarasvati Graph Execution </title>
+
+    <para>
+      Let us start with a simple process definition, the classic 'Hello
+      World'. When executed, this process will print out 'Hello, World!'
+      and then complete.
+</para>
+
+    <section id="concepts-legend">
+      <title>Legend </title>
+      <para>
+        First, we introduce a graphical notation for process definitions and
+        execution. Not all the symbols will make sense immediately, but
+        they will all be explained.
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/legend.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+
+    </section>
+    <section id="concepts-single-node">
+      <title>Single Node </title>
+      <para>
+        The simplest useful process definition would consist of a simple node.
+        Here is the graphical representation:
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts1.jpg"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        How will this process be executed? First the engine needs to determine
+        where to start execution.
+</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>Start Node</emphasis>
+            - A node at which a token will be placed when process
+            execution begins.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        There are various ways of handling this. For example, there may be a
+        specific type of node designated for start positions. All nodes
+        of this type will have tokens placed in them at process start.
+        Alternately, nodes may have an attribute which indicates whether
+        or not they are a start node, allowing any node to be a start
+        node. Sarasvati takes this second approach.
+</para>
+
+      <para>
+        Assuming that the 'Hello World' node is a start node, execution
+        would begin by creating a new
+        <emphasis>node token</emphasis>
+        at the 'Hello World' node.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>Node Token</emphasis>
+            - A token situated at a node. Node tokens track the response
+            of the node guard (see below). They may also have
+            attributes.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        With the addition of the node token, the process would now look like:
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts1-1.jpg"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        As you can see, the node now has an active node token stationed on it.
+      </para>
+
+      <para>
+        At this point the node has not yet been executed. Before it can
+        be, its
+        <emphasis>guard</emphasis>
+        would need to be invoked.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>Node Guard</emphasis>
+            - Nodes have functionality associated with them, which will
+            be executed when a node token is accepted into the node.
+            However, before a node is executed, its guard will be
+            executed. The guard is allowed one of three responses:
+          </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                <emphasis>Accept</emphasis>
+                - The node will be executed.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <emphasis>Discard</emphasis>
+                - The node token will be marked as discarded and the
+                node will not be executed.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <emphasis>Skip</emphasis>
+                - The node will
+                <emphasis>not</emphasis>
+                be executed, however, processing will continue as if the
+                node had completed execution normally.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        By default, a node's guard will return Accept. The node will
+        then be
+        <emphasis>executed</emphasis>
+        . This should cause 'Hello, World!' to be printed out.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>Node Execution</emphasis>
+            - When a node is executed, whatever custom logic has been
+            assigned by the developer will run. To complete node
+            execution, the node must inform the engine that that the
+            given node token has been completed. Node completion may
+            happen synchronously as part of the execution of the node
+            function or it may happen later, asynchronously.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        As there are no further steps in the process, it is now
+        <emphasis>complete</emphasis>
+        and looks like:
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts1-2.jpg"/>
+        </informalfigure>
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>Process Completion</emphasis>
+            - A process with no active tokens is considered complete.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+
+
+    </section>
+    <section id="concepts-two-nodes">
+      <title>Two Nodes</title>
+      <para>
+        Let's now example a slightly more complicated example. Instead of a
+        single node, we'll have two, the first of which prints out
+        'Hello', the second prints out 'World'. It looks as follows:
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts2.jpg"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        The
+        <emphasis>Hello</emphasis>
+        node is a
+        <emphasis>predecessor</emphasis>
+        of the
+        <emphasis>World</emphasis>
+        node. This dependency is indicated by the directed arc.
+      </para>
+
+      <para>
+        As the
+        <emphasis>Hello</emphasis>
+        node is marked as a start node, a node token will be placed
+        there when the process begins executing.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts2-1.jpg"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        When the node token on
+        <emphasis>Hello</emphasis>
+        is completed, an
+        <emphasis>arc token</emphasis>
+        will be generated on the outgoing arc.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts2-2.jpg"/>
+        </informalfigure>
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>Arc Token</emphasis>
+            - A token situated on an arc. Arc tokens exist so that
+            nodes know when to execute. Arc tokens may not
+            have attributes.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        Whenever an arc token is created on an arc, the <emphasis>join strategy</emphasis> of the
+        node at the end of the arc is evaluated, to determine if the node is ready to have a node token
+        created at that node. The only time join strategies are not used is when a process is started.
+        At that time all start node will have node tokens created on them.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>join strategy</emphasis>
+            - A join strategy determines if a node token should be created on a node. Evaluation
+            of the join strategy is generally initiated by the processing of an arc token
+            on an incoming arc to the node. The join strategy will determine two things:
+          </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  <emphasis>Is the join complete?</emphasis> Some join strategies require multiple arc tokens to
+                  be present before a node token is created on the node. Others may be satisfied every
+                  time an arc token arrives.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <emphasis>Which arc tokens completed the join?</emphasis> Every arc token that
+                  participates in completed the join will be marked complete and will be noted
+                  as a parent of the new node token, preserving a history of the flow of execution.
+                </para>
+              </listitem>
+            </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+         Since the arc on which the arc token is situated goes into a
+        node using the<emphasis>or join strategy</emphasis>
+        , a node token will be created on
+        <emphasis>World</emphasis>
+        immediately.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>or join strategy</emphasis>
+            - The or join strategy will allow a new node token
+            every time an arc token arrives at the node. This
+            stands in contrast to a <emphasis>label-and join strategy</emphasis>
+            , where active arc tokens must exist on all incoming arcs
+            with the same name.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        The process now looks like:
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts2-3.jpg"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        The
+        <emphasis>World</emphasis>
+        node will now run its guard and then execute. Finally the node
+        token will be completed.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts2-4.jpg"/>
+        </informalfigure>
+      </para>
+    </section>
+
+    <section id="concepts-split-join-with-wait-states">
+      <title>Split and Join with Wait States</title>
+
+      <para>
+        Let us now examine an example which contains concurrent execution.
+      </para>
+
+      <para>
+        The process describes an approval process.
+        <orderedlist>
+          <listitem>
+            <para>
+              A request is made
+      </para>
+          </listitem>
+          <listitem>
+            <para>
+              Two approvals must be obtained
+      </para>
+          </listitem>
+          <listitem>
+            <para>
+              The request is granted
+      </para>
+          </listitem>
+        </orderedlist>
+
+        The process looks like:
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        This a simplified system, since it does not allow approvals to be
+        denied.
+</para>
+
+      <para>
+        There is more than one way that this process could be executed.
+</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            If the approvals are granted by people, the nodes will
+            almost certainly be executed asynchronously. This means that
+            when a token arrives at
+            <emphasis>Approval 1</emphasis>
+            , the node will generate a notification to the user who is
+            to do the approval. The token will then enter a
+            <emphasis>wait state</emphasis>
+            . Execution may continue elsewhere in the process, but this
+            token will wait until the user enters the system and grants
+            approval.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If approvals are done by software which does a check and
+            then returns immediately the tokens will not have enter a
+            <emphasis>wait state</emphasis>
+            , but may continue immediately.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>Wait State</emphasis>
+            - When a token enters a node and the node is executed, it
+            may choose not to immediately continue process execution at
+            the end of the node method. In this case the token will
+            remain in the node until it is complete asynchronously.
+            While the token is waiting to be completed, it is considered
+            to be in a wait state.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        Let us view process execution for both these cases, starting with the
+        case where approvals are done by people and thus tokens will
+        need to enter wait states.
+</para>
+
+      <para>
+        Execution will begin as usual, by placing a node token in the nodes marked as
+        being start nodes.
+</para>
+
+      <para>
+        The
+        <emphasis>Request</emphasis>
+        node will be executed. It generates a task for the requester to
+        complete. Until the requester has filled out out the request and
+        completed the task, the token will be in a wait state. During
+        this time the process will look like:
+      </para>
+
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-1.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        <emphasis>Question:</emphasis>
+        What happens once the
+        <emphasis>Request</emphasis>
+        has been completed? Which arc or arcs will arc tokens be
+        generated on?
+      </para>
+
+      <para>
+        <emphasis>Answer:</emphasis>
+        Sarasvati requires that an arc name be specified when completing
+        a node token. All arcs with this name will have arc tokens
+        generated on them.
+      </para>
+
+      <para>
+        Some things to note:
+</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            Most arcs have no name specified. They are considered to have the
+            'default' name.
+      </para>
+        </listitem>
+        <listitem>
+          <para>
+            Usually when completing a node token, the default arc name will be given.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Each arc will have an arc token placed on it in turn. No specific
+            order is guaranteed
+      </para>
+        </listitem>
+        <listitem>
+          <para>
+            When an arc token is placed on an arc, it will continue on to its end
+            node immediately and see if the node can be executed.
+      </para>
+        </listitem>
+      </itemizedlist>
+
+
+      <para>
+        So now the node token on
+        <emphasis>Request</emphasis>
+        has been completed and arc tokens will be generated on the
+        outgoing arcs. First a node token will be generated on the upper
+        arc (though order of arc execution is not guaranteed).
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-2.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        This arc leads to a node which can be executed. The arc token
+        will be completed and a node token will be placed in the
+        <emphasis>Approval 1</emphasis>
+        node.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-3.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Here the node token will enter a wait state. Since no further execution
+        can take place here, an arc token will now be generated on the
+        second outgoing arc.
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-4.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Again, since node
+        <emphasis>Approval 2</emphasis>
+        can be executed immediately, the arc token will be completed and
+        a node token will be created. It will also enter into a wait
+        state once the notification to the user has been created.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-5.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        At some point one of the approvals will be completed. Let's say
+        that it's
+        <emphasis>Approval 2</emphasis>
+        . This will mark the node token complete and generate an arc
+        token on the outgoing arc.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-6.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Now the engine will see if the
+        <emphasis>Grant</emphasis>
+        node can be executed. However, as the dashed border indicates,
+        the <emphasis>Grant</emphasis> node is using the
+        <emphasis>label-and join strategy</emphasis>.
+        .
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>label-and join strategy</emphasis>
+            - When an arc token arrives a node using the label-and join
+            strategy, arc tokens must exist on all other arcs
+            <emphasis>with the same name</emphasis>
+            before the node will accept a node token.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        Since there are two arcs with the 'default' name coming into
+        <emphasis>Grant</emphasis>
+        , and only one of them has an arc token, the node can not be
+        executed at this time. Execution will halt at this point.
+      </para>
+
+      <para>
+        At some point later, the token at
+        <emphasis>Approval 1</emphasis>
+        is completed. This generates an arc token on the outgoing node.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-7.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Now when the engine tries to execute
+        <emphasis>Grant</emphasis>
+        it finds arc tokens on all the incoming 'default' arcs. These
+        arc tokens are marked complete and a node token is generated on
+        <emphasis>Grant</emphasis>
+        .
+      </para>
+
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-8.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Once the
+        <emphasis>Grant</emphasis>
+        task is finished, its node token will also be completed and the
+        process will be complete.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-9.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+
+
+    </section>
+    <section id="concepts-multithreading">
+      <title>Multithreading</title>
+      <para>
+        As seen the previous example, a process may have multiple tokens
+        active concurrently. Does this imply that each token executes in
+        a separate thread? No. Concurrency here is like that of multiple
+        programs running on a single chip. Each runs in turns, but may
+        present the appearance of running simultaneously.
+</para>
+
+      <para>
+        However, true multithreading can be done at the node level. Each node when
+        executed, may hand off its work to a background thread. The node
+        token will then enter a wait state, and other nodes may be
+        executed. When the background task is complete, it may then
+        complete the node token, allowing further execution.
+</para>
+
+      <para>
+        Note that only one thread may safely execute the process at any given
+        time, and care must be taken to serialize access to the process
+        itself.
+</para>
+
+
+    </section>
+    <section id="concepts-split-join-without-wait-states">
+      <title>Split and Join without Wait States</title>
+      <para>
+        Lets now take a look at the same process, except now the approvals will
+        be done by software and will not require a wait state.
+</para>
+
+      <para>
+        The execution will be the same up to the point where
+        <emphasis>Approval 1</emphasis>
+        is executing.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-3.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Previously, the node token went into a wait state. This time, the approval is
+        done synchronously and the token will be completed. This will
+        generate an arc token on the outgoing arc.
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-10.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Again, the <emphasis>Grant</emphasis>
+        node is using the label-and join strategy, so it will wait for an arc token on the
+        other incoming arc before executing. Execution will continue on
+        the lower outgoing arc of
+        <emphasis>Request</emphasis>
+        .
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-11.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Execution will continue into
+        <emphasis>Approval 2</emphasis>
+        .
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-12.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        This execution will also finish synchronously and an arc token will be
+        generated on the outgoing arc.
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-13.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Execution will finish as before now that all required incoming arcs have
+        tokens on them.
+</para>
+
+
+
+    </section>
+    <section id="concepts-flow-control-skip">
+      <title>Flow Control with Guards using Skip</title>
+      <para>
+        Now that we've seen how execution can split across arcs and join strategies
+        can bring current executions back together, let us examine how
+        to select which outgoing arcs receive tokens and which nodes get
+        executed.
+</para>
+
+      <para>
+        This example uses almost the same process as the previous example. The
+        difference is that either or both approvals may be optional,
+        depending on what is being requested.
+</para>
+
+      <para>
+        Let us pick up execution after the request has been entered and an arc
+        token generated on the upper arc:
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-2.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Now the node token will be generated in
+        <emphasis>Approval 1</emphasis>
+        .
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-3.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        However, remember that this does
+        <emphasis>not</emphasis>
+        mean that the node will immediately execute. First the
+        <emphasis>guard</emphasis>
+        must be invoked. Up until now, the guard has always been assumed
+        to just return
+        <emphasis>Accept</emphasis>
+        . This time however, the guard is intelligent. It will check to
+        see if this approval is required. If not, it will return a
+        <emphasis>Skip</emphasis>
+        response.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>Skip</emphasis>
+            - A guard response which indicates that the node should not
+            be executed, but that execution should continue on the
+            outgoing nodes. An arc name may be specifying indicated
+            which arcs should be used. If no arc name is given, arcs
+            with the default name (unnamed arcs) will be used.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        Assume that
+        <emphasis>Approval 1</emphasis>
+        is not required. The node token will marked as having skipped
+        the node, and execution will continue on the outgoing arc.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts3-16.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+
+
+    </section>
+    <section id="concepts-flow-control-discard">
+      <title>Flow Control with Guards using Discard</title>
+      <para>
+        Having seen Skip, let us examine how to use the Discard response from
+        guards. The same basic process definition is used, only this
+        time, the assumption is that only one of the guards is required.
+      </para>
+
+      <para>
+        The graph now looks like:
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts4.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Because we are using discard, only one token will reach
+        <emphasis>Grant</emphasis>. This is why the <emphasis>Grant</emphasis>
+        node is no longer a <emphasis>label-and join stragy</emphasis>.
+      </para>
+
+      <para>
+        Execution begins as normal. We pick up execution where a node
+        token has been generated in <emphasis>Approval 1</emphasis>.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts4-3.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        In this case, the guard determines that
+        <emphasis>Approval 1</emphasis>
+        is not required, and returns a
+        <emphasis>Discard</emphasis>
+        response.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>Discard</emphasis>
+            - A guard response indicating that the node token should be
+            marked as discard, the node should
+            <emphasis>not</emphasis>
+            be executed and no tokens will be generated on outgoing
+            arcs.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        The process now looks like:
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts4-4.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        The node token has been discarded, and execution has continued
+        from the completion of
+        <emphasis>Request</emphasis>
+        where an arc token has been generated on the lower outgoing arc.
+        Execution will now continue.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts4-5.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        <emphasis>Approval 2</emphasis>
+        will accept its node token and will continue normally.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts4-6.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts4-7.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Remember, because
+        <emphasis>Grant</emphasis>
+        is using the <emphasis>or join strategy</emphasis>, it will have a node token generated on
+        it as soon as any arc tokens arrived.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts4-8.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+    </section>
+
+    <section id="concepts-flow-control-guards-named-arcs">
+      <title>Flow Control with Guards using Named Arcs</title>
+      <para>
+        This same basic process could be implemented using a guard which returns
+        Skip along with an arc name.
+</para>
+
+      <para>
+        In this variant, a
+        <emphasis>Select</emphasis>
+        node has been inserted after
+        <emphasis>Request</emphasis>
+        . This node has no functionality, it only exists to give the
+        guard a place to run.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts5.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Let us pick it up after process started, as
+        <emphasis>Select</emphasis>
+        has a node token generated on it, and its guard is invoked.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts5-3.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        The
+        <emphasis>Select</emphasis>
+        guard will return a
+        <emphasis>Skip</emphasis>
+        response which includes the arc name on which to exit.
+        <emphasis>All arcs with this name will have an arc token
+          generated on them</emphasis>
+        . In this case, let us say the guard determines that
+        <emphasis>Approval 2</emphasis>
+        is required. It returns
+        <emphasis>Skip two</emphasis>
+        . An arc token is then generated on all arcs named
+        <emphasis>two</emphasis>
+        (of which is there only one in this case).
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts5-4.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        From here execution continues as normal.
+</para>
+
+
+
+    </section>
+    <section id="concepts-flow-control-completion-named-arcs">
+      <title>Flow Control from Node Completion using Named Arcs</title>
+      <para>
+        As mentioned previously, when a node token is completed, an arc name
+        must be specified. Arc tokens will be generated on all outgoing
+        arcs with that name. So the previous example could also be
+        implemented like this:
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts6.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Instead of using the guard on the
+        <emphasis>Select</emphasis>
+        node, the
+        <emphasis>Request</emphasis>
+        node will specify which arc to exit on.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts6-1.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        If we again specify
+        <emphasis>two</emphasis>
+        , then an arc token will be generated on that arc.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts6-2.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        From there, execution will continue.
+</para>
+
+
+
+    </section>
+  </section>
+  <section id="concepts-graph-composition-nested-processes">
+    <title>Graph Composition and Nested Processes</title>
+    <para>
+      Much like any software, a set of process definitions can grow larger,
+      more complex and more intertwined as time goes. One solution used
+      in the broader software world is encapsulation. This involves
+      pulling out common functionality and breaking up large pieces into
+      smaller components. These same techniques can be used with a set
+      of process definitions. Rather than using copy/paste, sections of
+      process definitions that are common can be extracted. Large
+      process definitions can be split out into smaller components.
+    </para>
+
+    <para>
+      Sarasvati supports two ways of doing encapsulation, each with it's
+      own advantages and disadvantages. The first is
+      <emphasis>graph composition</emphasis>
+      , the second is
+      <emphasis>nested processes</emphasis>
+      . Both of these techniques allow complete process definitions and
+      components that have been split out to be defined in separately.
+      The difference lies in when they are composed.
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Load-time composition</emphasis>
+          - Graph composition brings the disparate elements together at
+          load time. The main definition being loaded may refer to other
+          definitions. These definitions will be loaded as well and they
+          will all be combined into a single definition. This single
+          definition will execute as if it had been defined in a single
+          file.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis>Run-time composition</emphasis>
+          - Nested processes use composition at runtime. The main
+          definition will be loaded. When this definition is executed, a
+          node may start a nested process. This nested process will
+          execute and when completed, the main process will continue.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>
+      Now that we have general idea of how graph composition and nested
+      processes compare, let us investigate them in more detail.
+</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Graph composition</emphasis>
+          - The set of process definitions may be seen as a single,
+          disconnected graph. A node may contain arcs to nodes in other
+          process definitions. These arcs are referred to as
+          <emphasis>external arcs</emphasis>
+          . When the process definition is loaded, referenced external
+          process definitions will be loaded as well. All the process
+          definitions will be composed into a single, larger graph. The
+          external arcs will become regular arcs. The same external
+          processes definition may be embedded more than once. Each
+          <emphasis>external instance</emphasis>
+          of an external process definition will be given a unique
+          identifier.
+        </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Advantages
+          </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  Interactions with external process definitions are not limited to a single
+                  node. The connections may be as complicated as within
+                  process definition.
+              </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Since the graph is not nested, execution is simple.
+              </para>
+              </listitem>
+              <listitem>
+                <para>
+                  All nodes will share a single process variable scope, allowing
+                  easy sharing of variables.
+              </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            <para>
+              Restrictions
+          </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  Recursion is not allowed, since this would lead to an
+                  infinite loop during loading.
+                  <emphasis>NOTE:</emphasis>
+                  As in regular programing, recursive structures can be
+                  implemented using non-recursive techniques.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  All nodes will share a single process variable scope. Sometimes it
+                  is desirable to have shared state for a subset of the
+                  nodes in a process definition.
+              </para>
+              </listitem>
+              <listitem>
+                <para>
+                  The version of an external graph is set when the process
+                  definition is loaded, rather than when nodes from that
+                  graph are executed. If an external process definition
+                  is updated, process definitions referring to it must
+                  be reloaded as well to pick up the changes.
+              </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>External Arc</emphasis>
+          - An arc which has an endpoint in an external process
+          definition. While normal arcs are always specified as
+          originating in the node where they are defined (aka
+          <emphasis>out arcs</emphasis>
+          ), it is not possible to add arcs to an external process.
+          Therefore external arcs may either be
+          <emphasis>in arcs</emphasis>
+          or
+          <emphasis>out arcs</emphasis>
+          . Note that external arcs may be
+          <emphasis>named</emphasis>
+          just like regular arcs.
+        </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              <emphasis>Out Arc</emphasis>
+              - An arc which starts in the defining node and ends in a
+              specified node
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <emphasis>In Arc</emphasis>
+              - An arc which starts in a specified node and ends in the
+              node in which it is defined.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>External Instance</emphasis>
+          - A specific external process definition may be referenced
+          multiple times. It may also be imported into the referring
+          process definition multiple times, or just a single time. Each
+          external arc names a specific instance of the external process
+          definition.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Nested Process</emphasis>
+          - A node in an executing process may create a separate, new
+          process (of the same or different process definition). This
+          new process is known a nested process. The new process gets
+          initialized with the process state of the containing process
+          and the current token. When the nested process completes, the
+          token in the containing process will be completed.
+        </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Advantages
+          </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  The nested process will have it's own process state
+              </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Processes may nested recursively
+              </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Nested processes will always use the latest version process
+                  definition at the time the node is executed.
+              </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            <para>
+              Restrictions
+          </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  The interaction with the nested process must all be contained by a
+                  single node. The nested process will execute in
+                  isolation. The nodes in the nested process won't
+                  interact with the those of the containing process in
+                  any way.
+              </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+
+
+    <section id="concepts-graph-composition-example-one">
+      <title>Graph Composition Example One</title>
+
+      <para>
+        Let's look at an examples of how this works in practice. Here is
+        a small process definition which we want to embed. This process
+        definition will be named
+        <emphasis>ext</emphasis>
+        .
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts-externals1.jpg"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        It only has two nodes. Notice that both nodes are using the
+        <emphasis>label-and</emphasis> join strategy, even
+        though one node has no inputs and the other only has one.
+        However, in the composed graph these nodes may have more inputs.
+      </para>
+
+      <para>
+        Next is the process definition which will be using
+        <emphasis>ext</emphasis>.
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts-externals2.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        This process definition looks very different from previous examples. It
+        isn't even fully connected.
+</para>
+
+      <para>
+        Some things to note:
+        <itemizedlist>
+          <listitem>
+            <para>
+              The external arcs are labeled with the process definition name,
+              instance and node name that they are intended to link to.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              In this case, all the arcs are connecting to the same
+              instance of
+              <emphasis>ext</emphasis>
+              , instance 1.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Both in and out external arcs may connect to any node in the target
+              external. They are not limited to just start nodes, for
+              example.
+      </para>
+          </listitem>
+        </itemizedlist>
+
+        When the graph is loaded, the composed version will look as
+        follows:
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts-externals3.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+
+    </section>
+    <section id="concepts-graph-composition-example-two">
+      <title>Graph Composition Example Two</title>
+      <para>
+        The previous example referenced only a single instance. Here is the
+        example using two instances 'ext.
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts-externals4.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        When it is loaded, the composed graph looks like:
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts-externals5.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        As you can see, we now have two copies of
+        <emphasis>ext</emphasis>
+        embedded in the process definition. One copy will be made for
+        each unique instance referenced. A process definition can have
+        references to any number of different external definitions and
+        each external process definition can be imported any number of
+        times.
+      </para>
+
+
+    </section>
+    <section id="concepts-nested-processes-example-one">
+      <title>Nested Processes Example</title>
+      <para>
+        The above example could not be implemented with nested processes
+        because a nested process must be represented by a single node in
+        the parent process. So, here is a similar, but simpler example
+        using nested processes.
+</para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts-nested1.jpg" scalefit="1" width="100%"/>
+        </informalfigure>
+      </para>
+
+      <para>
+        Nodes
+        <literal>S</literal>
+        and
+        <literal>T</literal>
+        both refer to the nested process named
+        <literal>nested</literal>
+        . Note that
+        <literal>nested</literal>
+        is almost the same as
+        <literal>ext</literal>
+        , except that the first node is a start node. This is because
+        <literal>nested</literal>
+        will be executed as a separate process. If it didn't have a
+        start node, it would not execute.
+      </para>
+
+      <para>
+        When
+        <literal>S</literal>
+        and
+        <literal>T</literal>
+        execute, each will spawn a separate process. When
+        <literal>S</literal>
+        is executed, it will have an incomplete node token
+        <literal>t</literal>
+        . As part of execution it will start a new
+        <literal>nested</literal>
+        process
+        <literal>P</literal>
+        which have have the token
+        <literal>t</literal>
+        as a parent. When
+        <literal>P</literal>
+        completes, it will check if it has a parent token, and finding
+        that it does, will complete
+        <literal>t</literal>
+        . This will allow execution to continue in the original process.
+      </para>
+
+
+    </section>
+  </section>
+  <section id="concepts-execution-environment">
+    <title>Execution Environment</title>
+    <para>
+      While executing your process definitions, it may be desirable to
+      have some shared state or to send data between nodes via the
+      tokens. Sarasvati supports both these things via the execution
+      <emphasis>environment</emphasis>
+      . Each process has an environment on which attributes/variables
+      can be set. In addition, each token also has its own environment.
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Environment</emphasis>
+          - A set of key/value attributes.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>
+      When using a memory backed engine, all environment attributes are
+      stored in memory. However, when using a database backed engine, we
+      may wish to persist only certain attributes. Also, storing objects
+      in the database can be complicated, storing arbitrary objects in
+      memory is easier than doing so in the database. By default,
+      attributes are
+      <emphasis>persistent</emphasis>
+      , however, there is a separate set of variables which are
+      <emphasis>transient</emphasis>
+      .
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Persistent Attributes</emphasis>
+          - These attributes will be stored for the lifetime of the
+          process. There may be restriction on what can be (easily)
+          stored a persistent attribute, since it may need to be stored
+          in a database table.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis>Transient Attributes</emphasis>
+          - These attributes will be stored in memory, only as long as
+          the process and/or token is in memory. For a memory backed
+          engine, these have the same scope as the persistent
+          attributes. There are no restrictions on what can be stored as
+          a transient attribute.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <section id="concepts-process-attributes">
+      <title>Process Attributes</title>
+      <para>
+        If you want state that is accessible from anywhere during process
+        execution, then attributes can be set on the process
+        environment. These attributes are visible and mutable by all
+        nodes.
+</para>
+
+    </section>
+    <section id="concepts-token-attributes">
+      <title>Token Attributes</title>
+      <para>
+        Each
+        <emphasis>node token</emphasis>
+        also has its own environment. Arc tokens do not have an
+        environment, because they do not execute in the same way that
+        node tokens do, and thus have no need for private state. Node
+        tokens are initialized with the state of their
+        <emphasis>parent tokens</emphasis>
+        .
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>Parent token</emphasis>
+            - Each node tokens has zero to many parents.
+          </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                A node token on a start node has no parents. It will start with
+                an empty environment.
+        </para>
+            </listitem>
+            <listitem>
+              <para>
+                A node token on a node with one incoming arc of a given name has
+                a single parent. Its environment will be copied from the
+                parent.
+        </para>
+            </listitem>
+            <listitem>
+              <para>
+                A node token on a node using the labe-and join strategy may have multiple
+                parents, one for each arc of the same name. In this case the environments
+                of all the parents must be combined in some way. By default, each
+                environment will be imported into that of the new node. So if more than one
+                 parent has an attribute with the same one, the last one imported will
+                overwrite the previous values. This behavior may be
+                overridden, but if this is a concern, then using process
+                level attributes may be advisable.
+        </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+    </section>
+  </section>
+</chapter>

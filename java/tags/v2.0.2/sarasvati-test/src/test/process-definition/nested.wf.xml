@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<process-definition xmlns="http://sarasvati.googlecode.com/ProcessDefinition" name="nested">
+    <node name="N1" joinType="or" type="nestedTest" isStart="true">
+        <arc to="N2"/>
+        <arc to="N3"/>
+    </node>
+    <node name="N2" joinType="or" type="nestedTest">
+        <arc to="N4"/>
+    </node>
+    <node name="N5" joinType="labelAnd" type="nestedTest"/>
+    <node name="N4" joinType="or" type="nestedTest">
+        <arc to="N5"/>
+    </node>
+    <node name="N3" joinType="or" type="nestedTest"/>
+</process-definition>

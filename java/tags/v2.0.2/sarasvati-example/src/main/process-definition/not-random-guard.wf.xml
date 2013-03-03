@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<process-definition name="not-random-guard" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node type="node" name="start" isStart="true">
+    <arc to="first-node"/>
+  </node>
+
+  <node type="init" name="first-node">
+    <arc to="dump1"/>
+    <arc to="dump2"/>
+  </node>
+
+  <node type="dump" name="dump1">
+    <guard>IF isRandOdd THEN Accept ELSE Discard</guard>
+    <arc to="join"/>
+  </node>
+
+  <node type="dump" name="dump2">
+    <guard>IF NOT isRandOdd THEN Accept ELSE Discard</guard>
+    <arc to="join"/>
+  </node>
+
+  <node name="join" joinType="or">
+    <arc to="dump3"/>
+    <arc to="dump4"/>
+  </node>
+
+  <node type="dump" name="dump3">
+    <guard>IF isRandOdd THEN Accept ELSE Skip</guard>
+    <arc to="leave-decision"/>
+  </node>
+
+  <node type="dump" name="dump4">
+    <guard>IF NOT isRandOdd THEN Accept ELSE Skip</guard>
+    <arc to="leave-decision"/>
+  </node>
+
+  <node name="leave-decision" joinType="labelAnd">
+    <guard>IF isTenthIteration THEN Skip exit ELSE Skip beginning</guard>
+
+    <arc to="last-node" name="exit"/>
+    <arc to="first-node" name="beginning"/>
+
+  </node>
+
+  <node name="last-node"/>
+</process-definition>

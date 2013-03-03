@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<process-definition name="two-deep" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="two-deep.1">
+    <arc external="one-node" to="one-node.1"/>
+  </node>
+
+  <node name="two-deep.2"/>
+
+  <external name="one-node" processDefinition="one-node">
+    <arc from="one-node.1" to="two-deep.2"/>
+  </external>
+
+</process-definition>

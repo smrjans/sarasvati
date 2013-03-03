@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<process-definition name="external-env-one" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="A" type="script">
+    <custom>
+      <execute type="js">
+        <![CDATA[
+          var foo = token.node.externalEnv.getAttribute( "foo" );
+          var world = token.node.externalEnv.getAttribute( "hello" );
+
+          java.lang.System.out.println( "foo: " + foo );
+          java.lang.System.out.println( "hello: " + world );
+
+          engine.complete( token, null );
+        ]]>
+      </execute>
+    </custom>
+
+  </node>
+
+</process-definition>

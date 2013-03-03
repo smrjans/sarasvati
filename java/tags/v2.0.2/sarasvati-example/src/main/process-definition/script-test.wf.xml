@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<process-definition name="script-test" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="start" type="script" isStart="true">
+    <arc to="next"/>
+
+    <custom>
+      <execute type="js">
+        <![CDATA[
+          java.lang.System.out.println( "Hello" );
+          java.lang.System.out.println( "token: " + token );
+
+          engine.complete( token, null );
+        ]]>
+      </execute>
+    </custom>
+  </node>
+
+  <node name="next" type="script" joinType="labelAnd">
+    <custom>
+      <execute type="js">
+        <![CDATA[
+          java.lang.System.out.println( "Hello from node: " + token.node.name );
+          java.lang.System.out.println( "token: " + token );
+        ]]>
+      </execute>
+    </custom>
+  </node>
+
+
+</process-definition>

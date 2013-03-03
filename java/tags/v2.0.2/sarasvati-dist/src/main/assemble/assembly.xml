@@ -1,0 +1,78 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+  <id>assembly</id>
+  <formats>
+    <format>tar.gz</format>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>true</includeBaseDirectory>
+  <baseDirectory>sarasvati-${project.version}</baseDirectory>
+  <moduleSets>
+    <moduleSet>    
+      <useAllReactorProjects>true</useAllReactorProjects>
+      
+      <includes>
+        <include>com.googlecode.sarasvati:sarasvati-core</include>
+        <include>com.googlecode.sarasvati:sarasvati-hibernate</include>
+        <include>com.googlecode.sarasvati:sarasvati-visual</include>
+        <include>com.googlecode.sarasvati:sarasvati-example</include>
+        <include>com.googlecode.sarasvati:sarasvati-editor</include>
+        <include>com.googlecode.sarasvati:sarasvati-test</include>
+        <include>com.googlecode.sarasvati:sarasvati-dist</include>
+      </includes>
+      
+      <sources>
+        <fileSets>
+          <fileSet>
+            <excludes>
+              <exclude>target/**</exclude>
+            </excludes>
+          </fileSet>
+        </fileSets>      
+      </sources>
+      
+      <binaries>
+        <outputDirectory>.</outputDirectory>
+        <unpack>false</unpack>
+      </binaries>      
+    </moduleSet>
+  </moduleSets>
+  
+  <fileSets>    
+    <fileSet>
+      <directory>target/dependency</directory>
+      <excludes>
+        <exclude>sarasvati-*.jar</exclude>
+      </excludes>
+      <outputDirectory>lib</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>../sarasvati-parent/target/site/</directory>
+      <outputDirectory>doc</outputDirectory>
+    </fileSet>
+  </fileSets>
+
+  <files>
+   <file>
+     <source>README</source>
+     <outputDirectory>/</outputDirectory>
+     <filtered>false</filtered>
+   </file>
+   <file>
+     <source>GPLv3.license</source>
+     <outputDirectory>/</outputDirectory>
+     <filtered>false</filtered>
+   </file>
+   <file>
+     <source>LGPLv3.license</source>
+     <outputDirectory>/</outputDirectory>
+     <filtered>false</filtered>
+   </file>
+   <file>
+     <source>../sarasvati-parent/pom.xml</source>
+     <outputDirectory>/sarasvati-parent</outputDirectory>
+     <filtered>false</filtered>
+   </file>
+  </files>
+</assembly>

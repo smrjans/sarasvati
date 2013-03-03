@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<process-definition name="simplest" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="start" isStart="true">
+  </node>
+
+</process-definition>
