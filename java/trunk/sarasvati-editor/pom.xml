@@ -42,15 +42,13 @@
     </dependency>
     
     <dependency>
-      <groupId>org.eclipse</groupId>
+      <groupId>com.googlecode.sarasvati.thirdparty.eclipse</groupId>
       <artifactId>draw2d</artifactId>
-      <version>${org.eclipse.draw2d.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.netbeans.api</groupId>
+      <groupId>com.googlecode.sarasvati.thirdparty.netbeans</groupId>
       <artifactId>visual</artifactId>
-      <version>${org.netbeans.api.visual.version}</version>            
     </dependency>
 
     <dependency>
